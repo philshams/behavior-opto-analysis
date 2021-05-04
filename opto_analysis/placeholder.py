@@ -8,7 +8,8 @@ from helper_code.analysis_funcs import flatten
 #? this is a query
 #* this is important
 #TODO: this is a todo
-
+  
+#%% 
 # set file paths 
 folder_paths = ["D:\\Dropbox (UCL - SWC)\\DAQ\\upstairs_rig\\20OCT21_8754_laser wall gone\\"]#,
 #                 "D:\\Dropbox (UCL - SWC)\\DAQ\\upstairs_rig\\20OCT21_8752_laser wall gone\\",
@@ -26,14 +27,15 @@ mouse_dates = [ '8754_21-10-20_']#,
 # mouse_dates = [ '8753_21-11-06_',
 #                 '8751_21-11-06_']
 
+
+
 for folder_path, mouse_date in zip(folder_paths, mouse_dates):
 
     analog_signal_file = folder_path + "analog0.bin"
     video_file = folder_path + "cam0.avi"
     laser_file = folder_path + "laser_fire0.bin"
 
-12345
-67890
+
 
     # open analog signal (frames and sound) and see if we can count the frames
     analog_signal = np.fromfile(analog_signal_file)

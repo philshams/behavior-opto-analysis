@@ -1,19 +1,25 @@
-def function(input):
-    '''
-    does X, Y, and Z
-    '''
-    output = 3
+from dataclasses import dataclass
 
+def triple(input: int) -> int:
+    """
+    Triples a number
+    Args:
+        input: select any number
+    Returns:
+        output (int): the number multiplied by 3
+    
+    """
+    output = int(input * 3) 
     return output
 
+@dataclass
 class Person:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+    name: str = "John Doe"
+    age: int = 0
 
-P1 = Person("John", 36)
+    def __post_init__(self): 
+        self.age = round(self.age)
 
-print(P1.name)
-print(P1.age)
-
-
+    def report(self):
+        print(self.name)
+        print(self.age)
