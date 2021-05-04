@@ -1,6 +1,6 @@
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![Python package](https://github.com/philshams/opto-analysis/actions/workflows/github-actions.yml/badge.svg)](https://github.com/philshams/opto-analysis/actions/workflows/github-actions.yml)
-[![Coverage Status](https://coveralls.io/repos/github/philshams/opto-analysis/badge.svg?branch=master)](https://coveralls.io/github/philshams/opto-analysis?branch=master)
+[![codecov](https://codecov.io/gh/philshams/opto-analysis/branch/master/graph/badge.svg?token=IDLENSLEP4)](https://codecov.io/gh/philshams/opto-analysis)
 
 # opto analysis
 
