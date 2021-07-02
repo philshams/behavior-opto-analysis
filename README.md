@@ -8,8 +8,11 @@ Opto analysis is a package used in the Branco lab for analyzing free-moving beha
 
 ## Installation
 
-Not yet ready to be installed by others...
-
+- Clone the repository
+- Users: Can make a new Python 3.8 environment and install the requirements:
+```pip install -r requirements.txt```
+- Devs: Create a new python environment using the environment file: ```conda env create -f environment.yml``` or create a new Python 3.8 environment and install the dev requirements: ```pip install -r requirements.txt```
+- Navigate to the opto-analysis folder and write the command ```pip install -e .```
 
 ## Usage
 
@@ -18,3 +21,7 @@ placeholder.function() # does X
 placeholder.function() # does Y
 placeholder.function() # does Z
 ```
+
+## Testing
+```python
+
