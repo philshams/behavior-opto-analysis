@@ -1,6 +1,7 @@
-# import numpy as np
+import numpy as np
 # import matplotlib.pyplot as plt
-# import cv2
+import cv2
+import os
 # import itertools
 
 
@@ -10,34 +11,37 @@
 #TODO: this is a todo
   
 
-def hold_place():
-    # set file paths
-    folder_prefix = "D:\\Dropbox (UCL - SWC)\\DAQ\\upstairs_rig\\"
-    file_paths = ["21MAR16_9718_block evs", "21MAR17_9719_block evs"]
+def verify_time_sync(folder_prefix: str, file_paths: list):
 
     for folder_path in [folder_prefix + fp for fp in file_paths]:
 
-        analog_signal_file = folder_path + "analog0.bin"
-        video_file = folder_path + "cam0.avi"
-        laser_file = folder_path + "laser_fire0.bin"
+        analog_signal_file = os.path.join(folder_path + "analog1.bin")
+        video_file = os.path.join(folder_path + "cam1.avi")
+        laser_file = os.path.join(folder_path + "laser_fire1.bin")
 
-
-
-        # # open analog signal (frames and sound) and see if we can count the frames
-        analog_signal = np.fromfile(analog_signal_file)
+        # open analog signal (frames and sound) and count the frames
+        analog_signal = np.fromfile(analog_signal_file) 
         total_length = int(len(analog_signal))
-        camera_pulse = analog_signal[np.arange(0,total_length,4)] # subtract buffer of 3000
-        audio_signal = analog_signal[np.arange(1,total_length,4)] # now at 15kHz
-        fps = 40
+        print(total_length)
 
-        # # open laser signal and see if we can tell when the laser comes on
+
+
+
+
+
+        # camera_pulse = analog_signal[np.arange(0,total_length,4)] # subtract buffer of 3000
+        # audio_signal = analog_signal[np.arange(1,total_length,4)] # now at 15kHz
+        # fps = 40
+
+        # # open laser signal and tell when the laser comes on
         laser_signal = np.fromfile(laser_file) # at 15 kHz
         if np.sum(laser_signal)==0:
             print('No laser stims in this session')
             continue
-        laser_on = np.diff(laser_signal)
-        laser_on_idx = np.where(laser_on > .2)[0] + 1
-        time_since_last_laser_pulse = np.diff(laser_on_idx)
+        else: print('Laser detected')
+        # laser_on = np.diff(laser_signal)
+        # laser_on_idx = np.where(laser_on > .2)[0] + 1
+        # time_since_last_laser_pulse = np.diff(laser_on_idx)
 
         # # get the idx of the laser onset and how long the stimulation lasted
         # groups = []; laser_durations = []; laser_onset_idx = []; idx = 0
@@ -83,6 +87,7 @@ def hold_place():
         # # open video and get number of frames
         vid = cv2.VideoCapture(video_file)
         number_of_frames = vid.get(cv2.CAP_PROP_FRAME_COUNT)
+        print(number_of_frames)
 
         # # did we get the right number of frames?
         # frames_not_in_analog = int(number_of_frames - number_of_frames_analog)
@@ -128,7 +133,7 @@ def hold_place():
     # stimulus_start_frame = stimulus_start_frame[stimulus_start_frame > 300]
 
 
-    print('done')
+    # print('done')
 
     # elif j < (pre_laser_frames + laser_durations[i]*fps):
     #     cv2.putText(frame, '!!! - ' + str(laser_durations[i]) + ' sec stim ON - !!!', (20, 50), 0, 1, (100, 100, 255), thickness=2)

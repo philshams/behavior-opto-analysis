@@ -16,12 +16,17 @@ Opto analysis is a package used in the Branco lab for analyzing free-moving beha
 
 ## Usage
 
+- You can run or debug the code in an IDE or from the terminal, as follows
 ```python
-placeholder.function() # does X
-placeholder.function() # does Y
-placeholder.function() # does Z
+python -m opto_analysis.run # does X
 ```
 
 ## Testing
+- Run test discovery in VS code, and run or debug them using the Test Explorer
+- Alternatively, run tests in the terminal:
 ```python
+pytest # run all tests (from any part of the repo directory)
+pytest -pdb
+pytest tests/test_file.py # must be in the parent directory of 'tests'; this will just test "file"
+```
 
