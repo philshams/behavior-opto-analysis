@@ -14,9 +14,9 @@ class Laser:
     frequency: object
 
 
-def get_Laser(file_path: str, session: object) -> Laser:
+def get_Laser(session: Session) -> Laser:
 
-    laser_file = glob(os.path.join(file_path, "laser*"))[-1] # take the last file if there are multiple
+    laser_file = glob(os.path.join(session.file_path, "laser*"))[-1] # take the last file if there are multiple
     laser_data = np.fromfile(laser_file)
 
     num_samples = len(laser_data)
@@ -45,15 +45,15 @@ def get_laser_stimulus_parameters(laser_data: object, session: Session) -> Tuple
 
         if cur_laser_num_consecutive_samples < 2000:
             laser_trial_durations.append(np.round(
-                cur_laser_num_consecutive_samples * num_laser_onsets_in_this_group / session.DAQ_sampling_rate))
+                cur_laser_num_consecutive_samples * num_laser_onsets_in_this_group / session.daq_sampling_rate))
             laser_trial_onset_idx.append(
                 laser_pulse_onset_idx[current_pulse_idx])
             laser_trial_frequency.append(
-                np.round(session.DAQ_sampling_rate / cur_laser_num_consecutive_samples))
+                np.round(session.daq_sampling_rate / cur_laser_num_consecutive_samples))
         current_pulse_idx += num_laser_onsets_in_this_group
 
     laser_onset_frames = np.round(np.array(
-        laser_trial_onset_idx) / session.DAQ_sampling_rate * session.fps).astype(int)
+        laser_trial_onset_idx) / session.daq_sampling_rate * session.fps).astype(int)
 
     frames_since_previous_laser_onset = np.append(99999, np.diff(laser_onset_frames))
     start_of_stimulus_train = frames_since_previous_laser_onset > (20 * session.fps)

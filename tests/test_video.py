@@ -1,9 +1,11 @@
 from opto_analysis.process_data.video import get_Video
+from sample_data.sample_data_bank import sample_experiments
+from opto_analysis.process_data.session import get_Session
 import cv2
 
-def test_audio():
-    file_path = ".\\sample_data\\21MAR16_9718_block evs"
-    video = get_Video(file_path)
+def test_video():
+    session = get_Session(sample_experiments[0])
+    video = get_Video(session)
 
     assert video.num_frames == 143956
 

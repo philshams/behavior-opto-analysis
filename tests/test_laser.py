@@ -1,15 +1,15 @@
 from opto_analysis.process_data.laser import get_Laser
 from opto_analysis.process_data.session import get_Session
+from sample_data.sample_data_bank import sample_experiments
 import numpy as np
 
 
 def test_Laser():
-    file_path = ".\\sample_data\\21MAR16_9718_block evs"
-    session = get_Session(file_path)
+    session = get_Session(sample_experiments[0])
     onset_frames = np.array([np.array([2696, 2832]), np.array([5000, 5124, 5252])], dtype=object)
     stimulus_durations = np.array([np.array([2., 2.]), np.array([2., 2., 2.])], dtype=object)
 
-    laser = get_Laser(file_path, session)
+    laser = get_Laser(session)
 
     assert laser.num_samples == 54004500
 
