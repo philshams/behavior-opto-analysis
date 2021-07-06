@@ -1,1 +1,3 @@
 dataclasses
+opencv-python
+numpy
