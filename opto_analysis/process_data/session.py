@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import os
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class Session:
     mouse: str
     date: str
@@ -11,6 +11,12 @@ class Session:
     file_path: str
     daq_sampling_rate: int=15000
     fps: int=40
+    camera_trigger: object=None
+    laser: object=None
+    audio: object=None
+    video: object=None
+
+
     
 def get_Session(data_bank: list) -> Session:
 
