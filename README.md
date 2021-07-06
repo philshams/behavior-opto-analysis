@@ -26,7 +26,10 @@ python -m opto_analysis.run # does X
 - Alternatively, run tests in the terminal:
 ```python
 pytest # run all tests (from any part of the repo directory)
-pytest -pdb
 pytest tests/test_file.py # must be in the parent directory of 'tests'; this will just test "file"
 ```
+- To examine the test coverage, run in the terminal: ```pytest --cov-report term-missing --cov=opto_analysis tests/```
+<br/><br/>
+- To instead generate a coverage report, run instead: ```pytest --cov-report xml --cov=opto_analysis tests/```
+- ...and then run in bash shell: ```bash <(curl -s https://codecov.io/bash) -t TOKEN-NUMBER```
 
