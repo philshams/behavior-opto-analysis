@@ -6,7 +6,7 @@ from opto_analysis.process_data.video import get_Video
 import os
 import dill as pickle
 
-# CLAVS ~ Camera, Laser, Audio, Video, Session data
+# TODO: automatically open saved session if there is one; add overwrite option
 
 def process_session(session_info: list) -> Session:
     session = get_Session(session_info)
