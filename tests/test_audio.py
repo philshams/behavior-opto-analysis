@@ -10,6 +10,6 @@ def test_audio(audio = None):
         audio = get_Audio(session)
 
     assert audio.num_samples == 54010500
-    assert np.all(audio.onset_frames == np.array([ 54477,  97118, 103708, 113949]))
+    assert np.all(audio.onset_frames == np.array([ 54477, 97117, 103707, 113949]))
     assert np.all(audio.stimulus_durations == np.array([1.5, 3. , 1.5, 3. ]))
     assert np.all(audio.amplitude == np.array([87., 81., 87., 81.]))

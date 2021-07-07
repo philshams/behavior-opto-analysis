@@ -1,5 +1,3 @@
-
-
 def flatten(iterable):
     '''       flatten a nested list       '''
     it = iter(iterable)

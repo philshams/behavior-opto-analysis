@@ -18,14 +18,14 @@ class Session:
 
 
     
-def get_Session(data_bank: list) -> Session:
+def get_Session(session_info: list) -> Session:
 
-    file_path = data_bank[2]
+    file_path = session_info[2]
     session_folder_name = os.path.basename(file_path)
     date = session_folder_name[:7]
     mouse = session_folder_name[8:12]
-    experiment = data_bank[0]
-    previous_sessions = data_bank[1]
+    experiment = session_info[0]
+    previous_sessions = session_info[1]
 
     session = Session(mouse, date, experiment, previous_sessions, file_path)
     print(session)

@@ -28,7 +28,7 @@ def get_audio_stimulus_parameters(audio_data: object, session: Session) -> Tuple
     audio_on_idx = np.where(abs(audio_data)>1.25)[0]
     idx_since_audio_on = np.append(np.inf, np.diff(audio_on_idx)) # get the first sample of audio stimuli
     audio_onset_idx = audio_on_idx[idx_since_audio_on > (session.daq_sampling_rate * 30)] # separate trials separated by > 30 sec
-    audio_onset_frames = np.ceil(audio_onset_idx / session.daq_sampling_rate * session.fps).astype(int)
+    audio_onset_frames = np.round(audio_onset_idx / session.daq_sampling_rate * session.fps).astype(int)
 
     idx_before_next_audio = np.append(np.diff(audio_on_idx[::-1]), -np.inf) # get the last sample of audio stimuli
     audio_offset_idx = audio_on_idx[idx_before_next_audio < -(session.daq_sampling_rate * 30)]
