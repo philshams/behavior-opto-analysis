@@ -27,7 +27,7 @@ def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_bef
 
     # TODO: check the syncing between laser and camera trigger; need to add 1500 samples delay to laser? Why are they off by 6000? Same for all session
     
-    # TODO: check the syncing between audio and camera trigger too
+    # TODO: check the syncing between audio and camera trigger too (it's off)
 
     # TODO: save video if desired
     # video_save = cv2.VideoWriter("C:\\Users\\SWC\Desktop\\videos\\" + mouse_date + str(i+1) + ".mp4", cv2.VideoWriter_fourcc(*"XVID"), fps, (1024, 1024), True)

@@ -10,9 +10,9 @@ import os
 
 def test_process_save_load_session():
 
-    session = process_session(sample_experiments[0])
-    save_session(session)
+    session = process_session(sample_experiments[0], load_saved=False)
     save_file = os.path.join(session.file_path, "metadata")
+    save_session(session, save_file)
     del session
     session = load_session(save_file)
 
