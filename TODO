@@ -1,14 +1,12 @@
 
 -* Loop over multiple experiments
 
+- Fill in the data bank, can run tests on just the sample one
+
+- audio durations faulty, and go over audio sync
+
+- dlc tracking
+
 - threading to analyze multiple experiments at once
-
-- Fill in the data bank, run tests on just the sample one
-
-- audio durations faulty, go over audio sync
-
-- dlc tracking (new file)
-
-- laser and audio sync
 
 - test laser (and audio if needed) sync with an LED (and look at bonsai code for hints)...
