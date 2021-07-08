@@ -29,10 +29,6 @@ def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_bef
     
     # TODO: check the syncing between audio and camera trigger too (it's off)
 
-    # TODO: save video if desired
-    # video_save = cv2.VideoWriter("C:\\Users\\SWC\Desktop\\videos\\" + mouse_date + str(i+1) + ".mp4", cv2.VideoWriter_fourcc(*"XVID"), fps, (1024, 1024), True)
-    # video_save.release()
-
 def display_stimulus_status(stimulus_durations: object, cur_stimulus_status: int, frame: object, stimulus_type: str) -> None:
     if cur_stimulus_status==0:
         cv2.putText(frame, "{} s {} stimulus is coming".format(stimulus_durations[0], stimulus_type), (20, 40), 0, 1, (255, 255, 255), thickness=2)

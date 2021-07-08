@@ -1,12 +1,12 @@
 from opto_analysis.process_data.video import get_Video
-from sample_data.sample_data_bank import sample_experiments
+from data_bank import all_experiments
 from opto_analysis.process_data.session import get_Session
 import cv2
 
 def test_video(video = None):
 
     if not video: # if not provided by another test script
-        session = get_Session(sample_experiments[0])
+        session = get_Session(all_experiments[0])
         video = get_Video(session)
 
     assert video.num_frames == 143956
