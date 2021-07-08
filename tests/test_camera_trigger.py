@@ -1,12 +1,12 @@
 from opto_analysis.process_data.camera_trigger import Camera_trigger, get_Camera_trigger
 from opto_analysis.process_data.session import get_Session, Session
-from data_bank import all_experiments
+from data_bank import all_sessions
 
 
 
 def test_camera_trigger(camera_trigger: Camera_trigger=None, session: Session=None):   
     if not camera_trigger: # if not provided by another test script
-        session = get_Session(all_experiments[0])
+        session = get_Session(all_sessions[0])
         camera_trigger = get_Camera_trigger(session)
 
     assert camera_trigger.num_samples == 54010500

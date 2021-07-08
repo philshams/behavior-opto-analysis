@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 @dataclass(frozen=True)
 
-class Options:
+class Program:
     process_data: bool=False
     run_DLC_tracking: bool=False
     run_analysis: bool=False
