@@ -10,8 +10,7 @@ import dill as pickle
 def create_session(session_info: list, load: bool=True) -> Session:
     session = get_Session(session_info)
     save_file = os.path.join(session.file_path, "metadata")
-    if load:
-        assert Path(save_file).is_file(), "Cannot find session file to load"
+    if load and Path(save_file).is_file():
         session = load_session(save_file)
     else:
         session.camera_trigger = get_Camera_trigger(session)

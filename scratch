@@ -5,3 +5,14 @@
 from distutils.core import setup
 
 setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
+
+
+def flatten(iterable):
+    '''       flatten a nested list       '''
+    it = iter(iterable)
+    for e in it:
+        if isinstance(e, (list, tuple)):
+            for f in flatten(e):
+                yield f
+        else:
+            yield e

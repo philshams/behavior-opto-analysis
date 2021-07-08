@@ -1,12 +1,12 @@
 from opto_analysis.process_data.audio import get_Audio
 from opto_analysis.process_data.session import get_Session
-from data_bank import all_sessions
+from data_bank import all_data_entries
 import numpy as np
 
 def test_audio(audio = None):
 
     if not audio: # if not provided by another test script
-        session = get_Session(all_sessions[0])
+        session = get_Session(all_data_entries[0])
         audio = get_Audio(session)
 
     assert audio.num_samples == 54010500
