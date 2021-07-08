@@ -1,2 +1,7 @@
     # video_save = cv2.VideoWriter("C:\\Users\\SWC\Desktop\\videos\\" + mouse_date + str(i+1) + ".mp4", cv2.VideoWriter_fourcc(*"XVID"), fps, (1024, 1024), True)
     # video_save.release()
+
+
+from distutils.core import setup
+
+setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
