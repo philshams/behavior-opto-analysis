@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from data_bank import data_path
 import os
 
 
@@ -26,7 +27,7 @@ def get_Session(session_info: list) -> Session:
     global_session_number = session_info[1]
     experiment = session_info[2]
     num_previous_sessions = session_info[3]
-    file_path = session_info[4]
+    file_path = os.path.join(data_path, session_info[4])
     session_folder_name = os.path.basename(file_path)
     date = session_folder_name[:7]
     mouse = session_folder_name[8:12]

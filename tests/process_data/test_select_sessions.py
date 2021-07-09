@@ -10,7 +10,7 @@ def test_select_sessions_to_analyze():
 
     program = Processing_settings(by_experiment=True, experiments=['fake experiment','block edge vectors'])
     selected_sessions = select_sessions(program)
-    assert selected_sessions.shape == (2, 5)
+    assert selected_sessions.shape == (8, 5)
     assert np.all(selected_sessions[:,2]=="block edge vectors")
 
     program = Processing_settings(by_session=True, sessions=[0,-3,999999], by_experiment=True, experiments=['fake experiment','block edge vectors'])
@@ -19,7 +19,7 @@ def test_select_sessions_to_analyze():
     assert np.all(selected_sessions[:,2]=="block edge vectors")
     assert np.all(selected_sessions[:,0]==0)
 
-    program = Processing_settings(by_prev_session=True, prev_session=[2])
+    program = Processing_settings(by_prev_session=True, prev_session=[np.nan])
     selected_sessions = select_sessions(program)
     assert selected_sessions.shape == (0, 5)
 

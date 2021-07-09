@@ -1,9 +1,9 @@
-from settings import processing_settings, analysis_settings
+from processing_settings import processing_settings
+from analysis_settings import analysis_settings
 from opto_analysis.process_data.select_sessions import select_sessions
 from opto_analysis.process_data.create_save_load_session import create_session
 from opto_analysis.process_data.dlc_tracking import dlc_tracking
 from opto_analysis.process_data.synchronize import check_stimulus_sync, verify_all_frames_saved
-from opto_analysis.plotting.plotting import plotting
 
 def process_data():
     print("\n------ PROCESSING DATA ------ \n{}".format(processing_settings))

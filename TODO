@@ -1,14 +1,20 @@
 
--* Loop over multiple experiments
+----- at home ------
+- how to not be redundant for testing
 
-- Fill in the data bank, can run tests on just the sample one
 
-- audio durations faulty, and go over audio sync
+---- at work -------
 
-- dlc tracking
+- dlc tracking 
+-> plotting and analysis
+
+- fix plt.show thing
+
+- update dev_requirements, and install on laptop (e.g. pycov)
+
+- test laser sync - look at bonsai code for hings, test with an LED if needed
 
 - threading to analyze multiple experiments at once
 
-- update dev_requirements, and install on laptop 
-
-- test laser (and audio if needed) sync with an LED (and look at bonsai code for hints)...
+- locate missing data: 
+    - block pre ev apr 10

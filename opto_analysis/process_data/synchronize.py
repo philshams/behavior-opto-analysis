@@ -29,8 +29,6 @@ def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_bef
 
     # TODO: check the syncing between laser and camera trigger; need to add 1500 samples delay to laser? Why are they off by 6000? Same for all session
     
-    # TODO: check the syncing between audio and camera trigger too; sync to camera signal more precisely
-
 def display_stimulus_status(stimulus_durations: object, cur_stimulus_status: int, frame: object, stimulus_type: str) -> None:
     if cur_stimulus_status==0:
         cv2.putText(frame, "{} s {} stimulus is coming".format(stimulus_durations[0], stimulus_type), (20, 40), 0, 1, (255, 255, 255), thickness=2)

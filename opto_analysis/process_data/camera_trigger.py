@@ -8,6 +8,7 @@ from glob import glob
 class Camera_trigger:
     num_samples: int
     num_frames: int
+    frame_trigger_onsets_idx: object
     fps: int
 
 def get_Camera_trigger(session: Session) -> Camera_trigger:
@@ -17,10 +18,10 @@ def get_Camera_trigger(session: Session) -> Camera_trigger:
     camera_trigger_data = AI_data[np.arange(0, len(AI_data), 4)] # four interleaved time series
 
     camera_trigger_num_samples = len(camera_trigger_data)
-    num_frames_expected, duration_of_video = get_num_frames_expected(session, camera_trigger_data)
+    num_frames_expected, duration_of_video, frame_trigger_onsets_idx = get_num_frames_expected(session, camera_trigger_data)
     fps = get_fps(session, num_frames_expected, duration_of_video)
 
-    camera_trigger = Camera_trigger(camera_trigger_num_samples, num_frames_expected, fps)
+    camera_trigger = Camera_trigger(camera_trigger_num_samples, num_frames_expected, frame_trigger_onsets_idx, fps)
 
     return camera_trigger
 
@@ -32,7 +33,7 @@ def get_num_frames_expected(session: Session, camera_trigger_data: object) -> in
 
     duration_of_video = (frame_trigger_onsets_idx[-1] - frame_trigger_onsets_idx[0])/session.daq_sampling_rate
 
-    return num_frames_expected, duration_of_video
+    return num_frames_expected, duration_of_video, frame_trigger_onsets_idx
 
 def get_fps(session: Session, num_frames_expected: int, duration_of_video: int) -> int:
 
