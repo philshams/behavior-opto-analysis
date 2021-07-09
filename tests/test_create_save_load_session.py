@@ -9,9 +9,9 @@ from tests.test_session import test_session
 
 def test_create_save_load_session():
 
-    session = create_session(all_data_entries[0], load=False)
+    session = create_session(all_data_entries[0], create_new=True)
     del session
-    session = create_session(all_data_entries[0], load=True)
+    session = create_session(all_data_entries[0], create_new=False)
 
     test_session(session)
     test_camera_trigger(session.camera_trigger, session)

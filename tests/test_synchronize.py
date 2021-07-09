@@ -5,7 +5,7 @@ from data_bank import all_data_entries
 
 def test_verify_all_frames_saved():
 
-    session = create_session(all_data_entries[0], load=True)
+    session = create_session(all_data_entries[0])
     verify_all_frames_saved(session) # use the assertion contained within this function as the test
     assert True
 

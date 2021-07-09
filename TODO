@@ -9,4 +9,6 @@
 
 - threading to analyze multiple experiments at once
 
+- update dev_requirements, and install on laptop 
+
 - test laser (and audio if needed) sync with an LED (and look at bonsai code for hints)...

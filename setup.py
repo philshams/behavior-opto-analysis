@@ -9,7 +9,8 @@ setuptools.setup(
     package_dir={'opto_analysis': 'opto_analysis'},
     entry_points={
         "console_scripts": [
-            "opto = opto_analysis.__run__:run"
+            "process = opto_analysis.__process_data__:process_data",
+            "analyze = opto_analysis.__analyze_data__:analyze_data"
         ]
     }
 

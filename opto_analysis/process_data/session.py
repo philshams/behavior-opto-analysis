@@ -33,5 +33,5 @@ def get_Session(session_info: list) -> Session:
     name = experiment + ' ' + str(local_session_number)   
 
     session = Session(name, global_session_number, mouse, date, experiment, num_previous_sessions, file_path)
-    print(session)
+    print("\n{}".format(session))
     return session

@@ -5,7 +5,7 @@ import numpy as np
 def verify_all_frames_saved(session: Session) -> None:
     assert session.camera_trigger.num_frames == session.video.num_frames, "---Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(session.camera_trigger.num_frames, session.video.num_frames, session.experiment, session.mouse)
 
-    print("Video frame synchronization correct for experiment: {}, mouse: {}".format(session.experiment, session.mouse))
+    print("All frames properly saved for experiment {}".format(session.name))
 
 def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False) -> None:
     assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"

@@ -1,28 +1,28 @@
-from analysis_program import settings_name, settings
-from opto_analysis.process_data.select_sessions import select_sessions_to_analyze
+from settings import processing_settings, analysis_settings
+from opto_analysis.process_data.select_sessions import select_sessions
 from opto_analysis.process_data.create_save_load_session import create_session
-from opto_analysis.dlc_tracking.dlc_tracking import dlc_tracking
+from opto_analysis.process_data.dlc_tracking import dlc_tracking
 from opto_analysis.process_data.synchronize import check_stimulus_sync, verify_all_frames_saved
-from opto_analysis.analysis.analysis import analysis
 from opto_analysis.plotting.plotting import plotting
 
-def run():
-    print("\n------ {} ------ \n{}".format(settings_name, settings))
+def process_data():
+    print("\n------ PROCESSING DATA ------ \n{}".format(processing_settings))
 
-    selected_sessions_data_entries = select_sessions_to_analyze(settings)
+    selected_sessions_data_entries = select_sessions(processing_settings)
     for data_entry in selected_sessions_data_entries:
-        session = create_session(data_entry, load=settings.load_metadata)
+        session = create_session(data_entry, create_new=processing_settings.create_new_metadata)
+        verify_all_frames_saved(session)
 
-        if settings.verify_data_sync:
-            verify_all_frames_saved(session)
-            check_stimulus_sync(session, stimulus_type='laser', rapid=True)
-            check_stimulus_sync(session, stimulus_type='audio', rapid=False)
+        if processing_settings.examine_laser_trials:
+            check_stimulus_sync(session, stimulus_type='laser', rapid=processing_settings.rapid)
+        if processing_settings.examine_audio_trials:
+            check_stimulus_sync(session, stimulus_type='audio', rapid=processing_settings.rapid)
 
-        if settings.dlc_tracking: 
+        if processing_settings.dlc_tracking: 
             dlc_tracking(selected_sessions_data_entries)
 
-    if settings.plotting: 
-        plotting()
 
-if __name__=="__main__":
-    run()
+def analyze_data():
+    print("\n------ ANALYZING DATA ------")
+    for key in analysis_settings.__dict__.keys():
+        if analysis_settings.__dict__[key]: print(" {} = {}".format(key, analysis_settings.__dict__[key]))
