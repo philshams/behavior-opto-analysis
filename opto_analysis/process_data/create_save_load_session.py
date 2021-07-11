@@ -3,6 +3,7 @@ from opto_analysis.process_data.camera_trigger import get_Camera_trigger
 from opto_analysis.process_data.laser import get_Laser
 from opto_analysis.process_data.audio import get_Audio
 from opto_analysis.process_data.video import get_Video
+from opto_analysis.process_data.synchronize import verify_all_frames_saved
 from pathlib import Path
 import os.path
 import dill as pickle
@@ -15,6 +16,7 @@ def create_session(session_info: list, create_new: bool=False) -> Session:
         session.laser = get_Laser(session)
         session.audio = get_Audio(session)
         session.video = get_Video(session)
+        verify_all_frames_saved(session)
         save_session(session, overwrite=True)
     else:
         session = load_session(save_file)

@@ -7,7 +7,7 @@ def verify_all_frames_saved(session: Session) -> None:
 
     print("All frames properly saved for experiment {}".format(session.name))
 
-def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False) -> None:
+def examine_trials(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False) -> None:
     assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"
 
     video_object =  cv2.VideoCapture(session.video.video_file)
@@ -27,7 +27,6 @@ def check_stimulus_sync(session:Session, stimulus_type: str='laser', seconds_bef
         
     video_object.release()
 
-    # TODO: check the syncing between laser and camera trigger; need to add 1500 samples delay to laser? Why are they off by 6000? Same for all session
     
 def display_stimulus_status(stimulus_durations: object, cur_stimulus_status: int, frame: object, stimulus_type: str) -> None:
     if cur_stimulus_status==0:

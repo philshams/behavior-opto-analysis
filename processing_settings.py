@@ -3,13 +3,11 @@ from opto_analysis.settings_objects import Processing_settings
 # select the analysis settings
 processing_settings = Processing_settings(
 
-    create_new_metadata=True,
+    create_new_metadata=False,
 
     examine_laser_trials=False,
-    examine_audio_trials=True,
+    examine_audio_trials=False,
     rapid=True, # speed up laser and audio trial clips
-
-    dlc_tracking=False,
 
     by_experiment=False,
     experiments = ['block edge vectors'],

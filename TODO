@@ -8,11 +8,7 @@
 - dlc tracking 
 -> plotting and analysis
 
-- fix plt.show thing
+- test laser sync - test with an afferent to an AI!
 
--* update dev_requirements, and install on laptop (e.g. pycov)
-
-- test laser sync - look at bonsai code for hings, test with an LED if needed
-
-- locate missing data: 
+- * locate missing data: 
     - block pre ev apr 10

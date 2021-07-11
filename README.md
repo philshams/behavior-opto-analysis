@@ -3,7 +3,7 @@
 
 # opto analysis
 
-Opto analysis is a package used in the Branco lab for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging using VS Code, but it can be extended to other systems upon request. 
+Opto analysis is a package for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging using VS Code, but it can be extended to other systems upon request. 
 
 ## Installation
 

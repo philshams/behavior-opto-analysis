@@ -7,6 +7,7 @@ class Processing_settings:
     examine_audio_trials: bool=False
     rapid: bool=False
     dlc_tracking: bool=False
+    dlc_settings_file: str=None
     analysis: bool=False
     by_experiment: bool=False
     experiments: list=None
@@ -15,6 +16,15 @@ class Processing_settings:
     by_prev_session: bool=False
     prev_session: list=None
 
+@dataclass(frozen=True)
+class Tracking_settings:
+    dlc_settings_file: str = None
+    by_experiment: bool=False
+    experiments: list=None
+    by_session: bool=False
+    sessions: list=None
+    by_prev_session: bool=False
+    prev_session: list=None
 
 @dataclass(frozen=True)
 class Analysis_settings:
