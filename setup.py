@@ -10,7 +10,8 @@ setuptools.setup(
     entry_points={
         "console_scripts": [
             "process = opto_analysis.__process_data__:process_data",
-            "analyze = opto_analysis.__analyze_data__:analyze_data"
+            "analyze = opto_analysis.__analyze_data__:analyze_data",
+            "track = opto_analysis.__track_data__:track_data"
         ]
     }
 
