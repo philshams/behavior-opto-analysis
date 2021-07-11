@@ -7,6 +7,11 @@ def verify_all_frames_saved(session: Session) -> None:
 
     print("All frames properly saved for experiment {}".format(session.name))
 
+def verify_aligned_data_streams(session: Session, known_offset:int = 6000) -> None:
+    assert session.camera_trigger.num_samples == session.audio.num_samples and session.camera_trigger.num_samples == (session.laser.num_samples+known_offset), "---Data streams have mismatched numbers of samples---\nCamera trigger: {}\nAudio input: {}\nLaser output: {} = {} + {}".format(session.camera_trigger.num_samples, session.audio.num_samples, (session.laser.num_samples+known_offset), session.laser.num_samples, known_offset)
+
+    print("Data streams properly synced for experiment {}".format(session.name))
+
 def examine_trials(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False) -> None:
     assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"
 
