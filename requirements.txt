@@ -1,4 +1,4 @@
-dataclasses
-opencv-python
-numpy
-dill
+dill==0.2.8.2
+opencv_python==3.4.8.29
+dataclasses==0.8
+numpy==1.18.1

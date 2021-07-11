@@ -1,20 +1,18 @@
 
------ at home ------
+------- at home ------
 - how to not be redundant for testing
 
 
----- at work -------
+------- at work -------
 
 - dlc tracking 
 -> plotting and analysis
 
 - fix plt.show thing
 
-- update dev_requirements, and install on laptop (e.g. pycov)
+-* update dev_requirements, and install on laptop (e.g. pycov)
 
 - test laser sync - look at bonsai code for hings, test with an LED if needed
-
-- threading to analyze multiple experiments at once
 
 - locate missing data: 
     - block pre ev apr 10
