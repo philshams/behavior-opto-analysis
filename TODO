@@ -4,8 +4,10 @@
 
 ------- at work -------
 
-- dlc tracking 
-    - train new network
-    -> plotting and analysis
+- train new dlc network (and make a workflow for this)
 
+- save video clip
+- do trial rendering
+
+- do exploration visualization
 

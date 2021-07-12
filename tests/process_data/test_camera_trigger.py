@@ -1,5 +1,5 @@
-from opto_analysis.process_data.camera_trigger import Camera_trigger, get_Camera_trigger
-from opto_analysis.process_data.session import get_Session, Session
+from opto_analysis.process.camera_trigger import Camera_trigger, get_Camera_trigger
+from opto_analysis.process.session import get_Session, Session
 from settings.data_bank import all_data_entries
 
 

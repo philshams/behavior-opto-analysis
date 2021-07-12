@@ -1,4 +1,4 @@
-from opto_analysis.process_data.session import get_Session
+from opto_analysis.process.session import get_Session
 from settings.data_bank import all_data_entries
 
 def test_session(session=None):

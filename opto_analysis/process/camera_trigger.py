@@ -1,4 +1,4 @@
-from opto_analysis.process_data.session import Session
+from opto_analysis.process.session import Session
 import os
 import numpy as np
 from dataclasses import dataclass

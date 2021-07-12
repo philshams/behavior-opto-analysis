@@ -1,32 +1,21 @@
-from opto_analysis.process_data.session import Session
+from opto_analysis.process.session import Session
 import cv2
 import numpy as np
 
-def verify_all_frames_saved(session: Session) -> None:
-    assert session.camera_trigger.num_frames == session.video.num_frames, "---Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(session.camera_trigger.num_frames, session.video.num_frames, session.experiment, session.mouse)
-
-    print("All frames properly saved for experiment {}".format(session.name))
-
-def verify_aligned_data_streams(session: Session, known_offset:int = 6000) -> None:
-    assert session.camera_trigger.num_samples == session.audio.num_samples and session.camera_trigger.num_samples == (session.laser.num_samples+known_offset), "---Data streams have mismatched numbers of samples---\nCamera trigger: {}\nAudio input: {}\nLaser output: {} = {} + {}".format(session.camera_trigger.num_samples, session.audio.num_samples, (session.laser.num_samples+known_offset), session.laser.num_samples, known_offset)
-
-    print("Data streams properly synced for experiment {}".format(session.name))
-
-def examine_trials(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False) -> None:
-    assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"
-
-    video_object =  cv2.VideoCapture(session.video.video_file)
+def visualize_trials(session:Session, stimulus_type: str='laser', seconds_before: float=4, seconds_after: float=4, rapid: bool=False, verbose: bool=True) -> None:
     
+    assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"
+    video_object =  cv2.VideoCapture(session.video.video_file)
+
     for onset_frames, stimulus_durations in zip(session.__dict__[stimulus_type].onset_frames, session.__dict__[stimulus_type].stimulus_durations):
 
-        video_object.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-seconds_before*session.fps)
-        # create stimulus status, an array with 0~pre-stimulus, 1~stimulus on, 2~stimulus done
-        stimulus_status = generate_stimulus_status_array(onset_frames, stimulus_durations, seconds_before, seconds_after, session.fps)
+        video_object.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-seconds_before*session.fps) # set to trial start
+
+        stimulus_status = generate_stimulus_status_array(onset_frames, stimulus_durations, seconds_before, seconds_after, session.fps) # create stimulus status, an array with 0~pre-stimulus, 1~stimulus on, 2~stimulus done
+        
         for i in range((onset_frames[-1]-onset_frames[0])+int((seconds_before+stimulus_durations[-1]+seconds_after)*session.fps)):
             _, frame = video_object.read()
-            display_stimulus_status(stimulus_durations, stimulus_status[i], frame, stimulus_type)
-            if stimulus_status[i]==1:
-                x=0
+            if verbose: display_stimulus_status(stimulus_durations, stimulus_status[i], frame, stimulus_type)
             cv2.imshow('{} stimulus effect'.format(stimulus_type), frame)
             if cv2.waitKey(int(1000/session.fps*(not rapid)+rapid)) & 0xFF == ord('q'): break
         

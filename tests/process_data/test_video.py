@@ -1,6 +1,6 @@
-from opto_analysis.process_data.video import get_Video
+from opto_analysis.process.video import get_Video
 from settings.data_bank import all_data_entries
-from opto_analysis.process_data.session import get_Session
+from opto_analysis.process.session import get_Session
 import cv2
 
 def test_video(video = None):

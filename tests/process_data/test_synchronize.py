@@ -1,13 +1,14 @@
-from opto_analysis.process_data.camera_trigger import Camera_trigger
-from opto_analysis.process_data.synchronize import examine_trials, verify_all_frames_saved
-from opto_analysis.process_data.create_save_load_session import create_session
+from opto_analysis.process.camera_trigger import Camera_trigger
+from opto_analysis.process.synchronize import verify_all_frames_saved, verify_aligned_data_streams
+from opto_analysis.process.create_save_load_session import create_session
 from settings.data_bank import all_data_entries
 import numpy as np
 
-def test_verify_all_frames_saved():
+def test_verify_synchronized():
 
     session = create_session(all_data_entries[0])
     verify_all_frames_saved(session) # use the assertion contained within this function as the test
+    verify_aligned_data_streams(session) # use the assertion contained within this function as the test
     assert True
 
     session.camera_trigger = Camera_trigger(999, 99, np.array([0,1,2]), 40)
@@ -17,10 +18,8 @@ def test_verify_all_frames_saved():
     except:
         assert True
 
-def test_check_laser_sync():
-    session = create_session(all_data_entries[0])
-    examine_trials(session, stimulus_type='laser', rapid=True)
-
-def test_check_audio_sync():
-    session = create_session(all_data_entries[0])
-    examine_trials(session, stimulus_type='audio', rapid=True)
+    try:
+        verify_aligned_data_streams(session)
+        assert False
+    except:
+        assert True

@@ -2,10 +2,11 @@ from settings.processing_settings import processing_settings
 from settings.tracking_settings import tracking_settings
 from settings.analysis_settings import analysis_settings
 from settings.visualization_settings import visualization_settings
-from opto_analysis.process_data.select_sessions import select_sessions
-from opto_analysis.process_data.create_save_load_session import create_session
-from opto_analysis.process_data.dlc_tracking import dlc_tracking
-from opto_analysis.process_data.synchronize import examine_trials
+from opto_analysis.process.select_sessions import select_sessions
+from opto_analysis.process.create_save_load_session import create_session
+from opto_analysis.dlc_tracking import dlc_tracking
+from opto_analysis.visualize.trials import visualize_trials
+from opto_analysis.visualize.exploration import visualize_exploration
 
 def process_data():
     print("\n------ PROCESSING DATA ------".format(processing_settings))
@@ -33,6 +34,9 @@ def visualize_data():
     selected_sessions_data_entries = select_sessions(tracking_settings)
     for data_entry in selected_sessions_data_entries:
         session = create_session(data_entry, create_new=False)
+        if visualization_settings.visualize_laser_trials: visualize_trials(session, stimulus_type = 'laser', rapid=visualization_settings.rapid, seconds_before=3, seconds_after=6)
+        if visualization_settings.visualize_escape_trials: visualize_trials(session, stimulus_type = 'audio', rapid=visualization_settings.rapid, seconds_before=3, seconds_after=2)
+        if visualization_settings.visualize_exploration: visualize_exploration(session)
 
 def analyze_data():
     print("\n------ ANALYZING DATA ------")

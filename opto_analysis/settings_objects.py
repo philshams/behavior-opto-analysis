@@ -28,8 +28,10 @@ class Tracking_settings:
 
 @dataclass(frozen=True)
 class Visualization_settings:
-    laser_video: bool=True
-    escape_video: bool=True
+    visualize_laser_trials: bool=True
+    visualize_escape_trials: bool=True
+    rapid: bool=True
+    verbose: bool=True
     generate_rendering: bool=False
     visualize_exploration: bool=False
     by_experiment: bool=False
