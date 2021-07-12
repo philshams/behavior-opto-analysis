@@ -2,13 +2,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Processing_settings:
-    create_new_metadata: bool=True
-    examine_laser_trials: bool=False
-    examine_audio_trials: bool=False
-    rapid: bool=False
-    dlc_tracking: bool=False
-    dlc_settings_file: str=None
-    analysis: bool=False
+    create_new_registration: bool=False
+    skip_registration: bool=True
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False
@@ -32,6 +27,9 @@ class Visualization_settings:
     visualize_escape_trials: bool=True
     rapid: bool=True
     verbose: bool=True
+    size: int=1024
+    save_folder: str = None
+    fisheye_correction_file: str = None
     generate_rendering: bool=False
     visualize_exploration: bool=False
     by_experiment: bool=False

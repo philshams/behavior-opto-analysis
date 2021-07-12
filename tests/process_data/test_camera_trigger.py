@@ -11,6 +11,6 @@ def test_camera_trigger(camera_trigger: Camera_trigger=None, session: Session=No
 
     assert camera_trigger.num_samples == 54010500
     assert camera_trigger.num_frames == 143956
-    assert camera_trigger.fps == session.fps
+    assert camera_trigger.fps == 40
 
     

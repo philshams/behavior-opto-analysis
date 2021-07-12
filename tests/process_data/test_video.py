@@ -10,6 +10,7 @@ def test_video(video = None):
         video = get_Video(session)
 
     assert video.num_frames == 143956
+    assert video.fps == 40
 
     video_object = cv2.VideoCapture(video.video_file)
     video_object.set(cv2.CAP_PROP_POS_FRAMES, 0)

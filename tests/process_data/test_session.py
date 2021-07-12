@@ -8,5 +8,4 @@ def test_session(session=None):
     assert session.mouse == '9718'
     assert session.experiment == 'block edge vectors'
     assert session.daq_sampling_rate == 15000
-    assert session.fps == 40
     assert session.previous_sessions == 0

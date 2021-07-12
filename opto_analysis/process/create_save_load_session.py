@@ -16,6 +16,7 @@ def create_session(session_info: list, create_new: bool=False) -> Session:
         session.laser = get_Laser(session)
         session.audio = get_Audio(session)
         session.video = get_Video(session)
+        print_session_details(session)
         verify_all_frames_saved(session)
         verify_aligned_data_streams(session)
         save_session(session, overwrite=True)
@@ -31,3 +32,13 @@ def save_session(session: Session, overwrite=True) -> None:
 def load_session(save_file: str) -> Session:
     with open(save_file, "rb") as dill_file: session = pickle.load(dill_file)
     return session
+
+def print_session_details(session: Session) -> None:
+    for key in session.__dict__.keys():
+        if key in ['name','number','mouse','date','experiment','previous_sessions']:
+            print(" {}: {}".format(key, session.__dict__[key]))
+        elif key in ['camera_trigger', 'laser','audio','video']:
+            if key == 'camera_trigger': print("")
+            print(" {} metadata saved".format(key))
+    print(" registration transform: {}".format(bool(session.video.registration_transform)))
+    print(" -----------------")

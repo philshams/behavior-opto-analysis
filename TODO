@@ -1,13 +1,18 @@
-
 ------- at home ------
+
+
+
 
 
 ------- at work -------
 
 - train new dlc network (and make a workflow for this)
 
-- save video clip
+- register video
 - do trial rendering
+
+- get the x and y offset, if not zero update code
+- check if siheye is doing anything...
 
 - do exploration visualization
 
