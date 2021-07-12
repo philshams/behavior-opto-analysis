@@ -10,7 +10,7 @@ selection = {}
 #------------selection of analysis settings to choose from--------------
 
 selection["threat video all"] = \
-    Analysis_settings(plot_type='threat video', experiments = 'all')
+    Analysis_settings(plot_type='threat video')
     
 selection["laser video block edge vectors"] = \
     Analysis_settings(plot_type='laser video', experiments=['block edge vectors'])

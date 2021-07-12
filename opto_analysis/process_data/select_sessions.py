@@ -1,5 +1,5 @@
 from opto_analysis.settings_objects import Processing_settings
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 import numpy as np
 
 def select_sessions(processing_settings: Processing_settings) -> object:

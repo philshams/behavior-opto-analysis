@@ -3,7 +3,7 @@
 
 # opto analysis
 
-Opto analysis is a package for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging using VS Code, but it can be extended to other systems upon request. 
+Opto analysis is a package for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging in VS Code, but it can be extended to other systems upon request. 
 
 ## Installation
 
@@ -16,19 +16,20 @@ Opto analysis is a package for analyzing free-moving behavioral data during opto
 
 ## Usage
 
-- You can process data with the command ```python -m opto_analysis.run.process data``` or simply ```process```
-- You can analyze data with the command ```python -m opto_analysis.run.analyze_data``` or simply ```analyze```  
-- To debug the workflow with VS Code, debug the the file "./tests/test_run.py"
+- To process data and verify synchronization, fill in the the file ./settings/processing_settings.py with your desired settings, and run the terminal command ```process```
+- To track data (DeepLabCut), fill in the the file ./settings/tracking_settings.py with your desired settings, and run the command ```track```
+- To visualize trials, fill in the the file ./settings/visualization_settings.py with your desired settings, and run the command ```visualize```. This currently requires having already trained a DLC network.
+- To analyze and plot data, fill in the the file ./settings/analysis_settings.py with your desired settings, and run the command ```analyze```
 
 ## Testing (devs)
-- Using VS code: run test discovery and then run or debug the desired tests in the Test Explorer
-- Using the terminal:
+- In VS code: run test discovery and then run or debug the desired tests in the Test Explorer. Run each test in "./tests/test_run.py" to debug an entire workflow (processing, tracking, visualization, analysis)
+- In the terminal:
 ```python
 pytest # run all tests
-pytest tests/test_file.py # test one file; must be run from the parent directory of 'tests'
+pytest tests/test_file.py # test one file (you must be in from the parent directory of 'tests' to run this)
 ```
 - To examine the test coverage, run in the terminal: ```pytest --cov-report term-missing --cov=opto_analysis tests/```
 <br/><br/>
-- To instead generate a coverage report, run instead: ```pytest --cov-report xml --cov=opto_analysis tests/```
-- ...and then run in bash shell: ```bash <(curl -s https://codecov.io/bash) -t TOKEN-NUMBER```
+- To instead generate a coverage report, run: ```pytest --cov-report xml --cov=opto_analysis tests/```
+<br/>...and then run in bash shell: ```bash <(curl -s https://codecov.io/bash) -t TOKEN-NUMBER```
 

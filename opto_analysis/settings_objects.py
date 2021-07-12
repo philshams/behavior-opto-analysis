@@ -27,13 +27,29 @@ class Tracking_settings:
     prev_session: list=None
 
 @dataclass(frozen=True)
+class Visualization_settings:
+    laser_video: bool=True
+    escape_video: bool=True
+    generate_rendering: bool=False
+    visualize_exploration: bool=False
+    by_experiment: bool=False
+    experiments: list=None
+    by_session: bool=False
+    sessions: list=None
+    by_prev_session: bool=False
+    prev_session: list=None
+
+@dataclass(frozen=True)
 class Analysis_settings:
     plot_type: str = None
-    experiments: list = None
+    experiments: list = 'all'
     experiments_group_A: list = None
     experiments_group_B: list = None
     sessions: list = None
     sessions_group_A: list = None
     sessions_group_B: list = None
-    prev_session_group_A = [0]
-    prev_session_group_B = [1]
+    prev_session_group_A: list = None # [0]
+    prev_session_group_B: list = None # [1]
+    by_experiment: bool=True
+    by_session: bool=False
+    by_prev_session: bool=False

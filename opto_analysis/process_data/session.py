@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from data_bank import data_path
+from settings.data_bank import data_path
 import os
 
 

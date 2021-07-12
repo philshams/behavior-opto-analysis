@@ -1,5 +1,5 @@
 from opto_analysis.process_data.create_save_load_session import create_session
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 import numpy as np
 
 def test_create_save_load_session():

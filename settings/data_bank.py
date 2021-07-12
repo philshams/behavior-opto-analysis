@@ -57,6 +57,15 @@ all_data_entries = [
     # [46,6,      'laser near shelter',     True,        ""],
     # [47,7,      'laser near shelter',     True,        ""],
 
+    [48,0,      'open field',     False,       "21MAR18_9713_open field"],
+    # [49,1,      'open field',     False,       ""],
+    # [50,2,      'open field',     False,       ""],
+    # [51,3,      'open field',     False,       ""],
+    # [52,4,      'open field',     True,       ""],
+    # [53,5,      'open field',     True,       ""],
+    # [54,6,      'open field',     True,       ""],
+    # [55,7,      'open field',     True,       ""],
+
     [48,0,      'laser place preference (match expt parameters)',     True,       "21MAR27_9714_place pref left"],
     [49,1,      'laser place preference (match expt parameters)',     True,       "21MAR27_9717_place pref left"],
     [50,2,      'laser place preference (match expt parameters)',     True,       "21MAR27_9719_place pref right"],

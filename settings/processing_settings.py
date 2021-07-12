@@ -5,12 +5,12 @@ processing_settings = Processing_settings(
 
     create_new_metadata=False,
 
-    examine_laser_trials=True,
+    examine_laser_trials=False,
     examine_audio_trials=False,
     rapid=False, # speed up laser and audio trial clips
 
     by_experiment=False,
-    experiments = ['block edge vectors'],
+    experiments = [''],
 
     by_session=True,
     sessions=[0, 1],

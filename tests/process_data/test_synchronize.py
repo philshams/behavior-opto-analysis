@@ -1,7 +1,7 @@
 from opto_analysis.process_data.camera_trigger import Camera_trigger
 from opto_analysis.process_data.synchronize import examine_trials, verify_all_frames_saved
 from opto_analysis.process_data.create_save_load_session import create_session
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 import numpy as np
 
 def test_verify_all_frames_saved():

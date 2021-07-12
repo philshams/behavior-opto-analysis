@@ -1,7 +1,7 @@
 from opto_analysis.process_data.laser import get_Laser
 from opto_analysis.process_data.session import get_Session
 from opto_analysis.process_data.camera_trigger import get_Camera_trigger
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 import numpy as np
 
 

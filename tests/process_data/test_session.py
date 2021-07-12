@@ -1,5 +1,5 @@
 from opto_analysis.process_data.session import get_Session
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 
 def test_session(session=None):
     if not session:

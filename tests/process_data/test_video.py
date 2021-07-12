@@ -1,5 +1,5 @@
 from opto_analysis.process_data.video import get_Video
-from data_bank import all_data_entries
+from settings.data_bank import all_data_entries
 from opto_analysis.process_data.session import get_Session
 import cv2
 
