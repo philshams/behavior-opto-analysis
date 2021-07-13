@@ -4,6 +4,8 @@ from dataclasses import dataclass
 class Processing_settings:
     create_new_registration: bool=False
     skip_registration: bool=True
+    fisheye_correction_file: str=None
+    size: int=1024
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False

@@ -4,15 +4,15 @@ from opto_analysis.settings_objects import Processing_settings
 processing_settings = Processing_settings(
 
     create_new_registration = False,
-    skip_registration = True,
-
-    # TODO: find out if nonzero x and y offset are needed
+    skip_registration = False,
+    fisheye_correction_file = ".\\sample_data\\fisheye_maps.npy", # remove setting if n/a
+    size = 1024, # how big to make the renderings, in square pixels; currently must be >920
 
     by_experiment=False,
     experiments = [''],
 
     by_session=True,
-    sessions=[0,1],
+    sessions=[0, 1],
 
     by_prev_session=False,
     prev_session=[0],

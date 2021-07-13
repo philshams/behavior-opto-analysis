@@ -8,13 +8,11 @@ visualization_settings = Visualization_settings(
     generate_rendering=False,
     rapid = True,
     verbose = True,
-    size = 1024, # how big to make the visualizations, in square pixels
+    
 
     visualize_exploration=False,
 
     save_folder = "D:\\data\\Paper II",
-
-    fisheye_correction_file = ".\\sample_data\\fisheye_maps.npy", # remove setting if n/a
 
     by_experiment=False,
     experiments = [''],

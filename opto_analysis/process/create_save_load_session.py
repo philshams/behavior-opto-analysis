@@ -4,18 +4,25 @@ from opto_analysis.process.laser import get_Laser
 from opto_analysis.process.audio import get_Audio
 from opto_analysis.process.video import get_Video
 from opto_analysis.process.synchronize import verify_all_frames_saved, verify_aligned_data_streams
+from settings.processing_settings import processing_settings
 from pathlib import Path
 import os.path
+import numpy as np
 import dill as pickle
 
 def create_session(session_info: list, create_new: bool=False) -> Session:
     session = get_Session(session_info)
     save_file = os.path.join(session.file_path, "metadata")
+
+    if not processing_settings.create_new_registration:
+        saved_registration_transform = load_session(save_file).video.registration_transform
+    else: saved_registration_transform = None
+
     if create_new or not Path(save_file).is_file():
         session.camera_trigger = get_Camera_trigger(session)
         session.laser = get_Laser(session)
         session.audio = get_Audio(session)
-        session.video = get_Video(session)
+        session.video = get_Video(session, saved_registration_transform=saved_registration_transform)
         print_session_details(session)
         verify_all_frames_saved(session)
         verify_aligned_data_streams(session)
@@ -40,5 +47,5 @@ def print_session_details(session: Session) -> None:
         elif key in ['camera_trigger', 'laser','audio','video']:
             if key == 'camera_trigger': print("")
             print(" {} metadata saved".format(key))
-    print(" registration transform: {}".format(bool(session.video.registration_transform)))
+    print(" registration transform: {}".format(isinstance(session.video.registration_transform, np.ndarray)))
     print(" -----------------")
