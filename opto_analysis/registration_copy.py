@@ -8,13 +8,13 @@ def get_registration_transform(session: Session, video: object, video_object: ob
     if processing_settings.skip_registration:
         return None
     else:
-        rendered_arena, registration_click_targets =     generate_rendered_arena(session, processing_settings.size)
-        rendered_arena_with_click_targets =              add_click_targets(rendered_arena.copy(), registration_click_targets)
-        actual_arena =                                   generate_actual_arena(video_object)
-        fisheye_correction_map =                         load_fisheye_correction_map(video)
-        actual_arena =                                   correct_and_register_frame(actual_arena[:, :, 0], video, fisheye_correction_map)
-        actual_clicked_points =                          initialize_registration_transform(actual_arena, rendered_arena_with_click_targets, registration_click_targets)
-        registration_transform =                         refine_registration_transform(actual_arena, rendered_arena, registration_click_targets, actual_clicked_points)
+        rendered_arena, click_targets =       generate_rendered_arena(session, processing_settings.size)
+        rendered_arena_with_click_targets =   add_click_targets(rendered_arena.copy(), click_targets)
+        actual_arena =                        generate_actual_arena(video_object)
+        fisheye_correction_map =              load_fisheye_correction_map(video)
+        actual_arena =                        correct_and_register_frame(actual_arena[:, :, 0], video, fisheye_correction_map)
+        actual_clicked_points =               initialize_registration_transform(actual_arena, rendered_arena_with_click_targets, click_targets)
+        registration_transform =              refine_registration_transform(actual_arena, rendered_arena, click_targets, actual_clicked_points)
         return registration_transform
 
 def initialize_registration_transform(actual_arena: object, rendered_arena: object, registration_click_targets: object):

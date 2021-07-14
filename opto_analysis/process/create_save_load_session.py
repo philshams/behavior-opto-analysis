@@ -14,15 +14,15 @@ def create_session(session_info: list, create_new: bool=False) -> Session:
     session = get_Session(session_info)
     save_file = os.path.join(session.file_path, "metadata")
 
-    if not processing_settings.create_new_registration:
-        saved_registration_transform = load_session(save_file).video.registration_transform
-    else: saved_registration_transform = None
+    if Path(save_file).is_file and isinstance(load_session(save_file).video.registration_transform, np.ndarray) and not processing_settings.skip_registration:
+        loaded_registration_transform = load_session(save_file).video.registration_transform
+    else: loaded_registration_transform = None
 
     if create_new or not Path(save_file).is_file():
         session.camera_trigger = get_Camera_trigger(session)
         session.laser = get_Laser(session)
         session.audio = get_Audio(session)
-        session.video = get_Video(session, saved_registration_transform=saved_registration_transform)
+        session.video = get_Video(session, loaded_registration_transform)
         print_session_details(session)
         verify_all_frames_saved(session)
         verify_aligned_data_streams(session)

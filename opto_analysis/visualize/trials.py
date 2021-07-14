@@ -1,4 +1,4 @@
-from opto_analysis.register.registration import load_fisheye_correction_map, correct_and_register_frame
+from opto_analysis.registration import load_fisheye_correction_map, correct_and_register_frame
 from typing import Tuple
 import cv2
 import numpy as np
@@ -23,6 +23,7 @@ def visualize_trials(session: object, visualization_settings: object, stimulus_t
             _, frame = source_video.read()
             frame = correct_and_register_frame(frame[:, :, 0], session.video, fisheye_correction_map)
             if verbose: display_stimulus_status(stimulus_durations, stimulus_status[i], frame, stimulus_type)
+            if rendering: pass
             cv2.imshow('{} stimulus effect'.format(stimulus_type), frame)
             trial_video_raw.write(frame)
             if rendering: trial_video_rendering.write(rendering)
