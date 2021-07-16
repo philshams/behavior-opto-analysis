@@ -1,11 +1,12 @@
-------- at home ------
+------- at home or work ------
+- do trial rendering
+    - put body_loc, speed, neck_loc, body_angle, neck_angle. into a mouse_position_data file 
+
+- do exploration visualization
 
 
 ------- at work -------
 
 - train new dlc network (and make a workflow for this)
 
-- do trial rendering
-
-- do exploration visualization
 

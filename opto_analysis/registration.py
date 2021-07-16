@@ -10,7 +10,7 @@ def correct_and_register_frame(frame: object, video: object, fisheye_correction_
         frame = cv2.remap(frame, fisheye_correction_map[0], fisheye_correction_map[1], interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
         frame = frame[video.y_offset:video.height + video.y_offset, video.x_offset:video.width + video.x_offset]
     if isinstance(video.registration_transform, np.ndarray):
-        frame = cv2.warpAffine(frame, video.transform, frame.shape[0:2])
+        frame = cv2.warpAffine(frame, video.registration_transform, frame.shape[0:2])
     return frame
 
 def load_fisheye_correction_map(video: object):
@@ -21,27 +21,32 @@ def load_fisheye_correction_map(video: object):
         fisheye_correction_map = None
     return fisheye_correction_map
     
+def generate_rendered_arena(session: Session, size: int) -> object:
+    rendered_arena = 255 * np.ones((size, size)).astype(np.uint8)
+
+    if "place preference" in session.experiment:
+        pass #TODO: make place preference arena
+    else:
+        cv2.rectangle(rendered_arena, (int(size/2 - 250), int(size/2 - 50)), (int(size/2 + 250), int(size/2 + 50)), 190, thickness=1) # rectangular piece in the center of the arena
+        cv2.rectangle(rendered_arena, (int(size/2 - 50), int(size/2 + 458)), (int(size/2 + 50), int(size/2 + 360)), 210, thickness=-1) # the shelter
+        cv2.circle(rendered_arena, (int(size/2), int(size/2)), 460, 0, 1, lineType = 16) # arena outline
+
+        click_targets = np.array(([size/2 - 250, size/2 - 50], [size/2 - 250, size/2 + 50], [size/2 + 250, size/2 + 50], [size/2 + 250, size/2 - 50])).astype(int)
+
+    return rendered_arena, click_targets
+
 class Registration():
     def __init__(self, session: Session, video: object, video_object: object) -> object:
-        self.generate_rendered_arena(session, processing_settings.size)
+        self.generate_rendered_arena(session)
         self.add_click_targets()
         self.generate_actual_arena(video_object)
-        self.fisheye_correction_map = load_fisheye_correction_map(video)
-        self.actual_arena = correct_and_register_frame(self.actual_arena[:, :, 0], video, self.fisheye_correction_map)
+        self.load_fisheye_correction_map(video)
+        self.correct_and_register_frame(video)
         self.initialize_transform()
         self.refine_transform()
 
-    def generate_rendered_arena(self, session: Session, size: int):
-        self.rendered_arena = 255 * np.ones((size, size)).astype(np.uint8)
-
-        if "place preference" in session.experiment:
-            pass #TODO: make place preference arena
-        else:
-            cv2.rectangle(self.rendered_arena, (int(size/2 - 250), int(size/2 - 50)), (int(size/2 + 250), int(size/2 + 50)), 190, thickness=1) # rectangular piece in the center of the arena
-            cv2.rectangle(self.rendered_arena, (int(size/2 - 50), int(size/2 + 458)), (int(size/2 + 50), int(size/2 + 360)), 210, thickness=-1) # the shelter
-            cv2.circle(self.rendered_arena, (int(size/2), int(size/2)), 460, 0, 1, lineType = 16) # arena outline
-
-            self.click_targets = np.array(([size/2 - 250, size/2 - 50], [size/2 - 250, size/2 + 50], [size/2 + 250, size/2 + 50], [size/2 + 250, size/2 - 50])).astype(int)
+    def generate_rendered_arena(self, session: Session):
+        self.rendered_arena, self.click_targets = generate_rendered_arena(session, processing_settings.size)
 
     def add_click_targets(self):
         for i, click_target in enumerate(self.click_targets):
@@ -52,6 +57,12 @@ class Registration():
     def generate_actual_arena(self, video_object: object):
         video_object.set(cv2.CAP_PROP_POS_FRAMES, 0)
         _, self.actual_arena = video_object.read()
+
+    def load_fisheye_correction_map(self, video: object):
+        self.fisheye_correction_map = load_fisheye_correction_map(video)
+
+    def correct_and_register_frame(self, video: object):
+        self.actual_arena = correct_and_register_frame(self.actual_arena[:, :, 0], video, self.fisheye_correction_map)
 
     def initialize_transform(self):
         print("\n--REGISTRATION--\nClick the points in the actual arena corresponding to the numbered dots on the rendered arena -- in order!")
@@ -81,6 +92,8 @@ class Registration():
             cv2.imshow('overlay', self.overlay_of_arenas)
             if cv2.waitKey(10) & 0xFF == ord(' '): break
         cv2.destroyAllWindows()
+
+# --------------------------------------------------------------------------------------
 
     def click_click_targets(self, event,x,y, flags, params):
         if event == cv2.EVENT_LBUTTONDOWN:

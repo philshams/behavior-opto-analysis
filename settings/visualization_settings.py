@@ -5,7 +5,7 @@ visualization_settings = Visualization_settings(
 
     visualize_laser_trials=False,
     visualize_escape_trials=True,
-    generate_rendering=False,
+    generate_rendering=True,
     rapid = True,
     verbose = True,
     
