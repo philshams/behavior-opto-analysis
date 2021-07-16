@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import os
 
-class Visualization():
+class Visualize():
     def __init__(self, session: object):
         self.source_video = cv2.VideoCapture(session.video.video_file)
         self.fisheye_correction_map = load_fisheye_correction_map(session.video)
@@ -123,3 +123,4 @@ class Visualization():
         self.source_video.release()
         self.trial_video_raw.release()
         if self.rendering: self.trial_video_rendering.release()
+        cv2.destroyAllWindows()

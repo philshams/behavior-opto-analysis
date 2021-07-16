@@ -35,7 +35,7 @@ def generate_rendered_arena(session: Session, size: int) -> object:
 
     return rendered_arena, click_targets
 
-class Registration():
+class Register():
     def __init__(self, session: Session, video: object, video_object: object) -> object:
         self.generate_rendered_arena(session)
         self.add_click_targets()
