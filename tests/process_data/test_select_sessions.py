@@ -1,4 +1,4 @@
-from opto_analysis.process.select_sessions import select_sessions
+from opto_analysis.run import select_sessions
 from opto_analysis.settings_objects import Processing_settings
 import numpy as np
 

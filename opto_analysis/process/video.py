@@ -22,8 +22,8 @@ class Video:
 def get_Video(session: Session, registration_transform: object=None) -> Video:
     video_file = glob(os.path.join(session.file_path, "cam*avi"))[-1] # take the last file if there are multiple
     video_object = cv2.VideoCapture(video_file)
-    num_frames = video_object.get(cv2.CAP_PROP_FRAME_COUNT)
-    fps = video_object.get(cv2.CAP_PROP_FPS)
+    num_frames = int(video_object.get(cv2.CAP_PROP_FRAME_COUNT))
+    fps = int(video_object.get(cv2.CAP_PROP_FPS))
     height = int(video_object.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(video_object.get(cv2.CAP_PROP_FRAME_WIDTH))
     fisheye_correction_file = processing_settings.fisheye_correction_file

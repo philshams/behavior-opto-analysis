@@ -16,6 +16,12 @@ class Processing_settings:
 @dataclass(frozen=True)
 class Tracking_settings:
     dlc_settings_file: str = None
+    inverse_fisheye_correction_file: str = None
+    redo_dlc_tracking: bool=False
+    redo_processing_step: bool=False
+    skip_processing_step: bool=False
+    min_confidence_in_tracking: float=None
+    max_deviation_from_rest_of_points: int=None
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False

@@ -1,4 +1,4 @@
-from opto_analysis.registration import load_fisheye_correction_map, correct_and_register_frame, generate_rendered_arena
+from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame, generate_rendered_arena
 from settings.visualization_settings import visualization_settings
 import cv2
 import numpy as np
@@ -9,7 +9,7 @@ class Visualize():
         self.source_video = cv2.VideoCapture(session.video.video_file)
         self.fisheye_correction_map = load_fisheye_correction_map(session.video)
         self.session = session
-        self.mouse_position_data = None
+        self.tracking_data = None
         self.save_folder = visualization_settings.save_folder
         self.size = visualization_settings.size
         self.rapid = visualization_settings.rapid
@@ -58,8 +58,7 @@ class Visualize():
         if self.rendering: 
             self.get_current_position_and_speed() 
             self.get_shading_color()
-            self.shade_in_mouse_silhouette()
-            
+            self.shade_in_mouse_silhouette() 
 
     def display_and_save_frames(self, stimulus_type: str):
         cv2.imshow('{} stimulus effect - RAW'.format(stimulus_type), self.actual_frame)
@@ -77,11 +76,11 @@ class Visualize():
         self.rendering = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
 
     def get_current_position_and_speed(self):
-        self.body_loc = self.mouse_position_data.body_loc[self.frame_num]
-        self.neck_loc = self.mouse_position_data.neck_loc[self.frame_num]
-        self.body_angle = self.mouse_position_data.body_angle[self.frame_num]
-        self.neck_angle = self.mouse_position_data.neck_angle[self.frame_num]
-        self.speed = self.mouse_position_data.speed[self.frame_num]
+        self.body_loc = self.tracking_data.body_loc[self.frame_num]
+        self.neck_loc = self.tracking_data.neck_loc[self.frame_num]
+        self.body_angle = self.tracking_data.body_angle[self.frame_num]
+        self.neck_angle = self.tracking_data.neck_angle[self.frame_num]
+        self.speed = self.tracking_data.speed[self.frame_num]
 
     def get_shading_color(self):
         #                            corresponds to ----dark gray ----------dark blue--------medium blue-------------bright blue------------

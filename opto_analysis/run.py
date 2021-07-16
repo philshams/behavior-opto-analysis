@@ -3,41 +3,36 @@ from settings.tracking_settings import tracking_settings
 from settings.analysis_settings import analysis_settings
 from settings.visualization_settings import visualization_settings
 from opto_analysis.process.process import Process
-from opto_analysis.track.dlc_tracking import dlc_tracking
+from opto_analysis.track.track import Track
 from opto_analysis.visualize.visualize import Visualize
 from settings.data_bank import all_data_entries
 import numpy as np
 
 
 def process_data():
-    print("\n------ PROCESSING DATA ------".format(processing_settings))
-    print_settings(processing_settings)
+    print("\n------ PROCESSING DATA ------".format(processing_settings)); print_settings(processing_settings)
     selected_sessions_data_entries = select_sessions(processing_settings)
     for data_entry in selected_sessions_data_entries:
         Process(data_entry).create_session()
 
 def track_data():
-    print("\n------ TRACKING MICE ------")
-    print_settings(tracking_settings)
+    print("\n------ TRACKING MICE ------"); print_settings(tracking_settings)
     selected_sessions_data_entries = select_sessions(tracking_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()
-        dlc_tracking(session, tracking_settings)
+        Track().run_deeplabcut_tracking(session)
+        Track().process_tracking_data(session)
 
 def visualize_data():
-    print("\n------ VISUALIZING THE DATA ------")
-    print_settings(visualization_settings)
+    print("\n------ VISUALIZING THE DATA ------"); print_settings(visualization_settings)
     selected_sessions_data_entries = select_sessions(visualization_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()
-        if visualization_settings.visualize_laser_trials:
-            Visualize(session).trials(stimulus_type = 'laser', seconds_before=3, seconds_after=6)
-        if visualization_settings.visualize_escape_trials: 
-            Visualize(session).trials(stimulus_type = 'audio', seconds_before=3, seconds_after=2)
+        if visualization_settings.visualize_laser_trials:    Visualize(session).trials(stimulus_type = 'laser', seconds_before=3, seconds_after=6)
+        if visualization_settings.visualize_escape_trials:   Visualize(session).trials(stimulus_type = 'audio', seconds_before=3, seconds_after=2)
 
 def analyze_data():
-    print("\n------ ANALYZING DATA ------")
-    print_settings(analysis_settings)
+    print("\n------ ANALYZING DATA ------"); print_settings(analysis_settings)
     selected_sessions_data_entries = select_sessions(analysis_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()
