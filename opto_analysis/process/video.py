@@ -16,6 +16,8 @@ class Video:
     width: int
     fisheye_correction_file: str
     rendering_size_pixels: int
+    pixels_per_cm: int
+    tracking_data_file: str
     x_offset: int=128 # if the video frame is cropped, how far from the top left edge is it
     y_offset: int=0   # (this is for the fisheye correction step)
 
@@ -28,12 +30,14 @@ def get_Video(session: Session, registration_transform: object=None) -> Video:
     width = int(video_object.get(cv2.CAP_PROP_FRAME_WIDTH))
     fisheye_correction_file = processing_settings.fisheye_correction_file
     rendering_size_pixels = processing_settings.size
+    pixels_per_cm = processing_settings.pixels_per_cm
+    tracking_data_file = os.path.join(session.file_path, "tracking")
 
-    video = Video(num_frames, video_file, fps, None, height, width, fisheye_correction_file, rendering_size_pixels)
+    video = Video(num_frames, video_file, fps, None, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
     if processing_settings.skip_registration: return video
 
     if processing_settings.create_new_registration or (isinstance(registration_transform, type(None)) and not processing_settings.skip_registration):
         registration_transform = Register(session, video, video_object).transform
         
-    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels)
+    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
     return video

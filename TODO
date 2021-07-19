@@ -1,6 +1,8 @@
 ------- at home or work ------
 - do trial rendering
-    - put body_loc, speed, neck_loc, body_angle, neck_angle. into a mouse_position_data file 
+    - put body_loc, speed, neck_loc, body_angle, neck_angle. into a tracking_data file 
+
+- update tests
 
 - do exploration visualization
 

@@ -2,6 +2,7 @@ from opto_analysis.track.register import load_fisheye_correction_map, correct_an
 from settings.visualization_settings import visualization_settings
 import cv2
 import numpy as np
+import dill as pickle
 import os
 
 class Visualize():
@@ -9,7 +10,7 @@ class Visualize():
         self.source_video = cv2.VideoCapture(session.video.video_file)
         self.fisheye_correction_map = load_fisheye_correction_map(session.video)
         self.session = session
-        self.tracking_data = None
+        with open(self.session.video.tracking_data_file, "rb") as dill_file: self.tracking_data = pickle.load(dill_file)
         self.save_folder = visualization_settings.save_folder
         self.size = visualization_settings.size
         self.rapid = visualization_settings.rapid
@@ -37,7 +38,7 @@ class Visualize():
         self.release_video_objects()
 
     def read_frame(self):
-        self.frame_num = self.source_video.get(cv2.CAP_PROP_POS_FRAMES)
+        self.frame_num = int(self.source_video.get(cv2.CAP_PROP_POS_FRAMES))
         _, self.actual_frame = self.source_video.read()
 
     def correct_and_register_frame(self):
@@ -54,7 +55,7 @@ class Visualize():
 
     def generate_rendering(self, i):
         if i==0:
-            self.generate_rendered_arena()
+            self.initialize_rendered_frame()
         if self.rendering: 
             self.get_current_position_and_speed() 
             self.get_shading_color()
@@ -69,18 +70,15 @@ class Visualize():
 
 # ----------------------------------------------------------------------------------------------------------------
 
-    def generate_rendered_arena(self):
-        self.rendered_arena, _ = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
-
-    def generate_rendered_frame(self):
-        self.rendering = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
+    def initialize_rendered_frame(self):
+        self.rendered_frame = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
 
     def get_current_position_and_speed(self):
-        self.body_loc = self.tracking_data.body_loc[self.frame_num]
-        self.neck_loc = self.tracking_data.neck_loc[self.frame_num]
-        self.body_angle = self.tracking_data.body_angle[self.frame_num]
-        self.neck_angle = self.tracking_data.neck_angle[self.frame_num]
-        self.speed = self.tracking_data.speed[self.frame_num]
+        self.body_loc = self.tracking_data['body_loc'][self.frame_num, :]
+        self.neck_loc = self.tracking_data['neck_loc'][self.frame_num, :]
+        self.body_dir = self.tracking_data['body_dir'][self.frame_num]
+        self.neck_dir = self.tracking_data['neck_dir'][self.frame_num]
+        self.speed = self.tracking_data['speed'][self.frame_num]
 
     def get_shading_color(self):
         #                            corresponds to ----dark gray ----------dark blue--------medium blue-------------bright blue------------
@@ -94,8 +92,11 @@ class Visualize():
 
     def shade_in_mouse_silhouette(self) -> object:
         self.pixels_to_shade = np.zeros_like(self.rendered_frame)
-        cv2.ellipse(self.pixels_to_shade, self.body_loc, (14, 8), 180-self.body_angle, 0, 360, 100, thickness=-1)
-        cv2.ellipse(self.pixels_to_shade, self.neck_loc, (11, 6), 180-self.neck_angle, 0, 360, 100, thickness=-1)
+        cv2.ellipse(self.pixels_to_shade, tuple(self.body_loc.astype(int)), (14, 8), 180-self.body_dir, 0, 360, 100, thickness=-1)
+
+        # cv2.ellipse(self.pixels_to_shade, (479, 287), (14, 8), 180-self.body_dir, 0, 360, 100, thickness=-1)
+
+        cv2.ellipse(self.pixels_to_shade, self.neck_loc, (11, 6), 180-self.neck_dir, 0, 360, 100, thickness=-1)
 
         self.rendered_frame[self.pixels_to_shade] = self.rendered_frame[self.pixels_to_shade] * self.shading_color
 

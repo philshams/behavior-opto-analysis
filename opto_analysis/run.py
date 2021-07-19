@@ -16,7 +16,7 @@ def process_data():
         Process(data_entry).create_session()
 
 def track_data():
-    print("\n------ TRACKING MICE ------"); print_settings(tracking_settings)
+    print("\n------ TRACKING VIDEOS ------"); print_settings(tracking_settings)
     selected_sessions_data_entries = select_sessions(tracking_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()
@@ -24,7 +24,7 @@ def track_data():
         Track().process_tracking_data(session)
 
 def visualize_data():
-    print("\n------ VISUALIZING THE DATA ------"); print_settings(visualization_settings)
+    print("\n------ VISUALIZING DATA ------"); print_settings(visualization_settings)
     selected_sessions_data_entries = select_sessions(visualization_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()

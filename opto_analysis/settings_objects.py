@@ -6,6 +6,7 @@ class Processing_settings:
     skip_registration: bool=True
     fisheye_correction_file: str=None
     size: int=1024
+    pixels_per_cm : int=10
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False
@@ -20,6 +21,7 @@ class Tracking_settings:
     redo_dlc_tracking: bool=False
     redo_processing_step: bool=False
     skip_processing_step: bool=False
+    display_tracking_output: bool=False
     min_confidence_in_tracking: float=None
     max_deviation_from_rest_of_points: int=None
     by_experiment: bool=False
@@ -39,7 +41,6 @@ class Visualization_settings:
     save_folder: str = None
     fisheye_correction_file: str = None
     generate_rendering: bool=False
-    visualize_exploration: bool=False
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False
