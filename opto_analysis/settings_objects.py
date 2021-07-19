@@ -35,9 +35,15 @@ class Tracking_settings:
 class Visualization_settings:
     visualize_laser_trials: bool=True
     visualize_escape_trials: bool=True
+    display_tracking:bool=False
+    display_trail:bool=True
     rapid: bool=True
-    verbose: bool=True
+    display_stim_status: bool=True
     size: int=1024
+    seconds_before_audio: int = 3
+    seconds_before_laser: int = 3
+    seconds_after_audio: int = 2
+    seconds_after_laser: int = 6
     save_folder: str = None
     fisheye_correction_file: str = None
     generate_rendering: bool=False

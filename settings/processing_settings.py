@@ -13,7 +13,7 @@ processing_settings = Processing_settings(
     experiments = [''],
 
     by_session=True,
-    sessions=[0],
+    sessions=[0, 1],
 
     by_prev_session=False,
     prev_session=[0],

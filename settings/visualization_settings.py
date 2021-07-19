@@ -5,9 +5,19 @@ visualization_settings = Visualization_settings(
 
     visualize_laser_trials=False,
     visualize_escape_trials=True,
-    generate_rendering=True,
+    
+    display_tracking=True,
+    display_trail=False,
+
+    display_stim_status = True,
     rapid = True,
-    verbose = True,
+    
+    generate_rendering=False,
+
+    seconds_before_audio = 3,
+    seconds_before_laser = 3,
+    seconds_after_audio = 2,
+    seconds_after_laser = 6,
 
     save_folder = "D:\\data\\Paper II",
 
@@ -15,7 +25,7 @@ visualization_settings = Visualization_settings(
     experiments = [''],
 
     by_session=True,
-    sessions=[0],
+    sessions=[0, 1],
 
     by_prev_session=False,
     prev_session=[0]

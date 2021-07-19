@@ -28,8 +28,8 @@ def visualize_data():
     selected_sessions_data_entries = select_sessions(visualization_settings)
     for data_entry in selected_sessions_data_entries:
         session = Process(data_entry).load_session()
-        if visualization_settings.visualize_laser_trials:    Visualize(session).trials(stimulus_type = 'laser', seconds_before=3, seconds_after=6)
-        if visualization_settings.visualize_escape_trials:   Visualize(session).trials(stimulus_type = 'audio', seconds_before=3, seconds_after=2)
+        if visualization_settings.visualize_laser_trials:    Visualize(session).trials(stimulus_type = 'laser')
+        if visualization_settings.visualize_escape_trials:   Visualize(session).trials(stimulus_type = 'audio')
 
 def analyze_data():
     print("\n------ ANALYZING DATA ------"); print_settings(analysis_settings)
