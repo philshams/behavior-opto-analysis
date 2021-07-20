@@ -6,13 +6,13 @@ from distutils.core import setup
 
 setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
 
-
-def flatten(iterable):
-    '''       flatten a nested list       '''
+def flatten(iterable: list):
     it = iter(iterable)
-    for e in it:
-        if isinstance(e, (list, tuple)):
-            for f in flatten(e):
-                yield f
+    for x in it:
+        if isinstance(x, (list, tuple, np.ndarray)):
+            for y in flatten(x):
+                print(y)
+                yield y
         else:
-            yield e
+            print('hi')
+            yield x

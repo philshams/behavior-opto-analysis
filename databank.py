@@ -1,7 +1,8 @@
-data_path = ".\\sample_data\\"          # sample data
-# data_path = "path on desktop PC..."     # full dataset
+databank = {}
+databank['path'] = "P:\\opto data\\"          # sample data
+# data['path'] = "path on desktop PC..."     # full dataset
 
-all_data_entries = [
+databank['session IDs'] = [
 #-Session #s----Name of experiment-----prev session------Folder with data------
     [0,0,      'block edge vectors',     False,       "21MAR16_9718_block evs"],
     [1,1,      'block edge vectors',     False,       "21MAR17_9719_block evs"],

@@ -5,37 +5,38 @@ from settings.visualization_settings import visualization_settings
 from opto_analysis.process.process import Process
 from opto_analysis.track.track import Track
 from opto_analysis.visualize.visualize import Visualize
-from settings.data_bank import all_data_entries
+from databank import databank
+import os
 import numpy as np
 
 
-def process_data():
+def process():
     print("\n------ PROCESSING DATA ------".format(processing_settings)); print_settings(processing_settings)
-    selected_sessions_data_entries = select_sessions(processing_settings)
-    for data_entry in selected_sessions_data_entries:
-        Process(data_entry).create_session()
+    selected_session_IDs = collect_session_IDs(processing_settings, databank)
+    for session_ID in selected_session_IDs:
+        Process(session_ID).create_session(processing_settings)
 
-def track_data():
+def track():
     print("\n------ TRACKING VIDEOS ------"); print_settings(tracking_settings)
-    selected_sessions_data_entries = select_sessions(tracking_settings)
-    for data_entry in selected_sessions_data_entries:
-        session = Process(data_entry).load_session()
-        Track().run_deeplabcut_tracking(session)
-        Track().process_tracking_data(session)
+    selected_session_IDs = collect_session_IDs(tracking_settings, databank)
+    for session_ID in selected_session_IDs:
+        session = Process(session_ID).load_session()
+        Track(tracking_settings).run_deeplabcut_tracking(session)
+        Track(tracking_settings).process_tracking_data(session)
 
-def visualize_data():
+def visualize():
     print("\n------ VISUALIZING DATA ------"); print_settings(visualization_settings)
-    selected_sessions_data_entries = select_sessions(visualization_settings)
-    for data_entry in selected_sessions_data_entries:
-        session = Process(data_entry).load_session()
+    selected_session_IDs = collect_session_IDs(visualization_settings, databank)
+    for session_ID in selected_session_IDs:
+        session = Process(session_ID).load_session()
         if visualization_settings.visualize_laser_trials:    Visualize(session).trials(stimulus_type = 'laser')
         if visualization_settings.visualize_escape_trials:   Visualize(session).trials(stimulus_type = 'audio')
 
-def analyze_data():
+def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings(analysis_settings)
-    selected_sessions_data_entries = select_sessions(analysis_settings)
-    for data_entry in selected_sessions_data_entries:
-        session = Process(data_entry).load_session()
+    selected_session_IDs = collect_session_IDs(analysis_settings, databank)
+    for session_ID in selected_session_IDs:
+        session = Process(session_ID).load_session()
 
 # ----------------------------------------------------------------------------------------------------------
 
@@ -48,22 +49,25 @@ def print_settings(settings: object):
     if settings.by_prev_session: print(" - # of prev sessions: {}".format(settings.prev_sessions))
     print('\n-----------------')
 
-def select_sessions(processing_settings: object) -> object:
-    selected_sessions = np.array(all_data_entries, dtype='object')
+def collect_session_IDs(settings: object, databank: list) -> object:
+    session_IDs = np.array(databank['session IDs'], dtype='object')
 
-    if processing_settings.by_experiment:
-        assert isinstance(processing_settings.experiments, list), "Experiment(s) must be listed in list format"
-        experiments_idx = np.sum([experiment==selected_sessions[:,2] for experiment in processing_settings.experiments],0).astype(bool)
-        selected_sessions = selected_sessions[experiments_idx]
+    if settings.by_experiment:
+        assert isinstance(settings.experiments, list), "Experiment(s) must be listed in list format"
+        experiments_idx = np.sum([experiment==session_IDs[:,2] for experiment in settings.experiments],0).astype(bool)
+        session_IDs = session_IDs[experiments_idx]
 
-    if processing_settings.by_prev_session:
-        assert isinstance(processing_settings.prev_session, list), "Number(s) of previous sessions must be listed in list format"
-        naivete_idx = np.sum([num_prev_sessions==selected_sessions[:,3] for num_prev_sessions in processing_settings.prev_session],0).astype(bool)
-        selected_sessions = selected_sessions[naivete_idx]
+    if settings.by_prev_session:
+        assert isinstance(settings.prev_session, list), "Number(s) of previous sessions must be listed in list format"
+        naivete_idx = np.sum([num_prev_sessions==session_IDs[:,3] for num_prev_sessions in settings.prev_session],0).astype(bool)
+        session_IDs = session_IDs[naivete_idx]
 
-    if processing_settings.by_session:
-        assert isinstance(processing_settings.sessions, list), "Session number(s) must be listed in list format"
-        session_idx = np.sum([session_num==selected_sessions[:,0] for session_num in processing_settings.sessions],0).astype(bool)
-        selected_sessions = selected_sessions[session_idx]
+    if settings.by_session:
+        assert isinstance(settings.sessions, list), "Session number(s) must be listed in list format"
+        session_idx = np.sum([session_num==session_IDs[:,0] for session_num in settings.sessions],0).astype(bool)
+        session_IDs = session_IDs[session_idx]
 
-    return selected_sessions
+    for entry in session_IDs: # add in the full path to the raw data
+        entry[4] = os.path.join(databank['path'], entry[4])
+
+    return session_IDs

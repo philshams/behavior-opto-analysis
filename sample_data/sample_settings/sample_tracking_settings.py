@@ -14,7 +14,7 @@ tracking_settings = Tracking_settings(
     experiments = [''],
 
     by_session=True,
-    sessions=[0,1],
+    sessions=[0],
 
     by_prev_session=False,
     prev_session=[0],

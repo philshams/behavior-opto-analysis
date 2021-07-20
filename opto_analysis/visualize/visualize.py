@@ -48,6 +48,8 @@ class Visualize():
                 if cv2.waitKey(self.delay_between_frames) & 0xFF == ord('q'): break # press q to quit this video
         self.release_video_objects()
 
+# -----FIRST-LEVEL FUNCTIONS---------------------------------------------------------------------------------------
+
     def read_frame(self, onset_frames):
         self.frame_num = int(self.source_video.get(cv2.CAP_PROP_POS_FRAMES))
         self.num_frames_past_stim = self.frame_num - onset_frames[0]
@@ -123,7 +125,7 @@ class Visualize():
         self.trial_video_raw.write(self.actual_frame)
         if self.rendering: self.trial_video_rendering.write(self.rendered_frame)
 
-# ----------------------------------------------------------------------------------------------------------------
+# -----RENDERED FRAME FUNCTIONS-------------------------------------------------------------------------------------
 
     def initialize_rendered_frame(self):
         self.rendered_frame, _ = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
@@ -136,8 +138,7 @@ class Visualize():
 
         self.rendered_frame[self.pixels_to_shade.astype(bool)] = self.rendered_frame[self.pixels_to_shade.astype(bool)] * self.shading_color_light
 
-# ----------------------------------------------------------------------------------------------------------------
-
+# -----TRACKING DISPLAY FUNCTIONS-----------------------------------------------------------------------------------
       
     def display_avg_location_on_frame(self):
         cv2.circle(self.actual_frame, self.avg_loc, 3, (220,220,220), -1)
@@ -158,7 +159,7 @@ class Visualize():
             cv2.circle(self.actual_frame, bodypart_loc, 1, color, -1)
             cv2.putText(self.actual_frame, bodypart, (self.actual_frame.shape[0] - 85, self.actual_frame.shape[1] - 280 + j * 20), 0, .4, color, thickness=1)
 
-# ----------------------------------------------------------------------------------------------------------------
+# ----SETUP FUNCTIONS-----------------------------------------------------------------------------------------------
 
     def set_up_videos(self, stimulus_type: str, trial_num: int, onset_frames: object, stimulus_durations: object):
         assert stimulus_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"

@@ -1,4 +1,3 @@
-from numpy.lib.npyio import load
 from opto_analysis.process.session import Session, get_Session
 from opto_analysis.process.camera_trigger import get_Camera_trigger
 from opto_analysis.process.laser import get_Laser
@@ -9,19 +8,20 @@ import numpy as np
 import dill as pickle
 
 class Process():
-    def __init__(self, data_entry):
-        self.session = get_Session(data_entry)
+    def __init__(self, session_ID):
+        self.session = get_Session(session_ID)
 
-    def create_session(self) -> Session:        
+    def create_session(self, settings) -> Session:        
         self.load_registration_transform()
         self.session.camera_trigger = get_Camera_trigger(self.session)
         self.session.laser          = get_Laser(self.session)
         self.session.audio          = get_Audio(self.session)
-        self.session.video          = get_Video(self.session, self.loaded_registration_transform)
+        self.session.video          = get_Video(self.session, settings, self.loaded_registration_transform)
         self.print_session_details()
         self.save_session()
         self.verify_all_frames_saved()
         self.verify_aligned_data_streams()
+        return self.session
 
     def save_session(self, overwrite=True):
         assert not os.path.isfile(self.session.metadata_file) or overwrite, "Permission to save not granted"

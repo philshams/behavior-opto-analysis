@@ -23,16 +23,14 @@ def load_fisheye_correction_map(video: object):
     
 def generate_rendered_arena(session: Session, size: int) -> object:
     rendered_arena = 255 * np.ones((size, size)).astype(np.uint8)
-
+    #! This section must be modified with a new section for each type of arena (default: 92-cm circle with a square shelter and a 50cmx10cm removable rectangle in the middle)
     if "place preference" in session.experiment:
         pass #TODO: make place preference arena
     else:
         cv2.rectangle(rendered_arena, (int(size/2 - 250), int(size/2 - 50)), (int(size/2 + 250), int(size/2 + 50)), 190, thickness=1) # rectangular piece in the center of the arena
         cv2.rectangle(rendered_arena, (int(size/2 - 50), int(size/2 + 458)), (int(size/2 + 50), int(size/2 + 360)), 210, thickness=-1) # the shelter
         cv2.circle(rendered_arena, (int(size/2), int(size/2)), 460, 0, 1, lineType = 16) # arena outline
-
         click_targets = np.array(([size/2 - 250, size/2 - 50], [size/2 - 250, size/2 + 50], [size/2 + 250, size/2 + 50], [size/2 + 250, size/2 - 50])).astype(int)
-
     return rendered_arena, click_targets
 
 class Register():
