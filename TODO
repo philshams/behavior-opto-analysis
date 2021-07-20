@@ -1,11 +1,10 @@
 ------- at home or work ------
 
--* update tests
-    - make test settings!
+- test visualize
 
 - plot all escapes of a given condition
 
-- do exploration visualization
+- do exploration analysis
 
 - do rendering videos/images once dlc is trained
     - try: colored line plus occasional silhouettes (try matplotlib)

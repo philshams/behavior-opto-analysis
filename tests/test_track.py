@@ -3,15 +3,15 @@ from opto_analysis.track.track import Track
 from opto_analysis.track.register import Register
 from opto_analysis.run import collect_session_IDs
 from sample_data.sample_databank import databank
-from sample_data.sample_settings.sample_tracking_settings import tracking_settings
-from sample_data.sample_settings.sample_processing_settings import processing_settings
+from sample_data.sample_settings.sample_settings_track import settings_track
+from sample_data.sample_settings.sample_settings_process import settings_process
 import numpy as np
 import dill as pickle
 import cv2
 import os
 
 def test_register():
-    selected_session_IDs = collect_session_IDs(processing_settings, databank)
+    selected_session_IDs = collect_session_IDs(settings_process, databank)
 
     session = Process(selected_session_IDs[0]).load_session()
     video = session.video
@@ -22,10 +22,10 @@ def test_register():
     assert registration_transform.shape == (2,3)
 
 def test_track():
-    selected_session_IDs = collect_session_IDs(processing_settings, databank)
+    selected_session_IDs = collect_session_IDs(settings_process, databank)
 
     session = Process(selected_session_IDs[0]).load_session()
-    tracking = Track(tracking_settings)
+    tracking = Track(settings_track)
     tracking.tracking_data = {}
 
     extract_data_from_dlc_file_assertions(tracking, session)

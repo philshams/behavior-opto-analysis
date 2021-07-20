@@ -1,6 +1,6 @@
 databank = {}
-databank['path'] = "P:\\opto data\\"          # sample data
-# data['path'] = "path on desktop PC..."     # full dataset
+databank['path'] = ".\\sample data\\"          # sample data
+# data['path'] = "P:\\opto data\\"      # full dataset
 
 databank['session IDs'] = [
 #-Session #s----Name of experiment-----prev session------Folder with data------

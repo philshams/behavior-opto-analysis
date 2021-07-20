@@ -16,10 +16,10 @@ Opto analysis is a package for analyzing free-moving behavioral data during opto
 
 ## Usage
 
-- To process data and verify synchronization, fill in the the file ./settings/processing_settings.py with your desired settings, and run the terminal command ```process```
-- To track data (DeepLabCut), fill in the the file ./settings/tracking_settings.py with your desired settings, and run the command ```track```
-- To visualize trials, fill in the the file ./settings/visualization_settings.py with your desired settings, and run the command ```visualize```. This currently requires having already trained a DLC network.
-- To analyze and plot data, fill in the the file ./settings/analysis_settings.py with your desired settings, and run the command ```analyze```
+- To process data and verify synchronization, fill in the the file ./settings/settings_process.py with your desired settings, and run the terminal command ```process```
+- To track data (DeepLabCut), fill in the the file ./settings/settings_track.py with your desired settings, and run the command ```track```
+- To visualize trials, fill in the the file ./settings/settings_visualize.py with your desired settings, and run the command ```visualize```. This currently requires having already trained a DLC network.
+- To analyze and plot data, fill in the the file ./settings/settings_analyze.py with your desired settings, and run the command ```analyze```
 
 ## Testing (devs)
 - In VS code: run test discovery and then run or debug the desired tests in the Test Explorer. Run each test in "./tests/test_run.py" to debug an entire workflow (processing, tracking, visualization, analysis)

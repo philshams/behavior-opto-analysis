@@ -1,7 +1,7 @@
-from settings.processing_settings import processing_settings
-from settings.tracking_settings import tracking_settings
-from settings.analysis_settings import analysis_settings
-from settings.visualization_settings import visualization_settings
+from settings.settings_process import settings_process
+from settings.settings_track import settings_track
+from settings.settings_analyze import settings_analyze
+from settings.settings_visualize import settings_visualize
 from opto_analysis.process.process import Process
 from opto_analysis.track.track import Track
 from opto_analysis.visualize.visualize import Visualize
@@ -11,30 +11,30 @@ import numpy as np
 
 
 def process():
-    print("\n------ PROCESSING DATA ------".format(processing_settings)); print_settings(processing_settings)
-    selected_session_IDs = collect_session_IDs(processing_settings, databank)
+    print("\n------ PROCESSING DATA ------".format(settings_process)); print_settings(settings_process)
+    selected_session_IDs = collect_session_IDs(settings_process, databank)
     for session_ID in selected_session_IDs:
-        Process(session_ID).create_session(processing_settings)
+        Process(session_ID).create_session(settings_process)
 
 def track():
-    print("\n------ TRACKING VIDEOS ------"); print_settings(tracking_settings)
-    selected_session_IDs = collect_session_IDs(tracking_settings, databank)
+    print("\n------ TRACKING VIDEOS ------"); print_settings(settings_track)
+    selected_session_IDs = collect_session_IDs(settings_track, databank)
     for session_ID in selected_session_IDs:
         session = Process(session_ID).load_session()
-        Track(tracking_settings).run_deeplabcut_tracking(session)
-        Track(tracking_settings).process_tracking_data(session)
+        Track(settings_track).run_deeplabcut_tracking(session)
+        Track(settings_track).process_tracking_data(session)
 
 def visualize():
-    print("\n------ VISUALIZING DATA ------"); print_settings(visualization_settings)
-    selected_session_IDs = collect_session_IDs(visualization_settings, databank)
+    print("\n------ VISUALIZING DATA ------"); print_settings(settings_visualize)
+    selected_session_IDs = collect_session_IDs(settings_visualize, databank)
     for session_ID in selected_session_IDs:
         session = Process(session_ID).load_session()
-        if visualization_settings.visualize_laser_trials:    Visualize(session).trials(stimulus_type = 'laser')
-        if visualization_settings.visualize_escape_trials:   Visualize(session).trials(stimulus_type = 'audio')
+        if settings_visualize.laser_trials:  Visualize(session, settings_visualize).trials(stimulus_type = 'laser')
+        if settings_visualize.escape_trials: Visualize(session, settings_visualize).trials(stimulus_type = 'audio')
 
 def analyze():
-    print("\n------ ANALYZING DATA ------"); print_settings(analysis_settings)
-    selected_session_IDs = collect_session_IDs(analysis_settings, databank)
+    print("\n------ ANALYZING DATA ------"); print_settings(settings_analyze)
+    selected_session_IDs = collect_session_IDs(settings_analyze, databank)
     for session_ID in selected_session_IDs:
         session = Process(session_ID).load_session()
 

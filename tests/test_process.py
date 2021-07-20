@@ -1,14 +1,14 @@
 from opto_analysis.process.process import Process
 from opto_analysis.run import collect_session_IDs
-from sample_data.sample_settings.sample_processing_settings import processing_settings
+from sample_data.sample_settings.sample_settings_process import settings_process
 from sample_data.sample_databank import databank
 import numpy as np
 import cv2
 
 def test_process():
-    selected_session_IDs = collect_session_IDs(processing_settings, databank)
+    selected_session_IDs = collect_session_IDs(settings_process, databank)
     collect_session_IDs_assertions(selected_session_IDs)
-    session = Process(selected_session_IDs[0]).create_session(processing_settings)
+    session = Process(selected_session_IDs[0]).create_session(settings_process)
     session_assertions(session)
     camera_trigger_assertions(session.camera_trigger)
     laser_assertions(session.laser)

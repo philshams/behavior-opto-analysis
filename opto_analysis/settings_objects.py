@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class Processing_settings:
+class Settings_process:
     create_new_registration: bool=False
     skip_registration: bool=True
     fisheye_correction_file: str=None
@@ -15,7 +15,7 @@ class Processing_settings:
     prev_session: list=None
 
 @dataclass(frozen=True)
-class Tracking_settings:
+class Settings_track:
     dlc_settings_file: str = None
     inverse_fisheye_correction_file: str = None
     redo_dlc_tracking: bool=False
@@ -32,9 +32,9 @@ class Tracking_settings:
     prev_session: list=None
 
 @dataclass(frozen=True)
-class Visualization_settings:
-    visualize_laser_trials: bool=True
-    visualize_escape_trials: bool=True
+class Settings_visualize:
+    laser_trials: bool=True
+    escape_trials: bool=True
     display_tracking:bool=False
     display_trail:bool=True
     rapid: bool=True
@@ -55,7 +55,7 @@ class Visualization_settings:
     prev_session: list=None
 
 @dataclass(frozen=True)
-class Analysis_settings:
+class Settings_analyze:
     plot_type: str = None
     experiments: list = 'all'
     experiments_group_A: list = None

@@ -1,5 +1,5 @@
 from opto_analysis.process.session import Session
-from settings.processing_settings import processing_settings
+from settings.settings_process import settings_process
 import cv2
 import numpy as np
 
@@ -44,7 +44,7 @@ class Register():
         self.refine_transform()
 
     def generate_rendered_arena(self, session: Session):
-        self.rendered_arena, self.click_targets = generate_rendered_arena(session, processing_settings.size)
+        self.rendered_arena, self.click_targets = generate_rendered_arena(session, settings_process.size)
 
     def add_click_targets(self):
         for i, click_target in enumerate(self.click_targets):

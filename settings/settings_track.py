@@ -1,7 +1,7 @@
-from opto_analysis.settings_objects import Tracking_settings
+from opto_analysis.settings_objects import Settings_track
 
 # select the analysis settings
-tracking_settings = Tracking_settings(
+settings_track = Settings_track(
 
     redo_dlc_tracking=False,
     redo_processing_step=True,
@@ -14,7 +14,7 @@ tracking_settings = Tracking_settings(
     experiments = [''],
 
     by_session=True,
-    sessions=[0],
+    sessions=[0,1],
 
     by_prev_session=False,
     prev_session=[0],

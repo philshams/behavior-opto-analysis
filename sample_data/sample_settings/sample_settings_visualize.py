@@ -1,13 +1,13 @@
-from opto_analysis.settings_objects import Visualization_settings
+from opto_analysis.settings_objects import Settings_visualize
 
 # select the analysis settings
-visualization_settings = Visualization_settings(
+settings_visualize = Settings_visualize(
 
-    visualize_laser_trials=False,
-    visualize_escape_trials=True,
+    laser_trials=True,
+    escape_trials=True,
     
-    display_tracking=False,
     display_trail=True,
+    display_tracking=True,
 
     display_stim_status = True,
     rapid = True,
@@ -19,7 +19,7 @@ visualization_settings = Visualization_settings(
     seconds_after_audio = 2,
     seconds_after_laser = 6,
 
-    save_folder = "C:\\data\\Paper II",
+    save_folder = ".\\sample_data",
 
     by_experiment=False,
     experiments = [''],

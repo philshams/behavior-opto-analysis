@@ -16,3 +16,12 @@ def flatten(iterable: list):
         else:
             print('hi')
             yield x
+
+
+
+
+            # shading_colors = [np.array(x) for x in [[254, 254, 254], [254, 253.5, 252.6], [254, 250, 240], [254, 250, 200], [200, 250, 254]]]
+            # i = np.where( (self.speed - speed_thresholds)>0 )[0][-1] # index within the speed thresholds
+            # shading_color_based_on_speed = ((speed_thresholds[i+1] - self.speed) * shading_colors[i] + (self.speed - speed_thresholds[i]) * shading_colors[i+1]) / (speed_thresholds[i+1] - speed_thresholds[i]) # somewhere between the darker and brighter color depending on its speed relative to the threshold speeds
+            # self.shading_color_light = 1 - (1 - shading_color_based_on_speed / [255, 255, 255]) / (np.mean(1 - shading_color_based_on_speed / [255, 255, 255]) / .08)
+            # self.shading_color_dark = (1 - (1 - shading_color_based_on_speed / [255, 255, 255]) / (np.mean(1 - shading_color_based_on_speed / [255, 255, 255]) / .38))**2
