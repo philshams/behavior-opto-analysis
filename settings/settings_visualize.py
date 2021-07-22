@@ -1,18 +1,15 @@
-from opto_analysis.settings_objects import Settings_visualize
+from opto_analysis.utils.settings_objects import Settings_visualize
 
-# select the analysis settings
 settings_visualize = Settings_visualize(
 
     laser_trials=False,
     escape_trials=True,
     
-    display_trail=True,
-    display_tracking=False,
+    display_trail=False,
+    display_tracking=True,
 
     display_stim_status = True,
     rapid = True,
-    
-    generate_rendering=False,
 
     seconds_before_audio = 3,
     seconds_before_laser = 3,

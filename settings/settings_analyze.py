@@ -1,19 +1,21 @@
-from opto_analysis.settings_objects import Settings_analyze
+from opto_analysis.utils.settings_objects import Settings_analyze
 
-settings_analyze_selection = "threat video all"
- 
+settings_visualize = Settings_analyze(
 
+settings_name = "escapes 1",
+save_folder = "D:\\data\\Paper II",
+max_escapes_per_mouse = 6
 
+)
 
-
-selection = {}
+settings_dict = {}
 #------------selection of analysis settings to choose from--------------
 
-selection["threat video all"] = \
-    Settings_analyze(plot_type='threat video')
+settings_dict["escapes 1"] = \
+    Settings_analyze(plot_escapes = True, experiments=['block edge vectors'])
     
-selection["laser video block edge vectors"] = \
-    Settings_analyze(plot_type='laser video', experiments=['block edge vectors'])
+settings_dict["laser 1"] = \
+    Settings_analyze(plot_laser_responses=True, experiments=['block edge vectors'], save_folder=save_folder)
 
 #-----------------------------------------------------------------------
-settings_analyze=selection[settings_analyze_selection]
+settings_analyze=settings_dict[settings_name]

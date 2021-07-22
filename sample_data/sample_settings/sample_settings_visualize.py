@@ -1,4 +1,4 @@
-from opto_analysis.settings_objects import Settings_visualize
+from opto_analysis.utils.settings_objects import Settings_visualize
 
 # select the analysis settings
 settings_visualize = Settings_visualize(

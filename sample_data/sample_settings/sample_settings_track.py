@@ -1,4 +1,4 @@
-from opto_analysis.settings_objects import Settings_track
+from opto_analysis.utils.settings_objects import Settings_track
 
 # select the analysis settings
 settings_track = Settings_track(

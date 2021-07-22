@@ -1,4 +1,4 @@
-from opto_analysis.settings_objects import Settings_analyze
+from opto_analysis.utils.settings_objects import Settings_analyze
 
 settings_analyze_selection = "threat video all"
  

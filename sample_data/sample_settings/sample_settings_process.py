@@ -1,4 +1,4 @@
-from opto_analysis.settings_objects import Settings_process
+from opto_analysis.utils.settings_objects import Settings_process
 
 # select the analysis settings
 settings_process = Settings_process(

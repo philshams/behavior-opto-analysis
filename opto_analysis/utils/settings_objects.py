@@ -46,7 +46,6 @@ class Settings_visualize:
     seconds_after_laser: int = 6
     save_folder: str = None
     fisheye_correction_file: str = None
-    generate_rendering: bool=False
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False
@@ -56,15 +55,19 @@ class Settings_visualize:
 
 @dataclass(frozen=True)
 class Settings_analyze:
-    plot_type: str = None
-    experiments: list = 'all'
+    plot_escapes: bool=False
+    plot_laser_responses: bool=False
+    save_folder: str=None
+    experiments: list = None
     experiments_group_A: list = None
     experiments_group_B: list = None
     sessions: list = None
     sessions_group_A: list = None
     sessions_group_B: list = None
-    prev_session_group_A: list = None # [0]
-    prev_session_group_B: list = None # [1]
+    prev_session_group_A: list = None
+    prev_session_group_B: list = None
     by_experiment: bool=True
     by_session: bool=False
     by_prev_session: bool=False
+    compare: bool=False
+    all_sessions: bool=False

@@ -1,26 +1,18 @@
-from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame, generate_rendered_arena
+from opto_analysis.utils.open_tracking_data import open_tracking_data
+from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame
 import cv2
 import numpy as np
-import dill as pickle
 import os
 
 class Visualize():
     def __init__(self, session: object, settings: object):
-        self.settings = settings
-        self.fisheye_correction_map = load_fisheye_correction_map(session.video)
         self.session = session
-        assert os.path.isfile(self.session.video.tracking_data_file), 'Tracking data not found for session: {}'.format(session.name)
-        with open(self.session.video.tracking_data_file, "rb") as dill_file: self.tracking_data = pickle.load(dill_file)
-        self.save_folder = settings.save_folder
+        self.fisheye_correction_map = load_fisheye_correction_map(session.video)
         self.size = settings.size
         self.rapid = settings.rapid
-        self.rendering = settings.generate_rendering
         self.display_tracking_option = settings.display_tracking
         self.display_trail_option = settings.display_trail
         self.display_stimulus_option = settings.display_stim_status
-        if self.display_tracking_option: self.video_type = 'TRACK'
-        elif self.display_trail_option and not self.display_tracking_option: self.video_type = 'TRACE'
-        else: self.video_type ='RAW'
         self.rapid = settings.rapid
         self.verbose = settings.display_stim_status
         self.delay_between_frames = int(1000/self.session.video.fps*(not self.rapid)+self.rapid)
@@ -30,6 +22,7 @@ class Visualize():
         self.stimulus_durations = {}
         self.stimulus_durations['laser'] = self.session.laser.stimulus_durations
         self.stimulus_durations['audio'] = self.session.audio.stimulus_durations
+        open_tracking_data(self)
 
     def trials(self, stimulus_type):
         for trial_num, (onset_frames, stimulus_durations) in enumerate(zip(self.onset_frames[stimulus_type], self.stimulus_durations[stimulus_type])):
@@ -42,7 +35,6 @@ class Visualize():
                 self.display_stimulus(i)
                 self.display_trail(i)
                 self.display_tracking(i)
-                self.generate_rendering(i)
                 self.display_and_save_frames()
                 key = cv2.waitKey(self.delay_between_frames)
                 if key == ord('q'): break
@@ -61,18 +53,14 @@ class Visualize():
         if self.display_tracking_option or self.display_trail_option: self.actual_frame = cv2.cvtColor(self.actual_frame, cv2.COLOR_GRAY2RGB)
     
     def get_current_position_and_speed(self):
-        if self.rendering or self.display_tracking_option or self.display_trail_option or self.display_stimulus_option:
-            self.body_loc = self.tracking_data['body_loc'][self.frame_num, :]
-            self.neck_loc = self.tracking_data['neck_loc'][self.frame_num, :]
+        if self.display_tracking_option or self.display_trail_option or self.display_stimulus_option:
             self.body_dir = self.tracking_data['body_dir'][self.frame_num]
-            self.neck_dir = self.tracking_data['neck_dir'][self.frame_num]
             self.speed = self.tracking_data['speed'][self.frame_num]
             self.avg_loc = (int(self.tracking_data['avg_loc'][self.frame_num, 0]), int(self.tracking_data['avg_loc'][self.frame_num, 1]))
 
     def get_shading_color(self, i):
         if   self.stimulus_type == 'audio': speed_thresholds = np.array([0, 20, 40, 70, 999]) #cm/s
         elif self.stimulus_type == 'laser': speed_thresholds = np.array([0, 15, 20, 30, 999]) #cm/s
-        if self.rendering: pass
         if self.display_trail_option:
             if   self.stimulus_type=='audio': 
                 trail_colors = [np.array(x) for x in [[50,50,50], [50,50,100], [50, 100, 200], [250, 250, 255], [250, 250, 255]]]
@@ -86,9 +74,8 @@ class Visualize():
             self.speed_text_color = self.compute_intermediate_color_based_on_speed(speed_thresholds, speed_text_colors)
 
     def display_stimulus(self, i: int) -> None:
-        if self.display_stimulus_option and self.stimulus_status[i]==0 and self.stimulus_type=='audio':
+        if self.display_stimulus_option and self.stimulus_status[i]==0 and (self.stimulus_type=='audio' or (self.stimulus_type=='laser' and self.display_tracking_option)):
             if self.stimulus_type == 'laser': exclamation_color = (255, 200, 0)
-            elif self.display_tracking_option: exclamation_color = (255, 255, 255)
             else: exclamation_color = (100,200,255)
             cv2.putText(self.actual_frame, "!", (self.avg_loc[0] - 100, self.avg_loc[1] - 40), 4, 1.5, exclamation_color, thickness=6)
             cv2.putText(self.actual_frame, "!", (self.avg_loc[0] - 100, self.avg_loc[1] - 40), 4, 1.5, (0,0,0), thickness=4)
@@ -110,30 +97,9 @@ class Visualize():
             self.display_heading_dir_on_frame()
             self.display_colored_dot_for_each_bodypart_on_frame()
 
-    def generate_rendering(self, i):
-        if self.rendering: 
-            if i==0: self.initialize_rendered_frame()
-            self.shade_in_mouse_silhouette() 
-
     def display_and_save_frames(self):
-        cv2.imshow('{} stimulus effect - RAW'.format(self.stimulus_type), self.actual_frame)
-        if self.rendering: cv2.imshow('{} stimulus effect - RENDER'.format(self.stimulus_type), self.rendered_frame)
-
-        self.trial_video_raw.write(self.actual_frame)
-        if self.rendering: self.trial_video_rendering.write(self.rendered_frame)
-
-# -----RENDERED FRAME FUNCTIONS-------------------------------------------------------------------------------------
-
-    def initialize_rendered_frame(self):
-        self.rendered_frame, _ = generate_rendered_arena(self.session, self.session.video.rendering_size_pixels)
-        self.rendered_frame = cv2.cvtColor(self.rendered_frame, cv2.COLOR_GRAY2RGB)
-
-    def shade_in_mouse_silhouette(self) -> object:
-        self.pixels_to_shade = np.zeros(self.rendered_frame.shape[:2])
-        cv2.ellipse(self.pixels_to_shade, tuple(self.body_loc.astype(int)), (14, 8), 180-self.body_dir, 0, 360, (255,255,255), thickness=-1)
-        cv2.ellipse(self.pixels_to_shade, tuple(self.neck_loc.astype(int)), (11, 6), 180-self.neck_dir, 0, 360, (255,255,255), thickness=-1)
-
-        self.rendered_frame[self.pixels_to_shade.astype(bool)] = self.rendered_frame[self.pixels_to_shade.astype(bool)] * self.shading_color_light
+        cv2.imshow('{} stimulus effect'.format(self.stimulus_type), self.actual_frame)
+        self.trial_video.write(self.actual_frame)
 
 # -----TRACKING DISPLAY FUNCTIONS-----------------------------------------------------------------------------------
       
@@ -177,13 +143,12 @@ class Visualize():
             self.seconds_before = self.settings.seconds_before_audio
             self.seconds_after = self.settings.seconds_after_audio
 
+        if self.display_tracking_option: self.video_type = 'tracking'
+        else: self.video_type = self.stimulus_type
+
         self.source_video = cv2.VideoCapture(self.session.video.video_file)
         self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
-        self.trial_video_raw = cv2.VideoWriter(os.path.join(self.save_folder, self.session.experiment, "{}-{}-{} trial {}-{}.mp4".format(self.session.experiment, self.stimulus_type, self.session.mouse, trial_num+1, self.video_type)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), self.display_tracking_option or self.display_trail_option)
-        if self.rendering: 
-            self.trial_video_rendering = cv2.VideoWriter(os.path.join(self.save_folder, self.session.experiment, "{}-{}-{} trial {}-RENDER.mp4".format(self.session.experiment, self.stimulus_type, self.session.mouse, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), True)
-        else:
-            self.trial_video_rendering=None
+        self.trial_video = cv2.VideoWriter(os.path.join(self.settings.save_folder, self.session.experiment,self.video_type, "{}-{}-{}-{}.mp4".format(self.session.experiment, self.session.mouse, self.stimulus_type, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), self.display_tracking_option or self.display_trail_option)
 
         self.generate_stimulus_status_array() # array: 0~pre-stimulus, 1~stimulus on, 2~stimulus done
 
@@ -202,6 +167,5 @@ class Visualize():
 
     def release_video_objects(self):
         self.source_video.release()
-        self.trial_video_raw.release()
-        if self.rendering: self.trial_video_rendering.release()
+        self.trial_video.release()
         cv2.destroyAllWindows()
