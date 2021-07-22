@@ -19,13 +19,13 @@ settings_visualize = Settings_visualize(
     seconds_after_audio = 2,
     seconds_after_laser = 6,
 
-    save_folder = "C:\\data\\Paper II",
+    save_folder = "D:\\data\\Paper II",
 
     by_experiment=False,
     experiments = [''],
 
     by_session=True,
-    sessions=[0, 1],
+    sessions=[0],
 
     by_prev_session=False,
     prev_session=[0]

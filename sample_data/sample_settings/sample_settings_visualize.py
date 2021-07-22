@@ -3,12 +3,12 @@ from opto_analysis.settings_objects import Settings_visualize
 # select the analysis settings
 settings_visualize = Settings_visualize(
 
-    visualize_laser_trials=True,
-    visualize_escape_trials=False,
+    laser_trials=True,
+    escape_trials=False,
     
-    display_tracking=False,
     display_trail=True,
-
+    display_tracking=False,
+    
     display_stim_status = True,
     rapid = True,
     
