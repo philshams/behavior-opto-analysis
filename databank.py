@@ -1,5 +1,5 @@
 databank = {}
-databank['path'] = ".\\sample data\\"          # sample data
+databank['path'] = ".\\sample_data\\"          # sample data
 # data['path'] = "P:\\opto data\\"      # full dataset
 
 databank['session IDs'] = [
