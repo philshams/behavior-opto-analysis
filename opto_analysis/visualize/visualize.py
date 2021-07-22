@@ -16,10 +16,10 @@ class Visualize():
         self.rapid = settings.rapid
         self.rendering = settings.generate_rendering
         self.do_display_tracking = settings.display_tracking
-        self.do_display_trail = settings.display_trail
+        self.display_trail_option = settings.display_trail
         self.do_display_stimulus = settings.display_stim_status
         if self.do_display_tracking: self.video_type = 'TRACK'
-        elif self.do_display_trail and not self.do_display_tracking: self.video_type = 'TRACE'
+        elif self.display_trail_option and not self.do_display_tracking: self.video_type = 'TRACE'
         else: self.video_type ='RAW'
         self.rapid = settings.rapid
         self.verbose = settings.display_stim_status
@@ -44,7 +44,9 @@ class Visualize():
                 self.display_tracking(i)
                 self.generate_rendering(i)
                 self.display_and_save_frames(stimulus_type)
-                if cv2.waitKey(self.delay_between_frames) & 0xFF == ord('q'): break # press q to quit this video
+                key = cv2.waitKey(self.delay_between_frames)
+                if key == ord('q'): break
+            if key == ord('q'): break
         self.release_video_objects()
 
 # -----FIRST-LEVEL FUNCTIONS---------------------------------------------------------------------------------------
@@ -56,10 +58,10 @@ class Visualize():
 
     def correct_and_register_frame(self):
         self.actual_frame = correct_and_register_frame(self.actual_frame[:, :, 0], self.session.video, self.fisheye_correction_map)
-        if self.do_display_tracking or self.do_display_trail: self.actual_frame = cv2.cvtColor(self.actual_frame, cv2.COLOR_GRAY2RGB)
+        if self.do_display_tracking or self.display_trail_option: self.actual_frame = cv2.cvtColor(self.actual_frame, cv2.COLOR_GRAY2RGB)
     
     def get_current_position_and_speed(self):
-        if self.rendering or self.do_display_tracking or self.do_display_trail or self.do_display_stimulus:
+        if self.rendering or self.do_display_tracking or self.display_trail_option or self.do_display_stimulus:
             self.body_loc = self.tracking_data['body_loc'][self.frame_num, :]
             self.neck_loc = self.tracking_data['neck_loc'][self.frame_num, :]
             self.body_dir = self.tracking_data['body_dir'][self.frame_num]
@@ -70,7 +72,7 @@ class Visualize():
     def get_shading_color(self):
         speed_thresholds = np.array([0, 20, 40, 70, 999]) #cm/s
         if self.rendering: pass
-        if self.do_display_trail:
+        if self.display_trail_option:
             escape_trail_colors = [np.array(x) for x in [[50,50,50], [50,50,100], [50, 100, 200], [250, 250, 255], [250, 250, 255]]]
             self.trail_color = self.compute_intermediate_color_based_on_speed(speed_thresholds, escape_trail_colors)
         if self.do_display_tracking: 
@@ -86,7 +88,7 @@ class Visualize():
             cv2.putText(self.actual_frame, "!", (self.avg_loc[0] - 100, self.avg_loc[1] - 40), 4, 1.5, (0,0,0), thickness=4)
 
     def display_trail(self, i):
-        if self.do_display_trail:
+        if self.display_trail_option:
             for j, (dot_loc, dot_color) in enumerate(zip(self.trail_of_lines, self.trail_of_lines_colors)):
                 if j: cv2.line(self.actual_frame, dot_loc, self.trail_of_lines[j-1], dot_color, thickness=2, lineType=16)
 
@@ -165,7 +167,7 @@ class Visualize():
 
         self.source_video = cv2.VideoCapture(self.session.video.video_file)
         self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
-        self.trial_video_raw = cv2.VideoWriter(os.path.join(self.save_folder, self.session.experiment, "{}-{}-{} trial {}-{}.mp4".format(self.session.experiment, stimulus_type, self.session.mouse, trial_num+1, self.video_type)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), self.do_display_tracking or self.do_display_trail)
+        self.trial_video_raw = cv2.VideoWriter(os.path.join(self.save_folder, self.session.experiment, "{}-{}-{} trial {}-{}.mp4".format(self.session.experiment, stimulus_type, self.session.mouse, trial_num+1, self.video_type)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), self.do_display_tracking or self.display_trail_option)
         if self.rendering: 
             self.trial_video_rendering = cv2.VideoWriter(os.path.join(self.save_folder, self.session.experiment, "{}-{}-{} trial {}-RENDER.mp4".format(self.session.experiment, stimulus_type, self.session.mouse, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.size, self.size), True)
         else:
