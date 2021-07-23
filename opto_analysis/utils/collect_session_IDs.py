@@ -2,7 +2,7 @@ import numpy as np
 import os
 from typing import Tuple
 
-def collect_session_IDs(settings: object, databank: dict, group: str='') -> object:
+def collect_session_IDs(settings: object, databank: dict, group: str='') -> np.ndarray:
     session_IDs = np.array(databank['session IDs'], dtype='object')
 
     if settings.by_experiment:
@@ -25,8 +25,14 @@ def collect_session_IDs(settings: object, databank: dict, group: str='') -> obje
 
     return session_IDs
 
-def collect_session_IDs_analysis(settings: object, databank: dict) -> Tuple[object, object, object]:
-    selected_session_IDs = collect_session_IDs(settings, databank) 
-    selected_session_IDs_group_A = collect_session_IDs(settings, databank, group='_group_A') 
-    selected_session_IDs_group_B = collect_session_IDs(settings, databank, group='_group_B')
-    return selected_session_IDs, selected_session_IDs_group_A, selected_session_IDs_group_B
+def collect_session_IDs_analysis(settings: object, databank: dict) -> np.ndarray:
+    if not settings.compare:
+        session_IDs = collect_session_IDs(settings, databank)
+    if settings.compare:
+        session_IDs_group_A = collect_session_IDs(settings, databank, group='_group_A') 
+        session_IDs_group_B = collect_session_IDs(settings, databank, group='_group_B')
+        session_IDs_group_A = np.array([np.append(session_ID, 'A') for session_ID in session_IDs_group_A])
+        session_IDs_group_B = np.array([np.append(session_ID, 'B') for session_ID in session_IDs_group_B])
+        session_IDs = np.concatenate((session_IDs_group_A, session_IDs_group_B))
+
+    return session_IDs

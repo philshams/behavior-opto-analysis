@@ -38,7 +38,7 @@ class Settings_visualize:
     display_tracking:bool=False
     display_trail:bool=True
     rapid: bool=True
-    display_stim_status: bool=True
+    display_stimulus: bool=True
     size: int=1024
     seconds_before_audio: int = 3
     seconds_before_laser: int = 3
@@ -54,9 +54,10 @@ class Settings_visualize:
     prev_session: list=None
 
 @dataclass(frozen=True)
-class Settings_analyze:
-    plot_escapes: bool=False
-    plot_laser_responses: bool=False
+class Settings_analyze_local:
+    plot_escape: bool=False
+    plot_laser: bool=False
+    title: str=None
     save_folder: str=None
     experiments: list = None
     experiments_group_A: list = None
@@ -66,8 +67,16 @@ class Settings_analyze:
     sessions_group_B: list = None
     prev_session_group_A: list = None
     prev_session_group_B: list = None
-    by_experiment: bool=True
+    by_experiment: bool=False
     by_session: bool=False
     by_prev_session: bool=False
     compare: bool=False
     all_sessions: bool=False
+
+@dataclass(frozen=True)
+class Settings_analyze_global:
+    analysis: Settings_analyze_local=None
+    max_escapes_per_mouse: int = 6
+    max_seconds_to_reach_shelter: int = 9
+    save_folder: str=None
+    color_by: str=None

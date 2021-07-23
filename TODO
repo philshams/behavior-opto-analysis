@@ -1,13 +1,10 @@
 ------- at home or work ------
 
 
-- plot all escapes of a given condition
-
-- do exploration analysis
+- plot all laser trials of a given condition
 
 - do rendering videos/images once dlc is trained
-    - try: colored line plus occasional silhouettes (try matplotlib)
-
+    - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
 
 ------- at work -------
 

@@ -14,24 +14,24 @@ def test_visualize_trials():
     visualize = Visualize(session, settings_visualize)
     i = 0
     trial_num = 0
-    for stimulus_type in ['audio','laser']:
-        onset_frames = visualize.onset_frames[stimulus_type][0]
-        stimulus_durations = visualize.stimulus_durations[stimulus_type][0]
-        set_up_videos_assertions(visualize, stimulus_type, trial_num, onset_frames, stimulus_durations)
+    for stim_type in ['audio','laser']:
+        onset_frames = visualize.onset_frames[stim_type][0]
+        stimulus_durations = visualize.stimulus_durations[stim_type][0]
+        set_up_videos_assertions(visualize, stim_type, trial_num, onset_frames, stimulus_durations)
         read_frame_assertions(visualize, onset_frames)
         correct_and_register_frame_assertions(visualize)
         get_current_position_and_speed_assertions(visualize) 
         get_shading_color_assertions(visualize)
-        visualize.display_stimulus(i, stimulus_type) # test in test_visualize
+        visualize.display_stimulus(i, stim_type) # test in test_visualize
         visualize.display_trail(i) # test in test_visualize
         visualize.display_tracking(i)
         visualize.generate_rendering(i)
-        visualize.display_and_save_frames(stimulus_type)
+        visualize.display_and_save_frames(stim_type)
         cv2.waitKey(visualize.delay_between_frames)
-        release_video_objects_assertions(visualize, stimulus_type)
+        release_video_objects_assertions(visualize, stim_type)
 
-def set_up_videos_assertions(visualize, stimulus_type, trial_num, onset_frames, stimulus_durations):
-    visualize.set_up_videos(stimulus_type, trial_num, onset_frames, stimulus_durations)
+def set_up_videos_assertions(visualize, stim_type, trial_num, onset_frames, stimulus_durations):
+    visualize.set_up_videos(stim_type, trial_num, onset_frames, stimulus_durations)
     assert not visualize.trial_video_raw == None
     assert visualize.trial_video_rendering == None
 
@@ -53,9 +53,9 @@ def get_shading_color_assertions(visualize):
     assert (visualize.trail_color==np.array([50., 50., 81.29885662039507])).all() \
         or (visualize.speed_text_color==np.array([100.0, 100.0, 150.16538231641042])).all()
 
-def release_video_objects_assertions(visualize, stimulus_type):
+def release_video_objects_assertions(visualize, stim_type):
     visualize.release_video_objects()
-    saved_video_file = os.path.join(visualize.save_folder, visualize.session.experiment, "{}-{}-{} trial {}-{}.mp4".format(visualize.session.experiment, stimulus_type, visualize.session.mouse, 1, visualize.video_type))
+    saved_video_file = os.path.join(visualize.save_folder, visualize.session.experiment, "{}-{}-{} trial {}-{}.mp4".format(visualize.session.experiment, stim_type, visualize.session.mouse, 1, visualize.video_type))
     saved_video = cv2.VideoCapture(saved_video_file)
     successful_read, _ = saved_video.read()
     assert successful_read

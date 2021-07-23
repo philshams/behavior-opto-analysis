@@ -8,7 +8,7 @@ settings_visualize = Settings_visualize(
     display_trail=False,
     display_tracking=True,
 
-    display_stim_status = True,
+    display_stimulus = True,
     rapid = True,
 
     seconds_before_audio = 3,

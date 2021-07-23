@@ -9,10 +9,8 @@ settings_visualize = Settings_visualize(
     display_trail=True,
     display_tracking=False,
     
-    display_stim_status = True,
+    display_stimulus = True,
     rapid = True,
-    
-    generate_rendering=False,
 
     seconds_before_audio = 3,
     seconds_before_laser = 3,

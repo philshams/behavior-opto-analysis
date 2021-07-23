@@ -1,21 +1,17 @@
-from opto_analysis.utils.settings_objects import Settings_analyze
+from opto_analysis.utils.settings_objects import Settings_analyze_global as Settings_analyze
+from settings.analyses import analyses
 
-settings_visualize = Settings_analyze(
+settings_analyze = Settings_analyze(
 
-settings_name = "escapes 1",
-save_folder = "D:\\data\\Paper II",
-max_escapes_per_mouse = 6
+analysis = analyses["escapes"], # see types_of_analysis.py
+
+max_escapes_per_mouse = 6,
+max_seconds_to_reach_shelter = 9,
+
+color_by = '', # speed or mouse or session or none
+
+save_folder = "D:\\data\\Paper II"
+
 
 )
 
-settings_dict = {}
-#------------selection of analysis settings to choose from--------------
-
-settings_dict["escapes 1"] = \
-    Settings_analyze(plot_escapes = True, experiments=['block edge vectors'])
-    
-settings_dict["laser 1"] = \
-    Settings_analyze(plot_laser_responses=True, experiments=['block edge vectors'], save_folder=save_folder)
-
-#-----------------------------------------------------------------------
-settings_analyze=settings_dict[settings_name]
