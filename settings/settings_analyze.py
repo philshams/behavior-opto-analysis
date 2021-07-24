@@ -3,12 +3,14 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["escapes"], # see types_of_analysis.py
+analysis = analyses["laser"], 
+# see types_of_analysis.py for options
 
 max_escapes_per_mouse = 6,
 max_seconds_to_reach_shelter = 9,
 
-color_by = '', # speed or mouse or session or none
+color_by = '', 
+# 'speed' 'session' 'time' 'trial' or ''
 
 save_folder = "D:\\data\\Paper II"
 

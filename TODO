@@ -1,13 +1,21 @@
 ------- at home or work ------
+- determine trial eligibility
+- compute and plot escape target
 
-
-- plot all laser trials of a given condition
-
-- do rendering videos/images once dlc is trained
-    - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
+after track all videos 
+--> plot escapes from each expt
+--> plot/stats for escape target 
 
 ------- at work -------
+- train new dlc network (make a workflow for this *if needed*)
+--> track all videos
 
-- train new dlc network (and make a workflow for this)
 
+------- after injecting next group ---------
+- do rendering videos/images once dlc is trained
+    - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
+    - and/or: mouse at beginning /end of stim, with trail?
 
+- plot non-laser control runs
+
+- place preference pipeline

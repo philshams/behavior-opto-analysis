@@ -1,6 +1,7 @@
 from opto_analysis.utils.open_tracking_data import open_tracking_data, index_onset_and_duration_by_stim_type
 from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame
-from opto_analysis.utils.color_funcs import get_color_based_on_speed, custom_colormap
+from opto_analysis.utils.color_funcs import get_color_based_on_speed, get_colormap
+from opto_analysis.utils.generate_stim_status_array import generate_stim_status_array
 import cv2
 import numpy as np
 import os
@@ -87,7 +88,7 @@ class Visualize():
         cv2.arrowedLine(self.actual_frame, self.avg_loc, (self.avg_loc[0] + heading_dir_x, self.avg_loc[1] + heading_dir_y), (220,220,220), 1, 16)
 
     def display_colored_dot_for_each_bodypart_on_frame(self):
-        for j, (bodypart, color) in enumerate(zip(self.tracking_data['bodyparts'], custom_colormap())):
+        for j, (bodypart, color) in enumerate(zip(self.tracking_data['bodyparts'], get_colormap())):
             bodypart_loc = (int(self.tracking_data[bodypart][self.frame_num, 0]), int(self.tracking_data[bodypart][self.frame_num, 1]))
             cv2.circle(self.actual_frame, bodypart_loc, 1, color, -1)
             cv2.putText(self.actual_frame, bodypart, (self.actual_frame.shape[0] - 85, self.actual_frame.shape[1] - 280 + j * 20), 0, .4, color, thickness=1)
@@ -115,14 +116,9 @@ class Visualize():
         self.stim_type = stim_type
         self.onset_frames = onset_frames
         self.fps = self.session.video.fps
+        self.seconds_before = self.settings.__dict__['seconds_before_' + self.stim_type]
+        self.seconds_after = self.settings.__dict__['seconds_after_' + self.stim_type]
 
-        assert self.stim_type in ['laser', 'audio'], "Stimulus type must be either 'laser' or 'audio'"
-        if self.stim_type=='laser':
-            self.seconds_before = self.settings.seconds_before_laser
-            self.seconds_after = self.settings.seconds_after_laser
-        if self.stim_type=='audio':
-            self.seconds_before = self.settings.seconds_before_audio
-            self.seconds_after = self.settings.seconds_after_audio
 
         if self.settings.display_tracking: self.video_type = 'tracking'
         else: self.video_type = self.stim_type
@@ -131,20 +127,14 @@ class Visualize():
         self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
         self.trial_video = cv2.VideoWriter(os.path.join(self.settings.save_folder, self.session.experiment,self.video_type, "{}-{}-{}-{}.mp4".format(self.session.experiment, self.session.mouse, self.stim_type, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
 
-        self.generate_stim_status_array() # array: 0~pre-stimulus, 1~stimulus on, 2~stimulus done
-
+        # array: 0~stimulus on, negative~ pre stimulus, positive ~ post-stimulus
+        self.stim_status_array = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps) 
+        
         self.frames_in_this_trial = range((onset_frames[-1]-onset_frames[0])+int((self.seconds_before+stimulus_durations[-1]+self.seconds_after)*self.session.video.fps))
 
         self.trail = []
         self.trail_colors = []
         self.trail_thicknesses = []
-
-    def generate_stim_status_array(self) -> object:
-        self.stim_status = np.zeros((self.onset_frames[-1]-self.onset_frames[0])+int((self.seconds_before+self.stimulus_durations[-1]+self.seconds_after)*self.fps)) + 0.01 # 0.01 ~ in between stimuli
-        self.stim_status[:self.seconds_before*self.fps] = np.arange(-self.seconds_before*self.fps-1, -1)/self.fps # pre-stimulus countdown in seconds
-        for onset_frame, stimulus_duration in zip(self.onset_frames, self.stimulus_durations):
-            self.stim_status[int(self.seconds_before*self.fps+onset_frame-self.onset_frames[0]):int((self.seconds_before+stimulus_duration)*self.fps)+onset_frame-self.onset_frames[0]]=0 # 0 ~ stimulus is ON
-        self.stim_status[-int(self.seconds_after*self.fps):]=np.arange(1, self.seconds_after*self.fps+1)/self.fps  # post-stimulus countup in seconds
 
     def release_video_objects(self):
         self.source_video.release()
