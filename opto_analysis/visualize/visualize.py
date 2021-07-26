@@ -128,7 +128,7 @@ class Visualize():
         self.trial_video = cv2.VideoWriter(os.path.join(self.settings.save_folder, self.session.experiment,self.video_type, "{}-{}-{}-{}.mp4".format(self.session.experiment, self.session.mouse, self.stim_type, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
 
         # array: 0~stimulus on, negative~ pre stimulus, positive ~ post-stimulus
-        self.stim_status_array = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps) 
+        self.stim_status = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps) 
         
         self.frames_in_this_trial = range((onset_frames[-1]-onset_frames[0])+int((self.seconds_before+stimulus_durations[-1]+self.seconds_after)*self.session.video.fps))
 

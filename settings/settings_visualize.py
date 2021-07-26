@@ -2,11 +2,11 @@ from opto_analysis.utils.settings_objects import Settings_visualize
 
 settings_visualize = Settings_visualize(
 
-    laser_trials=False,
+    laser_trials=True,
     escape_trials=True,
     
-    display_trail=False,
-    display_tracking=True,
+    display_trail=True,
+    display_tracking=False,
 
     display_stimulus = True,
     rapid = True,
