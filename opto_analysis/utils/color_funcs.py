@@ -11,8 +11,6 @@ def get_color_based_on_speed(speed:float, object_to_color: str, stim_status: flo
 def get_color_parameters(stim_type: str='audio', stim_status: float=0, object_to_color: str='trail'):
     if   stim_type == 'audio': speed_thresholds = np.array([0, 20, 40, 70, 999]) #cm/s
     elif stim_type == 'laser': speed_thresholds = np.array([0, 15, 20, 30, 999]) #cm/s
-
-
     if object_to_color=='trail' or object_to_color=='plot':
         if   stim_type=='audio':                      colormap = [[50, 50,  50], [50, 50, 100], [50, 100,200], [250,250,255], [250,250,255]]
         elif stim_type=='laser' and stim_status != 0: colormap = [[25, 25,  25], [100,50,  50], [200,100, 50], [255,230,230], [255,230,230]]

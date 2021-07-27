@@ -2,7 +2,6 @@ from settings.settings_process import settings_process as settings_p
 from settings.settings_track import settings_track as settings_t
 from settings.settings_visualize import settings_visualize as settings_v
 from settings.settings_analyze import settings_analyze as settings_a
-from settings.analyses import analyses
 from opto_analysis.process.process import Process
 from opto_analysis.track.track import Track
 from opto_analysis.visualize.visualize import Visualize
@@ -36,8 +35,7 @@ def visualize():
 
 def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 
-
     session_IDs = collect_session_IDs_analysis(settings_a.analysis, databank)
-    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a).trajectories(stim_type='audio')
-    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a).trajectories(stim_type='laser')
-    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a).escape_targets()
+    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a).plot('escape trajectories')
+    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a).plot('laser trajectories')
+    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a).plot('escape targets')

@@ -29,6 +29,7 @@ def collect_session_IDs_analysis(settings: object, databank: dict) -> np.ndarray
     if not settings.compare:
         session_IDs = collect_session_IDs(settings, databank)
     if settings.compare:
+        # TODO: group numbers instead of letters, for comparing several groups
         session_IDs_group_A = collect_session_IDs(settings, databank, group='_group_A') 
         session_IDs_group_B = collect_session_IDs(settings, databank, group='_group_B')
         session_IDs_group_A = np.array([np.append(session_ID, 'A') for session_ID in session_IDs_group_A])
