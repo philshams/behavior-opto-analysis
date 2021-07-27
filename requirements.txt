@@ -1,8 +1,0 @@
-dill==0.2.8.2
-opencv_python==3.4.8.29
-pandas~=0.24
-matplotlib
-scipy
-dataclasses
-numpy
-pyyaml

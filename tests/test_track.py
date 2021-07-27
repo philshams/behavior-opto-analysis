@@ -90,7 +90,7 @@ def plot_filtered_and_registered_tracking_assertions(tracking):
 
 def compute_avg_bodypart_locations_assertions(tracking):
     tracking.compute_avg_bodypart_locations()
-    assert np.sum(tracking.tracking_data['avg_loc']) == 195460552.11858884
+    assert np.sum(tracking.tracking_data['avg_loc']) in [195460552.11858884, 195515748.5779112]
 
 def compute_angles_assertions(tracking):
     tracking.compute_angles()

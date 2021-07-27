@@ -38,5 +38,6 @@ def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 
 
     session_IDs = collect_session_IDs_analysis(settings_a.analysis, databank)
-    if settings_a.analysis.plot_escape: Analyze(session_IDs, settings_a).trajectories(stim_type='audio')
-    if settings_a.analysis.plot_laser:  Analyze(session_IDs, settings_a).trajectories(stim_type='laser')
+    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a).trajectories(stim_type='audio')
+    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a).trajectories(stim_type='laser')
+    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a).escape_targets()

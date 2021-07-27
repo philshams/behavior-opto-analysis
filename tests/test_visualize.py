@@ -32,8 +32,7 @@ def test_visualize_trials():
 
 def set_up_videos_assertions(visualize, stim_type, trial_num, onset_frames, stimulus_durations):
     visualize.set_up_videos(stim_type, trial_num, onset_frames, stimulus_durations)
-    assert not visualize.trial_video_raw == None
-    assert visualize.trial_video_rendering == None
+    assert not visualize.trial_video == None
 
 def read_frame_assertions(visualize, onset_frames):
     visualize.read_frame(onset_frames)

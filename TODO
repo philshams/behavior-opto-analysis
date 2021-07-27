@@ -1,13 +1,14 @@
 ------- at home or work ------
-- update tests
-- compute and plot escape target
+-* compute and plot escape target
 
 after track all videos 
 --> plot escapes from each expt
 --> plot/stats for escape target 
 
+- update tests
+
 ------- at work -------
-- *train new dlc network (make a workflow for this *if needed*)
+- examine DLC performance; update network if needed
 --> track all videos
 
 
@@ -19,4 +20,6 @@ after track all videos
 - plot non-laser control runs
 
 - place preference pipeline
+
+- speed heatmap plot
 

@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": "c:\\Users\\SWC\\Anaconda3\\envs\\opto\\python.exe",
+    "python.testing.pytestArgs": [
+        "-s",
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+}
