@@ -27,7 +27,7 @@ def generate_rendered_arena(session: Session, size: int) -> object:
     if "place preference" in session.experiment:
         pass #TODO: make place preference arena
     else:
-        cv2.rectangle(rendered_arena, (int(size/2 - 250), int(size/2 - 50)), (int(size/2 + 250), int(size/2 + 50)), 190, thickness=1) # rectangular piece in the center of the arena
+        cv2.rectangle(rendered_arena, (int(size/2 - 250), int(size/2 - 50)), (int(size/2 + 250), int(size/2 + 50)), 190, thickness=1) # rectangle in center
         cv2.rectangle(rendered_arena, (int(size/2 - 50), int(size/2 + 458)), (int(size/2 + 50), int(size/2 + 360)), 210, thickness=-1) # the shelter
         cv2.circle(rendered_arena, (int(size/2), int(size/2)), 460, 0, 1, lineType = 16) # arena outline
         click_targets = np.array(([size/2 - 250, size/2 - 50], [size/2 - 250, size/2 + 50], [size/2 + 250, size/2 + 50], [size/2 + 250, size/2 - 50])).astype(int)
@@ -91,7 +91,7 @@ class Register():
             if cv2.waitKey(10) & 0xFF == ord(' '): break
         cv2.destroyAllWindows()
 
-# --------------------------------------------------------------------------------------
+# ----CLICK CALLBACK FUNCTIONS-------------------------------------------------------------
 
     def click_click_targets(self, event,x,y, flags, params):
         if event == cv2.EVENT_LBUTTONDOWN:

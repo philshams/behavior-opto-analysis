@@ -33,3 +33,9 @@ def flatten(iterable: list):
 
     def extract_trajectory(self, stim_type, onset_frames):
         pass
+
+                    distance_from_trial_start = \
+                  ((self.tracking_data['avg_loc'][trial_start_idx:,0] - self.tracking_data['avg_loc'][trial_start_idx,0])**2 +\
+                   (self.tracking_data['avg_loc'][trial_start_idx:,1] - self.tracking_data['avg_loc'][trial_start_idx,1])**2)**.5
+
+                    np.where(distance_from_trial_start>500)[0][0]

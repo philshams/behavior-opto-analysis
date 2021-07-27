@@ -11,8 +11,8 @@ class Analyze():
         self.settings = settings
         self.session_IDs = session_IDs
         self.arena_already_plotted = False
-        self.session_counter = -1
-        self.trial_counter = 0
+        self.session_count = -1
+        self.trial_count = 0
 
     def trajectories(self, stim_type):
         for session_ID in self.session_IDs:
@@ -32,7 +32,8 @@ class Analyze():
     def initialize_plotting_parameters(self, stim_type):
         self.stim_type = stim_type
         self.fps = self.session.video.fps
-        self.session_counter += 1
+        self.session_count += 1
+        self.num_successful_escapes_this_session = 0
 
     def open_its_tracking_data(self):
         open_tracking_data(self)
@@ -64,63 +65,78 @@ class Analyze():
         self.trials_to_plot = []
         for onset_frames, stim_durations in zip(self.session.__dict__[self.stim_type].onset_frames, \
                                                 self.session.__dict__[self.stim_type].stimulus_durations):
-            self.trial_counter+=1
-            trial_start_idx = onset_frames[0] 
-            trial_end_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
-            size = self.session.video.rendering_size_pixels
-            self.create_trial_dict(trial_start_idx, trial_end_idx, size, epoch='stimulus')
-            if self.stim_type=='laser':
-                trial_start_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
-                distance_from_trial_start = \
-                  ((self.tracking_data['avg_loc'][trial_start_idx:,0] - self.tracking_data['avg_loc'][trial_start_idx,0])**2 +\
-                   (self.tracking_data['avg_loc'][trial_start_idx:,1] - self.tracking_data['avg_loc'][trial_start_idx,1])**2)**.5
-                trial_end_idx = trial_start_idx + np.where(distance_from_trial_start>200)[0][0]
-                self.create_trial_dict(trial_start_idx, trial_end_idx, size, epoch='post-laser')
-        # TODO: determine trial eligibility (audio trials: under max escapes per mouse, under max time to reach shelter)
+            if not self.determine_if_trial_is_eligible(onset_frames): continue
+            self.create_trial_dict(onset_frames, stim_durations, epoch='stimulus')
+            self.create_trial_dict(onset_frames, stim_durations, epoch='post-laser')
+            self.trial_count+=1
 
     def plot_trial_trajectories(self):
         for trial in self.trials_to_plot:
-            self.update_color_counter(trial['trial_count'])
-            if self.settings.color_by in ['speed', 'time']: 
-                self.colorline(trial['trajectory_x'], trial['trajectory_y'], trial['speed'], trial['epoch'], trial['linewidth'])
-                continue
-            self.line(trial['trajectory_x'], trial['trajectory_y'], trial['epoch'], trial['linewidth'])
+            if self.settings.color_by in ['speed', 'time']: self.colorline(trial)
+            else: self.line(trial)
             
     def save_plot(self):
         # plt.ion()
         plt.show()
-        file_base_name = os.path.join(self.settings.save_folder, self.session.experiment, self.settings.analysis.title)
+        file_base_name = os.path.join(self.settings.save_folder, self.session.experiment, "plots", self.settings.analysis.title)
         file_extension = '.png'
         file_suffix = ''
         if self.settings.color_by: 
             file_suffix = '_color by ' + self.settings.color_by
         self.fig.savefig(file_base_name+file_suffix+file_extension, bbox_inches='tight', pad_inches=0)
 
-# ----PLOTTING HELPER FUNCS-----------------------------------------------------
+# ----PLOTTING HELPER FUNCS----------------------------------------------
 
-    def line(self, x: np.ndarray, y: np.ndarray, epoch: str, linewidth: int, color: tuple=(.4,.4,.4, .7)):
+    def line(self, trial: dict, color: tuple=(.4,.4,.4, .7)):
         if self.settings.color_by:
-            color = get_colormap(object_to_color='plot', epoch=epoch)[self.color_counter%16]
-        self.ax.plot(x, y, color = color, linewidth=linewidth)
+            self.update_color_counter(trial['trial_count'])
+            color = get_colormap(object_to_color='plot', epoch=trial['epoch'])[self.color_counter%16]
+        self.ax.plot(trial['trajectory_x'], trial['trajectory_y'], color = color, linewidth=trial['linewidth'])
 
-    def colorline(self, x: np.ndarray, y: np.ndarray, speeds: np.ndarray, epoch: str, linewidth: int):
-        points = np.array([x, y]).T.reshape(-1, 1, 2)
+    def colorline(self, trial: dict):
+        points = np.array([trial['trajectory_x'], trial['trajectory_y']]).T.reshape(-1, 1, 2)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        colors = generate_list_of_colors(self.settings.color_by, self.stim_type, epoch, speeds)
-        set_of_lines = plt_coll.LineCollection(segments, colors=colors, linewidth=linewidth)
+        colors = generate_list_of_colors(self.settings.color_by, self.stim_type, trial['epoch'], trial['speed'])
+        set_of_lines = plt_coll.LineCollection(segments, colors=colors, linewidth=trial['linewidth'])
         self.ax.add_collection(set_of_lines)
 
-    def create_trial_dict(self, trial_start_idx: int, trial_end_idx: int, size: int, epoch: str='stimulus'):
+    def create_trial_dict(self, onset_frames: list, stim_durations: list, epoch: str='stimulus'):
+        if epoch=='post-laser' and self.stim_type=='audio': return
+
+        if epoch=='stimulus':
+            trial_start_idx = onset_frames[0] 
+            trial_end_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
+        if epoch=='post-laser':
+            trial_start_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
+            trial_end_idx = trial_start_idx + self.fps * self.settings.post_laser_seconds_to_plot
+
         trial = {}
         trial['trajectory_x'] = self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 0]
-        trial['trajectory_y'] = size - self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 1]
+        trial['trajectory_y'] = self.session.video.rendering_size_pixels - self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 1]
         trial['speed'] = self.tracking_data['speed'][trial_start_idx+1:trial_end_idx]
         trial['epoch'] = epoch
-        trial['trial_count'] = self.trial_counter
+        trial['trial_count'] = self.trial_count
         if epoch=='stimulus':   trial['linewidth'] = 3
         if epoch=='post-laser': trial['linewidth'] = 1
         self.trials_to_plot.append(trial)
-        
+
     def update_color_counter(self, trial_count):
         if self.settings.color_by=='trial':   self.color_counter = trial_count
-        if self.settings.color_by=='session': self.color_counter = self.session_counter
+        if self.settings.color_by=='session': self.color_counter = self.session_count
+
+# ----ANALYSIS HELPER FUNCS----------------------------------------------
+
+    def determine_if_trial_is_eligible(self, onset_frames) -> bool:
+        eligible = self.stim_type=='audio' and self.successful_escape(onset_frames) and \
+                   self.num_successful_escapes_this_session <  self.settings.max_num_trials            
+        if eligible: self.num_successful_escapes_this_session += 1
+        return eligible
+
+    def successful_escape(self, onset_frames) -> bool:
+        location_during_threat = self.tracking_data['avg_loc'][onset_frames[0]:onset_frames[0]+self.fps*self.settings.max_escape_duration, :]
+
+        distance_from_shelter_during_threat = ((location_during_threat[:,0]-self.session.video.shelter_location[0])**2 + \
+                                               (location_during_threat[:,1]-self.session.video.shelter_location[1])**2)**.5
+
+        successful_escape = (distance_from_shelter_during_threat < self.settings.min_distance_from_shelter*10).any()
+        return successful_escape

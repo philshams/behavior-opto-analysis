@@ -3,16 +3,19 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["laser"], 
+analysis = analyses["escapes"], 
 # see types_of_analysis.py for options
 
-max_escapes_per_mouse = 6,
-max_seconds_to_reach_shelter = 9,
+max_num_trials = 6,
+max_escape_duration = 9,
+post_laser_seconds_to_plot = 5,
+min_distance_from_shelter = 10,
 
-color_by = '', 
+color_by = 'session', 
 # 'speed' 'session' 'time' 'trial' or ''
 
 save_folder = "D:\\data\\Paper II"
+
 
 
 )

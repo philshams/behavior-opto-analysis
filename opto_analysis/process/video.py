@@ -17,6 +17,8 @@ class Video:
     rendering_size_pixels: int
     pixels_per_cm: int
     tracking_data_file: str
+    #! replace these values with your own parameters
+    shelter_location: tuple=(512, 921)
     x_offset: int=128 # if the video frame is cropped, how far from the top left edge is it
     y_offset: int=0   # (this is for the fisheye correction step)
 

@@ -76,7 +76,9 @@ class Settings_analyze_local:
 @dataclass(frozen=True)
 class Settings_analyze_global:
     analysis: Settings_analyze_local=None
-    max_escapes_per_mouse: int = 6
-    max_seconds_to_reach_shelter: int = 9
+    max_num_trials: int = 6
+    max_escape_duration: int = 9
+    post_laser_seconds_to_plot: int = 5
+    min_distance_from_shelter: int = 10
     save_folder: str=None
     color_by: str=None

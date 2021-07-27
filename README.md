@@ -8,28 +8,43 @@ Opto analysis is a package for analyzing free-moving behavioral data during opto
 ## Installation
 
 - Clone the repository
+
 - Get the sample data at "...Dropbox (UCL)\DAQ\upstairs_rig\21MAR16_9718_block evs"; place this folder in the sample_data folder
-- **Users**: Can make a new Python 3.8 environment and install the requirements:
-```pip install -r requirements.txt```
-- **Devs**: Create a new python environment using the environment file: ```conda env create -f environment.yml``` or create a new Python 3.8 environment and install the dev requirements: ```pip install -r dev_requirements.txt```
-- Navigate to the opto-analysis folder and write the command ```pip install -e .```
+
+- Navigate to the opto-analysis folder and run the following commands:
+
+  - **Users**: Create a new Python 3.8 environment (default name "opto-user") with ```conda env create -f environment_user.yml```
+
+  - **Devs**: Create a new Python 3.8 environment (default name "opto") with ```conda env create -f environment_dev.yml```
+
+  - **Both**: Install the package with the command ```pip install -e .```
 
 ## Usage
 
-- To process data and verify synchronization, fill in the the file ./settings/settings_process.py with your desired settings, and run the terminal command ```process```
-- To track data (DeepLabCut), fill in the the file ./settings/settings_track.py with your desired settings, and run the command ```track```
-- To visualize trials, fill in the the file ./settings/settings_visualize.py with your desired settings, and run the command ```visualize```. This currently requires having already trained a DLC network.
-- To analyze and plot data, fill in the the file ./settings/settings_analyze.py with your desired settings, and run the command ```analyze```
+- To process data and verify synchronization, fill in the the file *./settings/settings_process.py* with your desired settings, and run the terminal command ```process```
+
+- To track data (DeepLabCut), fill in the the file *./settings/settings_track.py* with your desired settings, and run the command ```track```
+
+- To visualize trials, fill in the the file *./settings/settings_visualize.py* with your desired settings, and run the command ```visualize```. This  requires a trained DLC network.
+
+- To analyze and plot data, fill in the the file *./settings/analyses* with your desired analysis program options and then fill in *./settings/settings_analyze.py* with your desired global analysis settings (including the program you'd like to run), and run the command ```analyze```
 
 ## Testing (devs)
-- In VS code: run test discovery and then run or debug the desired tests in the Test Explorer. Run each test in "./tests/test_run.py" to debug an entire workflow (processing, tracking, visualization, analysis)
-- In the terminal:
-```python
-pytest # run all tests
-pytest tests/test_file.py # test one file (you must be in from the parent directory of 'tests' to run this)
-```
-- To examine the test coverage, run in the terminal: ```pytest --cov-report term-missing --cov=opto_analysis tests/```
-<br/><br/>
+- In VS code: run test discovery and then run or debug the desired tests in the Test Explorer. Run each test in *./tests/test_run.py* to debug an entire workflow (processing, tracking, visualization, analysis)
+
+- Alternatively, run in the terminal: ```pytest``` or ```pytest tests/test_file.py```
+
+- To examine the test coverage, run: ```pytest --cov-report term-missing --cov=opto_analysis tests/```
+
+
 - To instead generate a coverage report, run: ```pytest --cov-report xml --cov=opto_analysis tests/```
-<br/>...and then run in bash shell: ```bash <(curl -s https://codecov.io/bash) -t TOKEN-NUMBER```
+
+- ...and then run in bash shell: ```bash <(curl -s https://codecov.io/bash) -t TOKEN-NUMBER``` to upload to codecov
+
+## Dependency management
+
+- To remake the environment file, run: ```conda env export > dev_environment.yml```
+
+
+
 

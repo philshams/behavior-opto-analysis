@@ -1,5 +1,5 @@
 ------- at home or work ------
-- determine trial eligibility
+- update tests
 - compute and plot escape target
 
 after track all videos 
@@ -7,7 +7,7 @@ after track all videos
 --> plot/stats for escape target 
 
 ------- at work -------
-- train new dlc network (make a workflow for this *if needed*)
+- *train new dlc network (make a workflow for this *if needed*)
 --> track all videos
 
 
@@ -19,3 +19,4 @@ after track all videos
 - plot non-laser control runs
 
 - place preference pipeline
+
