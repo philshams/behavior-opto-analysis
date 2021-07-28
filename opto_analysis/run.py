@@ -23,7 +23,7 @@ def track():
     for session_ID in session_IDs:
         session = Process(session_ID).load_session()
         Track(settings_t).run_deeplabcut_tracking(session)
-        Track(settings_t).process_tracking_data(session)
+        Track(settings_t).process_tracking_data  (session)
 
 def visualize():
     print("\n------ VISUALIZING DATA ------"); print_settings(settings_v)
@@ -36,6 +36,6 @@ def visualize():
 def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 
     session_IDs = collect_session_IDs_analysis(settings_a.analysis, databank)
-    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a).plot('escape trajectories')
-    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a).plot('laser trajectories')
-    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a).plot('escape targets')
+    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a, 'escape trajectories').plot()
+    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a, 'laser trajectories' ).plot()
+    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).plot()

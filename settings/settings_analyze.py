@@ -12,8 +12,9 @@ post_laser_seconds_to_plot = 5,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 30,
 
-color_by = 'session', 
+color_by = '', 
 # 'speed' 'session' 'time' 'trial' or ''
+x_jitter = True,
 
 save_folder = "D:\\data\\Paper II"
 

@@ -61,13 +61,15 @@ class Settings_analyze_local:
     title: str=None
     save_folder: str=None
     experiments: list = None
-    experiments_group_A: list = None
-    experiments_group_B: list = None
     sessions: list = None
-    sessions_group_A: list = None
-    sessions_group_B: list = None
-    prev_session_group_A: list = None
-    prev_session_group_B: list = None
+    group_1: list=None
+    group_2: list=None
+    group_3: list=None
+    group_4: list=None
+    group_5: list=None
+    group_6: list=None
+    group_7: list=None
+    group_8: list=None
     by_experiment: bool=False
     by_session: bool=False
     by_prev_session: bool=False
@@ -84,3 +86,4 @@ class Settings_analyze_global:
     escape_initiation_speed: float = 20
     save_folder: str=None
     color_by: str=None
+    x_jitter: bool=True

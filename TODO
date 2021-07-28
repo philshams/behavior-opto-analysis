@@ -17,6 +17,8 @@ after track all videos
     - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
     - and/or: mouse at beginning /end of stim, with trail?
 
+- try escape initiation as begin of turn-and-run
+
 - plot non-laser control runs
 
 - place preference pipeline
