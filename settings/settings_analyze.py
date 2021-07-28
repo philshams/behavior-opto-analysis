@@ -12,7 +12,7 @@ post_laser_seconds_to_plot = 5,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 30,
 
-color_by = '', 
+color_by = 'session', 
 # 'speed' 'session' 'time' 'trial' or ''
 x_jitter = True,
 

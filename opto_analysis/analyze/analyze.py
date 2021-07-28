@@ -217,7 +217,7 @@ class Analyze():
             trial_start_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
             trial_end_idx = trial_start_idx + self.fps * self.settings.post_laser_seconds_to_plot
         trial = {}
-        trial['session count']  = self.trial_count
+        trial['session count']  = self.session_count
         trial['trial count']  = self.trial_count
         trial['group number'] = self.group_num
         trial['epoch'] = epoch
@@ -244,7 +244,6 @@ class Analyze():
         distance_edge_vector_to_homing_vector, _    = self.distance_to_line(x_edge_vector, y_target, x_start, y_start, x_goal, y_goal)
 
         escape_target_score = abs(distance_path_to_homing_vector - distance_path_to_edge_vector + distance_edge_vector_to_homing_vector) / (2*distance_edge_vector_to_homing_vector)
-
         return escape_target_score
 
     def distance_to_line(self, x, y, x_start, y_start, x_goal, y_goal):
