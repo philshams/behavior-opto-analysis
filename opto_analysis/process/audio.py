@@ -4,6 +4,7 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Tuple
 from glob import glob
+import dill as pickle
 
 @dataclass(frozen=True)
 class Audio:
@@ -13,10 +14,11 @@ class Audio:
 
 def get_Audio(session: Session) -> Audio:
     AI_file = glob(os.path.join(session.file_path, "analog*"))[-1] # take the last file if there are multiple
-    AI_data = np.fromfile(AI_file)
-
+    try:
+        with open(AI_file, "rb") as dill_file: AI_data = pickle.load(dill_file)
+    except:
+        AI_data = np.fromfile(AI_file)
     audio_data = AI_data[np.arange(1, len(AI_data), 4)] # four interleaved time series
-
     audio_num_samples = len(audio_data)
     audio_onset_frames, stimulus_durations = get_audio_stimulus_parameters(audio_data, session)
     audio = Audio(audio_num_samples, audio_onset_frames, stimulus_durations)

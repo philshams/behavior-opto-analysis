@@ -5,7 +5,6 @@ def print_settings(settings: object):
     if settings.by_experiment:      print(" - experiments: {}".format(settings.experiments))
     if settings.by_session:         print(" - sessions: {}".format(settings.sessions))
     if settings.by_prev_session:    print(" - # of prev sessions: {}".format(settings.prev_sessions))
-    print('\n-----------------')
 
 def print_settings_analysis(settings: object):
     for key in settings.__dict__.keys():
@@ -27,5 +26,3 @@ def print_settings_analysis(settings: object):
             group_A_members = settings.prev_session_group_A    
             group_B_members = settings.prev_session_group_B 
         print(" - group A: {}\n - group B: {}".format(group_A_members, group_B_members))
-
-    print('\n-----------------')

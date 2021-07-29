@@ -18,8 +18,8 @@ class Session:
     video: object=None
 
 def get_Session(session_ID: list) -> Session:
-    local_session_number = session_ID[0]
-    global_session_number = session_ID[1]
+    global_session_number = session_ID[0]
+    local_session_number = session_ID[1]
     experiment = session_ID[2]
     num_previous_sessions = session_ID[3]
     file_path = session_ID[4]

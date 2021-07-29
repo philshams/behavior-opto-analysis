@@ -37,6 +37,7 @@ class Process():
         else: self.loaded_registration_transform = None
 
     def print_session_details(self):
+        print('\n\n---')
         for key in self.session.__dict__.keys():
             if key in ['name','number','mouse','date','experiment','previous_sessions']:
                 print(" {}: {}".format(key, self.session.__dict__[key]))
@@ -44,10 +45,12 @@ class Process():
                 if key == 'camera_trigger': print("")
                 print(" {} metadata saved".format(key))
         print(" registration transform: {}".format(isinstance(self.session.video.registration_transform, np.ndarray)))
-        print(" -----------------")
+        
 
     def verify_all_frames_saved(self):
-        assert self.session.camera_trigger.num_frames == self.session.video.num_frames, "---Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(self.session.camera_trigger.num_frames, self.session.video.num_frames, self.session.experiment, self.session.mouse)
+        if self.session.camera_trigger.num_frames != self.session.video.num_frames:
+            print("\n - Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(self.session.camera_trigger.num_frames, self.session.video.num_frames, self.session.experiment, self.session.mouse))
 
-    def verify_aligned_data_streams(self, known_offset: int = 6000) -> None:
-        assert self.session.camera_trigger.num_samples == self.session.audio.num_samples and self.session.camera_trigger.num_samples == (self.session.laser.num_samples+known_offset), "---Data streams have mismatched numbers of samples---\nCamera trigger: {}\nAudio input: {}\nLaser output: {} = {} + {}".format(self.session.camera_trigger.num_samples, self.session.audio.num_samples, (self.session.laser.num_samples+known_offset), self.session.laser.num_samples, known_offset)
+    def verify_aligned_data_streams(self, known_offset: list = [3000,4500, 6000, 7500]) -> None:
+        if self.session.camera_trigger.num_samples != self.session.audio.num_samples or not (self.session.camera_trigger.num_samples - self.session.laser.num_samples) in known_offset:
+            print("\n - Data streams have mismatched numbers of samples---\n  Camera trigger: {}\n  Audio input:    {}\n  Laser output:   {} + {} or {} or {} or {}".format(self.session.camera_trigger.num_samples, self.session.audio.num_samples, self.session.laser.num_samples, known_offset[0], known_offset[1], known_offset[2], known_offset[3]))

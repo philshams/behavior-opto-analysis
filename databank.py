@@ -1,6 +1,6 @@
 databank = {}
-databank['path'] = ".\\sample_data\\"                          # sample data
-# data['path'] = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\"      # full dataset
+# databank['path'] = ".\\sample_data\\"                          # sample data
+databank['path'] = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\"      # full dataset
 
 databank['session IDs'] = [
 #-Session #s----Name of experiment-----prev session------Folder with data------
@@ -14,7 +14,7 @@ databank['session IDs'] = [
     [7,7,      'block edge vectors',     True,        "21APR10_9748_block evs"],
 
     [8,0,      'block pre edge vectors',     False,       "21APR01_9751_block pre evs"],
-    [9,1,      'block pre edge vectors',     False,       "21APR01_9753_block pre evs"],
+    [9,1,      'block pre edge vectors',     False,       "21APR01_9753_block pre evs"], # MISSING FRAMES
     [10,2,     'block pre edge vectors',     False,       "21APR01_9754_block pre evs"],
     [11,3,     'block pre edge vectors',     False,       "21APR01_9747_block pre evs"],
     [12,4,     'block pre edge vectors',     True,        "21APR01_9709_block pre evs"],

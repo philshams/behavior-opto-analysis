@@ -4,8 +4,6 @@ from typing import Tuple
 
 def collect_session_IDs(settings: object, databank: dict, group_num: int=0) -> np.ndarray:
     session_IDs = np.array(databank['session IDs'], dtype='object')
-    if settings.compare:
-        assert int(settings.by_experiment + settings.by_prev_session + settings.by_session)==1,"Must select exactly one factor to compare between"
     if settings.by_experiment:
         if group_num: key = 'group_' + str(group_num)
         else:         key = 'experiments'
@@ -18,10 +16,10 @@ def collect_session_IDs(settings: object, databank: dict, group_num: int=0) -> n
         if group_num: key = 'group_' + str(group_num)
         else:         key = 'sessions'
         factor_idx = 0
-    group_idx = np.sum([factor==session_IDs[:,factor_idx] for factor in settings.__dict__[key]],0).astype(bool)
-    session_IDs = session_IDs[group_idx]
-    
-    assert isinstance(settings.__dict__[key], list), "Group must be listed in list format" 
+    if settings.by_experiment or settings.by_prev_session or settings.by_session:
+        assert isinstance(settings.__dict__[key], list), "Group must be listed in list format" 
+        group_idx = np.sum([factor==session_IDs[:,factor_idx] for factor in settings.__dict__[key]],0).astype(bool)
+        session_IDs = session_IDs[group_idx]   
     
     for entry in session_IDs: # add in the full path to the raw data
         entry[4] = os.path.join(databank['path'], entry[4])
@@ -35,6 +33,7 @@ def collect_session_IDs_analysis(settings: object, databank: dict) -> np.ndarray
     if not settings.compare:
         session_IDs = collect_session_IDs(settings, databank)
     if settings.compare:
+        assert int(settings.by_experiment + settings.by_prev_session + settings.by_session)==1,"Must select exactly one factor to compare between"
         session_IDs = np.empty((0,6))
         for group_num in range(1,8):
             session_IDs_group_i = collect_session_IDs(settings, databank, group_num) 
