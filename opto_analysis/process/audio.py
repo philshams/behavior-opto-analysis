@@ -14,10 +14,10 @@ class Audio:
 
 def get_Audio(session: Session) -> Audio:
     AI_file = glob(os.path.join(session.file_path, "analog*"))[-1] # take the last file if there are multiple
-    try:
-        with open(AI_file, "rb") as dill_file: AI_data = pickle.load(dill_file)
-    except:
+    if '.bin' in AI_file: 
         AI_data = np.fromfile(AI_file)
+    else: 
+        with open(AI_file, "rb") as dill_file: AI_data = pickle.load(dill_file)        
     audio_data = AI_data[np.arange(1, len(AI_data), 4)] # four interleaved time series
     audio_num_samples = len(audio_data)
     audio_onset_frames, stimulus_durations = get_audio_stimulus_parameters(audio_data, session)
@@ -27,6 +27,9 @@ def get_Audio(session: Session) -> Audio:
 def get_audio_stimulus_parameters(audio_data: object, session: Session) -> Tuple[object, object, object]:
     
     audio_on_idx = np.where(abs(audio_data)>3)[0]
+    if not audio_on_idx.size:
+        print("No audio trials detected")
+        return [],[]
     idx_since_audio_on = np.append(np.inf, np.diff(audio_on_idx)) # get the first sample of audio stimuli
     audio_onset_idx = audio_on_idx[idx_since_audio_on > (session.daq_sampling_rate * 30)] # separate trials separated by > 30 sec
     audio_onset_frames = np.array([[np.argmin(abs(x - session.camera_trigger.frame_trigger_onsets_idx))] for x in audio_onset_idx])

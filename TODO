@@ -10,6 +10,8 @@ after track all videos
 - examine DLC performance; update network if needed
 --> track all videos
 
+- copy concatenated data to hard drive
+
 
 ------- after injecting next group ---------
 - do rendering videos/images once dlc is trained
@@ -20,7 +22,7 @@ after track all videos
 
 - plot non-laser control runs
 
-- place preference pipeline
+- place preference (incl. loom expts) pipeline
 
 - speed heatmap plot
 

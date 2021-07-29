@@ -16,10 +16,10 @@ class Laser:
 
 def get_Laser(session: Session) -> Laser:
     laser_file = glob(os.path.join(session.file_path, "laser*"))[-1] # take the last file if there are multiple
-    try:
-        with open(laser_file, "rb") as dill_file: laser_data = pickle.load(dill_file)
-    except:
+    if '.bin' in laser_file: 
         laser_data = np.fromfile(laser_file)
+    else: 
+        with open(laser_file, "rb") as dill_file: laser_data = pickle.load(dill_file)
     num_samples = len(laser_data)
     onset_frames, stimulus_durations, frequency = get_laser_stimulus_parameters(laser_data, session)
     laser = Laser(num_samples, onset_frames, stimulus_durations, frequency)
@@ -32,7 +32,9 @@ def get_laser_stimulus_parameters(laser_data: object, session: Session) -> Tuple
     laser_trial_frequency = []
     laser_data_diff = np.diff(laser_data)
     laser_pulse_onset_idx = np.where(laser_data_diff > .2)[0] + 1
-    assert laser_pulse_onset_idx.size, "Pipeline currently requires all session to have at least one laser trial"
+    if not laser_pulse_onset_idx.size:
+        print("No laser trials detected")
+        return [],[],[]
     laser_samples_since_last_start = np.diff(laser_pulse_onset_idx)
     current_pulse_idx = 0
 

@@ -11,8 +11,8 @@ settings_process = Settings_process(
     by_experiment=False,
     experiments = [''],
 
-    by_session=False,
-    sessions=[9,10,11],
+    by_session=True,
+    sessions=[x for x in range(71,80)],
 
     by_prev_session=False,
     prev_session=[0],

@@ -13,6 +13,7 @@ class Track():
         self.settings = settings
 
     def run_deeplabcut_tracking(self, session):
+        print('\n\n---')
         dlc_already_run = bool(glob.glob(os.path.join(session.file_path, "*DeepCut*")))
         if dlc_already_run and not self.settings.redo_dlc_tracking: 
             print("DeepLabCut tracking already saved for session:              {}".format(session.name))
@@ -23,11 +24,11 @@ class Track():
     def process_tracking_data(self, session):
         already_filtered_and_registered = os.path.isfile(session.video.tracking_data_file)
         if already_filtered_and_registered and not self.settings.redo_processing_step: 
-            print("Tracking data already filtered and registered for session:  {}".format(session.name))
+            print("\nTracking data already filtered and registered for session:  {}".format(session.name))
         elif isinstance(session.video.registration_transform, type(None)):
-            print("Registration not found. Tracking not processed for session: {}".format(session.name))
+            print("\nRegistration not found; tracking not processed for session: {}".format(session.name))
         else:
-            print("Processing tracking data for session:                       {}".format(session.name))
+            print("\nProcessing tracking data for session:                       {}".format(session.name))
             self.tracking_data = {}
             self.extract_data_from_dlc_file(session)
             self.create_array_with_dlc_tracking_data(session)
@@ -44,7 +45,6 @@ class Track():
             self.compute_speed(session)
             self.compute_speed(session, session.video.shelter_location, 'speed rel. to shelter')
             self.save_tracking_data(session)
-        print(" -----------------")
 
     # ------------------------------------------------------------------
 

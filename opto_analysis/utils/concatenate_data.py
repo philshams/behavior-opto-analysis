@@ -5,7 +5,7 @@ file 'path/to/file1.wav'
 file 'path/to/file2.wav'
 file 'path/to/file3.wav'
 
-ffmpeg -f concat -safe 0 -i mylist.txt -c copy mergedfile.mp4
+ffmpeg -f concat -safe 0 -i vids.txt -c copy cam3.avi
 '''
 
 ''' bin data '''
@@ -15,6 +15,7 @@ import numpy as np
 import dill as pickle
 
 file_path = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\21APR01_9753_block pre evs"
+file_path = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\21APR12_9756_allow then block"
 
 # LASER BIN FILES
 laser_files = glob(os.path.join(file_path, "laser*"))

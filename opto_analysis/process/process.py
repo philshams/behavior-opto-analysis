@@ -13,11 +13,12 @@ class Process():
 
     def create_session(self, settings) -> Session:        
         self.load_registration_transform()
+        self.print_session_details(stage=1)
         self.session.camera_trigger = get_Camera_trigger(self.session)
         self.session.laser          = get_Laser(self.session)
         self.session.audio          = get_Audio(self.session)
         self.session.video          = get_Video(self.session, settings, self.loaded_registration_transform)
-        self.print_session_details()
+        self.print_session_details(stage=2)
         self.save_session()
         self.verify_all_frames_saved()
         self.verify_aligned_data_streams()
@@ -36,20 +37,22 @@ class Process():
             self.loaded_registration_transform = self.load_session().video.registration_transform
         else: self.loaded_registration_transform = None
 
-    def print_session_details(self):
-        print('\n\n---')
-        for key in self.session.__dict__.keys():
-            if key in ['name','number','mouse','date','experiment','previous_sessions']:
-                print(" {}: {}".format(key, self.session.__dict__[key]))
-            elif key in ['camera_trigger', 'laser','audio','video']:
-                if key == 'camera_trigger': print("")
-                print(" {} metadata saved".format(key))
-        print(" registration transform: {}".format(isinstance(self.session.video.registration_transform, np.ndarray)))
-        
+    def print_session_details(self,stage: int):
+        if stage==1:
+            print('\n\n---')
+            for key in self.session.__dict__.keys():
+                if key in ['name','number','mouse','date','previous_sessions']:
+                    print(" {}: {}".format(key, self.session.__dict__[key]))
+        if stage==2:
+            print('')
+            for key in self.session.__dict__.keys():
+                if key in ['camera_trigger', 'laser','audio','video']:
+                    print(" {} metadata saved".format(key))
+            print(" registration transform: {}".format(isinstance(self.session.video.registration_transform, np.ndarray))) 
 
     def verify_all_frames_saved(self):
         if self.session.camera_trigger.num_frames != self.session.video.num_frames:
-            print("\n - Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(self.session.camera_trigger.num_frames, self.session.video.num_frames, self.session.experiment, self.session.mouse))
+            print("\n - Video contains {} frames, but {} frames were triggered! (for experiment: {}, mouse: {})---".format(self.session.video.num_frames, self.session.camera_trigger.num_frames, self.session.experiment, self.session.mouse))
 
     def verify_aligned_data_streams(self, known_offset: list = [3000,4500, 6000, 7500]) -> None:
         if self.session.camera_trigger.num_samples != self.session.audio.num_samples or not (self.session.camera_trigger.num_samples - self.session.laser.num_samples) in known_offset:

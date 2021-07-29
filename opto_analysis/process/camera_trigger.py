@@ -14,10 +14,10 @@ class Camera_trigger:
 
 def get_Camera_trigger(session: Session) -> Camera_trigger:
     AI_file = glob(os.path.join(session.file_path, "analog*"))[-1] # take the last file if there are multiple
-    try:
-        with open(AI_file, "rb") as dill_file: AI_data = pickle.load(dill_file)
-    except:
+    if '.bin' in AI_file: 
         AI_data = np.fromfile(AI_file)
+    else:
+        with open(AI_file, "rb") as dill_file: AI_data = pickle.load(dill_file)
     camera_trigger_data = AI_data[np.arange(0, len(AI_data), 4)] # four interleaved time series
     camera_trigger_num_samples = len(camera_trigger_data)
     num_frames_expected, duration_of_video, frame_trigger_onsets_idx = get_num_frames_expected(session, camera_trigger_data)
