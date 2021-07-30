@@ -16,13 +16,7 @@ def print_settings_analysis(settings: object):
         if settings.by_session:         print(" - sessions: {}".format(settings.sessions))
         if settings.by_prev_session:    print(" - # of prev sessions: {}".format(settings.prev_sessions))
     if settings.compare:
-        if settings.by_experiment: 
-            group_A_members = settings.experiments_group_A    
-            group_B_members = settings.experiments_group_B
-        if settings.by_session:       
-            group_A_members = settings.sessions_group_A    
-            group_B_members = settings.sessions_group_B  
-        if settings.by_prev_session:   
-            group_A_members = settings.prev_session_group_A    
-            group_B_members = settings.prev_session_group_B 
-        print(" - group A: {}\n - group B: {}".format(group_A_members, group_B_members))
+        for group_num in range(1,9):
+            key = 'group_' + str(group_num)
+            if settings.__dict__[key] is None: continue
+            print(" - group {}: {}".format(group_num, settings.__dict__[key]))

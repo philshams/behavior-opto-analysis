@@ -57,7 +57,7 @@ class Settings_visualize:
 class Settings_analyze_local:
     plot_escape: bool=False
     plot_laser: bool=False
-    plot_targets: bool=True
+    plot_targets: bool=False
     title: str=None
     save_folder: str=None
     experiments: list = None
@@ -84,6 +84,7 @@ class Settings_analyze_global:
     post_laser_seconds_to_plot: int = 5
     min_distance_from_shelter: int = 10
     escape_initiation_speed: float = 20
+    edge_vector_threshold: float = 0.65
     save_folder: str=None
     color_by: str=None
     x_jitter: bool=True

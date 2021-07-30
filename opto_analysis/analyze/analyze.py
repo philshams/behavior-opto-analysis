@@ -19,7 +19,7 @@ class Analyze():
         self.trial_colors   = []
         self.trials_to_plot = []
         self.group_nums = np.unique(session_IDs[:, 5])
-        self.x_range = [min(self.group_nums)-1, max(self.group_nums)+1]
+        self.num_of_groups = np.ptp(self.group_nums)+1       
         self.analysis_type = analysis_type
         if analysis_type=='escape trajectories': self.stim_type='audio'
         if analysis_type=='escape targets':      self.stim_type='audio'
@@ -35,10 +35,10 @@ class Analyze():
         self.plot_data()
         self.save_plot()
 
-
 # ----FIRST-ORDER PLOTTING FUNCS-----------------------------------------
 
     def initialize_figure(self):
+        self.load_session_for_plotting(self.session_IDs[0]) 
         if 'trajectories' in self.analysis_type: self.initialize_arena_plot()
         if 'targets' in self.analysis_type:      self.initialize_box_plot()
         plt.axis('off')
@@ -69,14 +69,15 @@ class Analyze():
     def plot_data(self):
         if 'trajectories' in self.analysis_type:
             for trial in self.trials_to_plot:
-                if self.settings.color_by in ['speed', 'time']: self.gradient_line(trial)
-                if not self.settings.color_by:                  self.solid_line(trial)
-
+                if self.settings.color_by in ['speed', 'time']: 
+                    self.gradient_line(trial)
+                else:
+                    self.solid_line(trial)
         if 'targets' in self.analysis_type:
             for trial in self.trials_to_plot:
-                self.data_x = np.append(self.data_x, trial['group number'])
-                self.data_y = np.append(self.data_y, trial['escape target score'])
-                self.trial_colors.append(self.get_solid_color(trial))
+                self.data_x =  np.append(self.data_x, trial['group number'])
+                self.data_y =  np.append(self.data_y, trial['escape target score'])
+                self.trial_colors.append(self.get_solid_color(trial, plot_type='scatter'))
             self.plot_box_plot()
             self.plot_scatter_data()
                     
@@ -108,43 +109,50 @@ class Analyze():
         self.ax.add_artist(circle)
 
     def initialize_box_plot(self):
-        self.fig, self.ax = plt.subplots(figsize=(np.ptp(self.group_nums)+4, 6))
+        self.fig, self.ax = plt.subplots(figsize=(self.num_of_groups*2, 9))
         self.fig.canvas.set_window_title(self.settings.analysis.title) 
         self.fig.tight_layout()
         self.ax.set_ylim([-.05, 1.05])
-        self.ax.set_xlim([self.x_range[0]-1, self.x_range[1]+1])
-        plt.plot(self.x_range, [0,0],     color=(.9,.9,.9), linestyle='--')
-        plt.plot(self.x_range, [1,1],     color=(.9,.9,.9), linestyle='--')
-        plt.plot(self.x_range, [.65,.65], color=(.9,.9,.9), linestyle='--')
+        self.x_range = [min(self.group_nums)-.6, max(self.group_nums)+.6]
+        self.ax.set_xlim(self.x_range)
+        plt.plot(self.x_range, [0,0],     color=(.9,.9,.9), linestyle='--', zorder=-1)
+        plt.plot(self.x_range, [1,1],     color=(.9,.9,.9), linestyle='--', zorder=-1)
+        plt.plot(self.x_range, [.65,.65], color=(.9,.9,.9), linestyle='--', zorder=-1)
 
     def plot_scatter_data(self):
-        self.apply_x_jitter(offset_x=.35, min_distance_y=0.01, jitter_distance_x=0.04)
-        self.ax.scatter(self.jittered_data_x, self.data_y, color=self.trial_colors, alpha=1, s=15, zorder=99)
+        self.apply_x_jitter(offset_x=0, min_distance_y=0.01, jitter_distance_x=0.02 * self.num_of_groups)
+        self.ax.scatter(self.jittered_data_x, self.data_y, color=self.trial_colors, linewidth=0, s=35, zorder=99)
 
-    def plot_box_plot(self, width=.35):
+    def plot_box_plot(self, width=.4):
         for group_num in self.group_nums:
             group_data_y = self.data_y[self.data_x==group_num]
             quartile_1, median, quartile_3 = np.percentile(group_data_y, [25, 50, 75])
             iqr = quartile_3 - quartile_1
             lower_range = max(min(group_data_y), quartile_1-1.5*iqr)
             upper_range = min(max(group_data_y), quartile_3+1.5*iqr)
-            color = (.85,.85,.85)
+            color = (.9,.9,.9)
 
+            whiskers = self.ax.plot([group_num,group_num], [lower_range, upper_range], color=color, linewidth=10)
             boxplot = plt.Rectangle((group_num-width/2, quartile_1), width, iqr, color=color, edgecolor=None, fill=True)
             self.ax.add_artist(boxplot)
-            whiskers = self.ax.plot([[group_num,group_num],[group_num,group_num]], [[lower_range,quartile_3],[quartile_1,upper_range]], color=color, linewidth=2)
-            median_line = self.ax.plot([group_num-width/2.15, group_num+width/2.15], [median, median], color=(0,0,0), linewidth=1)
+
+            median_line = self.ax.plot([group_num-width/2.1, group_num+width/2.05], [median, median], color=(0,0,0), linewidth=1.5)
 
     def solid_line(self, trial: dict):
-        color = self.get_solid_color(self, trial)
+        color = self.get_solid_color(trial, plot_type='trajectory')
         self.ax.plot(trial['trajectory x'], trial['trajectory y'], color = color, linewidth=trial['linewidth'])
 
-    def get_solid_color(self,trial) -> tuple:
-        if not self.settings.color_by: color=(.4,.4,.4, .7); return color
-
+    def get_solid_color(self, trial: dict, plot_type:str='trajectory') -> tuple:
+        if not self.settings.color_by: 
+            color=(.4,.4,.4, .7)
+            return color
+        if self.settings.color_by=='target': 
+            if trial['escape target score'] >  self.settings.edge_vector_threshold: color = (0, .4, 1, .6)
+            if trial['escape target score'] <= self.settings.edge_vector_threshold: color = (.4,.4,.4,  1)
+            return color
         if self.settings.color_by=='trial':      self.color_counter = trial['trial count']
         if self.settings.color_by=='session':    self.color_counter = trial['session count']
-        color = get_colormap(object_to_color='plot', epoch=trial['epoch'])[self.color_counter%16]
+        color = get_colormap(object_to_color='plot', epoch=trial['epoch'], plot_type=plot_type)[self.color_counter%16]
         return color
 
     def gradient_line(self, trial: dict):
@@ -206,7 +214,7 @@ class Analyze():
             if epoch=='post-laser': trial['linewidth'] = 1
         if 'targets' in self.analysis_type:
             trial['escape initiation idx'] = self.get_escape_initiation_idx(trial_start_idx)
-            trial['escape target score'] = self.get_escape_target_score(trial['trajectory x'], trial['trajectory y'], trial['escape initiation idx'])
+            trial['escape target score'] = 1 - 1.5 * self.get_escape_target_score(trial['trajectory x'], trial['trajectory y'], trial['escape initiation idx']) #temp!!
         self.trials_to_plot.append(trial)
 
     def initialize_trial_dict(self, onset_frames: list, stim_durations: list, epoch: str) -> Tuple[int, int]:

@@ -19,12 +19,14 @@ def get_color_parameters(stim_type: str='audio', stim_status: float=0, object_to
 
     return [np.array(x) for x in colormap], speed_thresholds
 
-def get_colormap(object_to_color = 'tracking video', epoch='stimulus'):
+def get_colormap(object_to_color = 'tracking video', epoch='stimulus', plot_type='trajectory'):
     colormap = [(0, 0, 255),(255, 0, 255),(120, 120, 255),(0, 255, 255),(0, 255, 150),(0, 150, 0),(255, 255, 0),(120,120,120),(255, 50, 0),(255, 50, 80),(255, 50, 150),(150, 0, 150),(30, 0, 180)]
     if object_to_color=='plot':
         colormap = plt.get_cmap('viridis')(np.linspace(0,.95,16))
-        if epoch=='stimulus':   colormap[:,3] = np.linspace(.4, .8, 16)
-        if epoch=='post-laser': colormap[:,3] = np.linspace(.3, .6, 16)
+        if plot_type =='trajectory':
+           if epoch=='stimulus':     colormap[:,3] = np.linspace(.4, .8, 16)
+           if epoch=='post-laser':   colormap[:,3] = np.linspace(.3, .6, 16)
+        if plot_type =='scatter':    colormap[:,3] = .6
         colormap = colormap[np.array([6,11,0,5,10,15,4,9,14,3,8,13,2,7,12,1]), :]
     return colormap
 
