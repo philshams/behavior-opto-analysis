@@ -12,6 +12,7 @@ post_laser_seconds_to_plot = 5,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 30,
 edge_vector_threshold = 0.65,
+two_tailed_test = True,
 
 x_jitter = True,
 color_by = 'target', 

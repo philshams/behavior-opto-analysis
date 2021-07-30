@@ -36,6 +36,6 @@ def visualize():
 def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 
     session_IDs = collect_session_IDs_analysis(settings_a.analysis, databank)
-    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a, 'escape trajectories').plot()
-    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a, 'laser trajectories' ).plot()
-    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).plot()
+    if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a, 'escape trajectories').trajectories()
+    if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a, 'laser trajectories' ).trajectories()
+    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).data()

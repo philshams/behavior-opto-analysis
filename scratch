@@ -6,18 +6,6 @@ from distutils.core import setup
 
 setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
 
-def flatten(iterable: list):
-    it = iter(iterable)
-    for x in it:
-        if isinstance(x, (list, tuple, np.ndarray)):
-            for y in flatten(x):
-                print(y)
-                yield y
-        else:
-            yield x
-
-
-
 
             # shading_colors = [np.array(x) for x in [[254, 254, 254], [254, 253.5, 252.6], [254, 250, 240], [254, 250, 200], [200, 250, 254]]]
             # i = np.where( (self.speed - speed_thresholds)>0 )[0][-1] # index within the speed thresholds

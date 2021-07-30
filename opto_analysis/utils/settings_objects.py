@@ -85,6 +85,7 @@ class Settings_analyze_global:
     min_distance_from_shelter: int = 10
     escape_initiation_speed: float = 20
     edge_vector_threshold: float = 0.65
+    two_tailed_test: bool=True
     save_folder: str=None
     color_by: str=None
     x_jitter: bool=True
