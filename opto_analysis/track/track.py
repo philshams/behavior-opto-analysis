@@ -18,6 +18,7 @@ class Track():
         if dlc_already_run and not self.settings.redo_dlc_tracking: 
             print("DeepLabCut tracking already saved for session:              {}".format(session.name))
         else:
+            print("Running DeepLabCut tracking for session:                    {}".format(session.name))
             from deeplabcut.pose_estimation_tensorflow import analyze_videos
             analyze_videos(self.settings.dlc_settings_file, session.video.video_file)
 

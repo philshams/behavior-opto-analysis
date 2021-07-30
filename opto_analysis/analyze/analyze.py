@@ -28,72 +28,53 @@ class Analyze():
     def plot(self):
         self.initialize_figure()
         for session_ID in self.session_IDs:
-            self.load_session_for_plotting(session_ID) 
-            self.initialize_session_parameters() 
-            self.open_its_tracking_data()
-            self.extract_data_from_each_trial()
-        self.plot_data()
-        self.save_plot()
+            self.open_session_data(session_ID) 
+            self.get_data_on_each_trial()
+        self.statistics()
+        self.plot()
 
 # ----FIRST-ORDER PLOTTING FUNCS-----------------------------------------
 
     def initialize_figure(self):
-        self.load_session_for_plotting(self.session_IDs[0]) 
         if 'trajectories' in self.analysis_type: self.initialize_arena_plot()
-        if 'targets' in self.analysis_type:      self.initialize_box_plot()
+        if 'targets' in self.analysis_type:      self.initialize_data_plot()
         plt.axis('off')
         self.ax.margins(0, 0)
         self.ax.xaxis.set_major_locator(plt.NullLocator())
         self.ax.yaxis.set_major_locator(plt.NullLocator())
 
-    def load_session_for_plotting(self, session_ID):
+    def open_session_data(self, session_ID):
         self.session = Process(session_ID).load_session()
         self.group_num = session_ID[5]
-
-    def initialize_session_parameters(self):
         self.fps = self.session.video.fps
         self.session_count += 1
         self.num_successful_escapes_this_session = 0
+        open_tracking_data(self) # generates self.tracking_data
 
-    def open_its_tracking_data(self):
-        open_tracking_data(self)
-
-    def extract_data_from_each_trial(self):
+    def get_data_on_each_trial(self):
         for onset_frames, stim_durations in zip(self.session.__dict__[self.stim_type].onset_frames, \
                                                 self.session.__dict__[self.stim_type].stimulus_durations):
-            if not self.trial_is_eligible(onset_frames): continue
-            self.generate_trial_dict(onset_frames, stim_durations, epoch='stimulus')
-            self.generate_trial_dict(onset_frames, stim_durations, epoch='post-laser')
+            if not self.trial_is_eligible(onset_frames): 
+                continue
+            self.generate_trial_dict(onset_frames, stim_durations)
             self.trial_count+=1
 
-    def plot_data(self):
-        if 'trajectories' in self.analysis_type:
-            for trial in self.trials_to_plot:
-                if self.settings.color_by in ['speed', 'time']: 
-                    self.gradient_line(trial)
-                else:
-                    self.solid_line(trial)
-        if 'targets' in self.analysis_type:
-            for trial in self.trials_to_plot:
-                self.data_x =  np.append(self.data_x, trial['group number'])
-                self.data_y =  np.append(self.data_y, trial['escape target score'])
-                self.trial_colors.append(self.get_solid_color(trial, plot_type='scatter'))
-            self.plot_box_plot()
-            self.plot_scatter_data()
-                    
-    def save_plot(self):
-        # plt.ion()
-        plt.show()
-        file_base_name = os.path.join(self.settings.save_folder, self.session.experiment, "plots", self.settings.analysis.title)
-        file_extension = '.png'
-        file_suffix = ''
-        if self.settings.color_by: 
-            file_suffix = '_color by ' + self.settings.color_by
-        self.fig.savefig(file_base_name+file_suffix+file_extension, bbox_inches='tight', pad_inches=0)
+    def statistics(self):
+        if not 'trajectories' in self.analysis_type:
+            self.compile_all_trials_data()
 
-# ----PLOTTING HELPER FUNCS----------------------------------------------
+    def plot(self):
+        if 'trajectories' in self.analysis_type: 
+            self.plot_trajectories()
+        else: 
+            self.plot_boxplot()
+            self.plot_scatterplot()
+        self.save_plot()
+                    
+# ----PLOTTING FUNCS-----------------------------------------------------
 
     def initialize_arena_plot(self):
+        self.session = Process(self.session_IDs).load_session()
         size = self.session.video.rendering_size_pixels
         if self.stim_type=='audio':
             self.fig, self.ax = plt.subplots(figsize=(9,9))
@@ -108,7 +89,12 @@ class Analyze():
         circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
 
-    def initialize_box_plot(self):
+    def plot_trajectories(self):
+        for trial in self.trials_to_plot:
+            if self.settings.color_by in ['speed', 'time']: self.gradient_line(trial)
+            else:                                           self.solid_line(trial)        
+
+    def initialize_data_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(self.num_of_groups*2, 9))
         self.fig.canvas.set_window_title(self.settings.analysis.title) 
         self.fig.tight_layout()
@@ -119,11 +105,11 @@ class Analyze():
         plt.plot(self.x_range, [1,1],     color=(.9,.9,.9), linestyle='--', zorder=-1)
         plt.plot(self.x_range, [.65,.65], color=(.9,.9,.9), linestyle='--', zorder=-1)
 
-    def plot_scatter_data(self):
+    def plot_scatterplot(self):
         self.apply_x_jitter(offset_x=0, min_distance_y=0.01, jitter_distance_x=0.02 * self.num_of_groups)
         self.ax.scatter(self.jittered_data_x, self.data_y, color=self.trial_colors, linewidth=0, s=35, zorder=99)
 
-    def plot_box_plot(self, width=.4):
+    def plot_boxplot(self, width=.4):
         for group_num in self.group_nums:
             group_data_y = self.data_y[self.data_x==group_num]
             quartile_1, median, quartile_3 = np.percentile(group_data_y, [25, 50, 75])
@@ -187,35 +173,32 @@ class Analyze():
                 multiplier = 2
         self.jittered_data_x = data_x+offset_x
 
-# ----ANALYSIS HELPER FUNCS----------------------------------------------
+    def save_plot(self):
+        # plt.ion()
+        plt.show()
+        file_base_name = os.path.join(self.settings.save_folder, self.session.experiment, "plots", self.settings.analysis.title)
+        file_extension = '.png'
+        file_suffix = ''
+        if self.settings.color_by: 
+            file_suffix = '_color by ' + self.settings.color_by
+        self.fig.savefig(file_base_name+file_suffix+file_extension, bbox_inches='tight', pad_inches=0)
 
-    def trial_is_eligible(self, onset_frames: list) -> bool:
-        eligible = self.stim_type=='audio' and self.successful_escape(onset_frames) and \
-                   self.num_successful_escapes_this_session <  self.settings.max_num_trials            
-        if eligible: self.num_successful_escapes_this_session += 1
-        return eligible
+# ----DATA EXTRACTION FUNCS----------------------------------------------
 
-    def successful_escape(self, onset_frames: list) -> bool:
-        location_during_threat = self.tracking_data['avg_loc'][onset_frames[0]:onset_frames[0]+self.fps*self.settings.max_escape_duration, :]
-
-        distance_from_shelter_during_threat = ((location_during_threat[:,0]-self.session.video.shelter_location[0])**2 + \
-                                               (location_during_threat[:,1]-self.session.video.shelter_location[1])**2)**.5
-
-        successful_escape = (distance_from_shelter_during_threat < self.settings.min_distance_from_shelter*10).any()
-        return successful_escape
-
-    def generate_trial_dict(self, onset_frames: list, stim_durations: list, epoch: str='stimulus'):
-        if epoch=='post-laser' and self.stim_type=='audio': return
-        trial, trial_start_idx, trial_end_idx = self.initialize_trial_dict(onset_frames, stim_durations, epoch)
-        if'trajectories' in self.analysis_type:
-            trial['trajectory y'] = self.session.video.rendering_size_pixels - trial['trajectory y']
-            trial['speed'] = self.tracking_data['speed'][trial_start_idx+1:trial_end_idx]
-            if epoch=='stimulus':   trial['linewidth'] = 3
-            if epoch=='post-laser': trial['linewidth'] = 1
-        if 'targets' in self.analysis_type:
-            trial['escape initiation idx'] = self.get_escape_initiation_idx(trial_start_idx)
-            trial['escape target score'] = 1 - 1.5 * self.get_escape_target_score(trial['trajectory x'], trial['trajectory y'], trial['escape initiation idx']) #temp!!
-        self.trials_to_plot.append(trial)
+    def generate_trial_dict(self, onset_frames: list, stim_durations: list):
+        if self.stim_type=='audio': epochs = ['stimulus']
+        if self.stim_type=='laser': epochs = ['stimulus', 'post-laser']
+        for epoch in epochs:
+            trial, trial_start_idx, trial_end_idx = self.initialize_trial_dict(onset_frames, stim_durations, epoch)
+            if'trajectories' in self.analysis_type:
+                trial['trajectory y'] = self.session.video.rendering_size_pixels - trial['trajectory y']
+                trial['speed'] = self.tracking_data['speed'][trial_start_idx+1:trial_end_idx]
+                if epoch=='stimulus':   trial['linewidth'] = 3
+                if epoch=='post-laser': trial['linewidth'] = 1
+            if 'targets' in self.analysis_type:
+                trial['escape initiation idx'] = self.get_escape_initiation_idx(trial_start_idx)
+                trial[self.analysis_type] = self.get_escape_target_score(trial['trajectory x'], trial['trajectory y'], trial['escape initiation idx'])
+            self.trials_to_plot.append(trial)
 
     def initialize_trial_dict(self, onset_frames: list, stim_durations: list, epoch: str) -> Tuple[int, int]:
         if epoch=='stimulus':
@@ -233,6 +216,29 @@ class Analyze():
         trial['trajectory y'] = self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 1]
 
         return trial, trial_start_idx, trial_end_idx
+
+    def compile_all_trials_data(self):
+        for trial in self.trials_to_plot:
+            self.data_x =  np.append(self.data_x, trial['group number'])
+            self.data_y =  np.append(self.data_y, trial[self.analysis_type])
+            self.trial_colors.append(self.get_solid_color(trial, plot_type='scatter'))
+
+# ----ANALYSIS FUNCS-----------------------------------------------------
+
+    def trial_is_eligible(self, onset_frames: list) -> bool:
+        eligible = self.stim_type=='audio' and self.successful_escape(onset_frames) and \
+                   self.num_successful_escapes_this_session <  self.settings.max_num_trials            
+        if eligible: self.num_successful_escapes_this_session += 1
+        return eligible
+
+    def successful_escape(self, onset_frames: list) -> bool:
+        location_during_threat = self.tracking_data['avg_loc'][onset_frames[0]:onset_frames[0]+self.fps*self.settings.max_escape_duration, :]
+
+        distance_from_shelter_during_threat = ((location_during_threat[:,0]-self.session.video.shelter_location[0])**2 + \
+                                               (location_during_threat[:,1]-self.session.video.shelter_location[1])**2)**.5
+
+        successful_escape = (distance_from_shelter_during_threat < self.settings.min_distance_from_shelter*10).any()
+        return successful_escape
 
     def get_escape_initiation_idx(self, trial_start_idx: int):
         escape_initiation_idx = np.where(self.tracking_data['speed rel. to shelter'][trial_start_idx+1:] > self.settings.escape_initiation_speed)[0][0]
