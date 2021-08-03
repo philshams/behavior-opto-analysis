@@ -3,7 +3,6 @@ from opto_analysis.utils.settings_objects import Settings_track
 # select the analysis settings
 settings_track = Settings_track(
 
-    redo_dlc_tracking=False,
     redo_processing_step=True,
 
     min_confidence_in_tracking=0.99,

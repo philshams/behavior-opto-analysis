@@ -3,10 +3,10 @@ from opto_analysis.utils.settings_objects import Settings_visualize
 settings_visualize = Settings_visualize(
 
     laser_trials=True,
-    escape_trials=False,
+    escape_trials=True,
     
-    display_trail=False,
-    display_tracking=True,
+    display_trail=True,
+    display_tracking=False,
 
     display_stimulus = True,
     rapid = True,
@@ -16,12 +16,12 @@ settings_visualize = Settings_visualize(
     seconds_after_audio = 2,
     seconds_after_laser = 6,
 
-    save_folder = "D:\\data\\Paper II",
+    save_folder = "D:\\data\\Paper II\\",
 
     by_experiment=False,
     experiments = [''],
 
-    by_session=True,
+    by_session=False,
     sessions=[1],
 
     by_prev_session=False,

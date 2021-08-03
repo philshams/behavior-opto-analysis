@@ -2,6 +2,7 @@ from opto_analysis.utils.open_tracking_data import open_tracking_data, index_ons
 from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame
 from opto_analysis.utils.color_funcs import get_color_based_on_speed, get_colormap
 from opto_analysis.utils.generate_stim_status_array import generate_stim_status_array
+from opto_analysis.utils.directory import Directory
 import cv2
 import numpy as np
 import os
@@ -106,8 +107,6 @@ class Visualize():
             self.trail_colors.append(trail_color)
             self.trail.append(self.avg_loc)
             self.trail_thicknesses.append(int(self.stim_status[i]!=0)+int(self.stim_type=='audio')+1)
-    
-    
      
 # ----SETUP FUNCTIONS-----------------------------------------------------------------------------------------------
 
@@ -118,23 +117,17 @@ class Visualize():
         self.fps = self.session.video.fps
         self.seconds_before = self.settings.__dict__['seconds_before_' + self.stim_type]
         self.seconds_after = self.settings.__dict__['seconds_after_' + self.stim_type]
-
-
-        if self.settings.display_tracking: self.video_type = 'tracking'
-        else: self.video_type = self.stim_type
-
         self.source_video = cv2.VideoCapture(self.session.video.video_file)
         self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
-        self.trial_video = cv2.VideoWriter(os.path.join(self.settings.save_folder, self.session.experiment,self.video_type, "{}-{}-{}-{}.mp4".format(self.session.experiment, self.session.mouse, self.stim_type, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
-
-        # array: 0~stimulus on, negative~ pre stimulus, positive ~ post-stimulus
-        self.stim_status = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps) 
-        
         self.frames_in_this_trial = range((onset_frames[-1]-onset_frames[0])+int((self.seconds_before+stimulus_durations[-1]+self.seconds_after)*self.session.video.fps))
-
         self.trail = []
         self.trail_colors = []
-        self.trail_thicknesses = []
+        self.trail_thicknesses = []    
+        self.stim_status = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps)  
+        #self.stim_status: 0~stimulus on, negative~pre stimulus, positive~post-stimulus
+
+        trial_video_folder = Directory(self.settings.save_folder, experiment=self.session.experiment, stim_type=self.stim_type, tracking_video=self.settings.display_tracking).path
+        self.trial_video = cv2.VideoWriter(os.path.join(trial_video_folder, "{}-{}.mp4".format(self.session.mouse, trial_num+1)), cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
 
     def release_video_objects(self):
         self.source_video.release()
