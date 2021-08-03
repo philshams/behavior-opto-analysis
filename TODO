@@ -1,12 +1,11 @@
 ------- at home or work ------
 
 after track all videos 
---> plot escapes from each expt
 --> plot/stats for escape target 
+    - color trajectories by target score
+    - color trajectories by GROUP!
 
-- video saving
-- figure saving
-
+- put minute in trial clip title
 - update tests
 
 ------- at work -------

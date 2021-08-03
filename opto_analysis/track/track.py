@@ -59,7 +59,7 @@ class Track():
         self.compute_avg_bodypart_locations()
         self.compute_angles()
         self.compute_speed(session)
-        self.compute_speed(session, session.video.shelter_location, 'speed rel. to shelter')
+        self.compute_speed(session, reference_location=session.video.shelter_location, reference_name=' rel. to shelter')
 
 # -----LOW-LEVEL FUNCS--------------------------------------------------------------
     def extract_data_from_dlc_file(self, session):
@@ -136,17 +136,18 @@ class Track():
             self.tracking_data[direction_to_compute] = np.angle((self.tracking_data[front_bodypart][:, 0] - self.tracking_data[back_bodypart][:, 0]) + \
                                                                (-self.tracking_data[front_bodypart][:, 1] + self.tracking_data[back_bodypart][:, 1]) * 1j, deg=True)
 
-    def compute_speed(self, session, reference_location=None, speed_name='speed'):
+    def compute_speed(self, session, reference_location: tuple=None, reference_name: str=''):
         if not reference_location:
             speed_x_and_y_pixel_per_frame = np.diff(self.tracking_data['avg_loc'], axis=0) 
             speed_pixel_per_frame = (speed_x_and_y_pixel_per_frame[:, 0]**2 + speed_x_and_y_pixel_per_frame[:, 1]**2)**.5
         else:
             distance_from_reference_location = ((self.tracking_data['avg_loc'][:,0] - reference_location[0])**2 + \
                                                 (self.tracking_data['avg_loc'][:,1] - reference_location[1])**2)**.5
+            self.tracking_data['distance' + reference_name] = distance_from_reference_location
             speed_pixel_per_frame = -np.diff(distance_from_reference_location)
         speed_cm_per_sec = speed_pixel_per_frame * session.video.fps / session.video.pixels_per_cm
         smoothed_speed_cm_per_sec = gaussian_filter1d(speed_cm_per_sec, sigma=session.video.fps/10)
-        self.tracking_data[speed_name] = smoothed_speed_cm_per_sec
+        self.tracking_data['speed' + reference_name] = smoothed_speed_cm_per_sec
        
     def plot_tracking(self):
         if self.settings.display_tracking_output:

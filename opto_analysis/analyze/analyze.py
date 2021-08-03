@@ -4,12 +4,11 @@ from opto_analysis.analyze.plot_funcs import *
 from opto_analysis.analyze.data_extraction_funcs import *
 from opto_analysis.analyze.stats_funcs import permutation_test, print_stat_test_results
 from opto_analysis.analyze.analysis_funcs import trial_is_eligible
+from opto_analysis.utils.directory import Directory
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 class Analyze():
-
     def __init__(self, session_IDs, settings, analysis_type):
         self.settings = settings
         self.session_IDs = session_IDs
@@ -96,7 +95,7 @@ class Analyze():
     def initialize_data_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(self.num_of_groups*2, 9))
         self.fig.canvas.set_window_title(self.settings.analysis.title) 
-        self.ax.set_ylim([-.05, 1.05])
+        self.ax.set_ylim([-.2, 1.2])
         self.x_range = [min(self.group_nums)-.6, max(self.group_nums)+.6]
         self.ax.set_xlim(self.x_range)
         plt.plot(self.x_range, [0,0],     color=(.9,.9,.9), linestyle='--', zorder=-1)
@@ -105,19 +104,19 @@ class Analyze():
         format_axis(self)
 
     def plot_scatterplot(self):
-        apply_x_jitter(self, offset_x=0, min_distance_y=0.01, jitter_distance_x=0.02 * self.num_of_groups)
+        apply_x_jitter(self, offset_x=0, min_distance_y=0.01, jitter_distance_x=0.01 * self.num_of_groups)
         self.ax.scatter(self.jittered_data_x, self.data_y, color=self.trial_colors, linewidth=0, s=35, zorder=99)
 
-    def plot_boxplot(self, width=.4):
+    def plot_boxplot(self, width=.25):
         for group_num in self.group_nums:
             group_data_y = self.data_y[self.data_x==group_num]
             quartile_1, median, quartile_3 = np.percentile(group_data_y, [25, 50, 75])
             iqr = quartile_3 - quartile_1
             lower_range = max(min(group_data_y), quartile_1-1.5*iqr)
             upper_range = min(max(group_data_y), quartile_3+1.5*iqr)
-            color = (.9,.9,.9)
+            color = (.8,.8,.8)
 
-            whiskers = self.ax.plot([group_num,group_num], [lower_range, upper_range], color=color, linewidth=10)
+            whiskers = self.ax.plot([group_num,group_num], [lower_range, upper_range], color=color, linewidth=2)
             boxplot = plt.Rectangle((group_num-width/2, quartile_1), width, iqr, color=color, edgecolor=None, fill=True)
             self.ax.add_artist(boxplot)
 
@@ -126,12 +125,9 @@ class Analyze():
     def save_plot(self):
             # plt.ion()
             plt.show()
-            file_base_name = os.path.join(self.settings.save_folder, self.session.experiment, "plots", self.settings.analysis.title)
-            file_extension = '.png'
-            file_suffix = ''
-            if self.settings.color_by: 
-                file_suffix = '_color by ' + self.settings.color_by
-            self.fig.savefig(file_base_name+file_suffix+file_extension, bbox_inches='tight', pad_inches=0) 
+            plot_path = Directory(self.settings.save_folder, analysis_type=self.analysis_type, plot=True).\
+                        file_name(title=self.settings.analysis.title, color_by = self.settings.color_by)
+            self.fig.savefig(plot_path, bbox_inches='tight', pad_inches=0) 
 
 # ----PLOTTING TRAJECTORIES-----------------------------------------------
     def initialize_trajectory_plot(self):
@@ -151,5 +147,5 @@ class Analyze():
 
     def plot_trajectories(self):
         for trial in self.trials_to_plot:
-            if self.settings.color_by in ['speed', 'time']: self.gradient_line(trial)
-            else:                                           self.solid_line(trial)        
+            if self.settings.color_by in ['speed', 'time']: gradient_line(self, trial)
+            else:                                           solid_line(self, trial)        

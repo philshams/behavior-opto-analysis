@@ -2,12 +2,15 @@ import numpy as np
 from typing import Tuple
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = self.stim_type=='audio' and successful_escape(self, onset_frames) and \
+    eligible = self.stim_type=='audio' and \
+                successful_escape(self, onset_frames) and \
                 self.num_successful_escapes_this_session <  self.settings.max_num_trials            
     if eligible: self.num_successful_escapes_this_session += 1
     return eligible
 
 def successful_escape(self, onset_frames: list) -> bool:
+    if self.tracking_data['distance rel. to shelter'][onset_frames[0]] < self.settings.min_distance_from_shelter*10: return False
+
     location_during_threat = self.tracking_data['avg_loc'][onset_frames[0]:onset_frames[0]+self.fps*self.settings.max_escape_duration, :]
     distance_from_shelter_during_threat = ((location_during_threat[:,0]-self.session.video.shelter_location[0])**2 + \
                                             (location_during_threat[:,1]-self.session.video.shelter_location[1])**2)**.5
@@ -16,7 +19,9 @@ def successful_escape(self, onset_frames: list) -> bool:
 
 def get_escape_initiation_idx(self, trial_start_idx: int) -> int:
     escape_initiation_idx = np.where(self.tracking_data['speed rel. to shelter'][trial_start_idx+1:] > self.settings.escape_initiation_speed)[0][0]
-    assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps), "escape initiation time is longer than max escape duration"
+    assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps)
+        # print("Escape initiation taking longer than max escape duration, session: {}, at time: {} min".format(self.session.name, np.round(trial_start_idx/self.fps/60, 2)))
+        # return None # escape initiation time is longer than max escape duration
     return escape_initiation_idx
 
 def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> float:

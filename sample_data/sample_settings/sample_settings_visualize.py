@@ -17,7 +17,7 @@ settings_visualize = Settings_visualize(
     seconds_after_audio = 2,
     seconds_after_laser = 6,
 
-    save_folder = ".\\sample_data",
+    save_folder = ".\\sample_data\\trial clips",
 
     by_experiment=False,
     experiments = [''],

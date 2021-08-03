@@ -12,7 +12,7 @@ settings_track = Settings_track(
     experiments = [''],
 
     by_session=True,
-    sessions=[x for x in range(48,49)],
+    sessions=[x for x in range(0,24)],
 
     by_prev_session=False,
     prev_session=[0],

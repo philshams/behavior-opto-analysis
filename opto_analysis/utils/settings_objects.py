@@ -86,5 +86,5 @@ class Settings_analyze_global:
     edge_vector_threshold: float = 0.65
     two_tailed_test: bool=True
     save_folder: str=None
-    color_by: str=None
+    color_by: str=''
     x_jitter: bool=True
