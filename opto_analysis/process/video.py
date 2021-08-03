@@ -2,6 +2,7 @@ from opto_analysis.process.session import Session
 from opto_analysis.track.register import Register
 from dataclasses import dataclass
 from glob import glob
+import numpy as np
 import cv2
 import os
 
@@ -35,7 +36,9 @@ def get_Video(session: Session, settings: object, registration_transform: object
     tracking_data_file = os.path.join(session.file_path, "tracking")
 
     video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
-    if settings.create_new_registration or (isinstance(registration_transform, type(None)) and not settings.skip_registration):
-        registration_transform = Register(session, video, video_object).transform
+    if settings.skip_registration or (isinstance(registration_transform, np.ndarray) and not settings.create_new_registration): 
+        return video
+
+    registration_transform = Register(session, video, video_object).transform
     video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
     return video

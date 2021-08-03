@@ -1,6 +1,6 @@
 databank = {}
-databank['path'] = ".\\sample_data\\"                          # sample data
-# databank['path'] = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\"      # full dataset
+# databank['path'] = ".\\sample_data\\"                          # sample data
+databank['path'] = "D:\\Dropbox (UCL)\\DAQ\\upstairs_rig\\"      # full dataset
 
 databank['session IDs'] = [
 #-Session #s----Name of experiment-----prev session------Folder with data------

@@ -15,40 +15,53 @@ class Track():
     def run_deeplabcut_tracking(self, session):
         print('\n\n---')
         dlc_already_run = bool(glob.glob(os.path.join(session.file_path, "*DeepCut*")))
-        if dlc_already_run and not self.settings.redo_dlc_tracking: 
-            print("DeepLabCut tracking already saved for session:              {}".format(session.name))
+        if dlc_already_run: 
+            print("DeepLabCut tracking already saved for session:              {} - {}".format(session.number, session.name))
         else:
-            print("Running DeepLabCut tracking for session:                    {}".format(session.name))
+            print("Running DeepLabCut tracking for session:                    {} - {}".format(session.number, session.name))
             from deeplabcut.pose_estimation_tensorflow import analyze_videos
             analyze_videos(self.settings.dlc_settings_file, session.video.video_file)
 
     def process_tracking_data(self, session):
         already_filtered_and_registered = os.path.isfile(session.video.tracking_data_file)
         if already_filtered_and_registered and not self.settings.redo_processing_step: 
-            print("\nTracking data already filtered and registered for session:  {}".format(session.name))
+            print("Tracking data already filtered and registered for session:  {} - {}".format(session.number, session.name))
         elif isinstance(session.video.registration_transform, type(None)):
-            print("\nRegistration not found; tracking not processed for session: {}".format(session.name))
+            print("Registration not found; tracking not processed for session: {} - {}".format(session.number, session.name))
         else:
-            print("\nProcessing tracking data for session:                       {}".format(session.name))
-            self.tracking_data = {}
-            self.extract_data_from_dlc_file(session)
-            self.create_array_with_dlc_tracking_data(session)
-            self.replace_low_confidence_points_with_nan()
-            self.interpolate_nan_values()
-            self.apply_median_filter(filter_length=7)
-            self.replace_points_far_from_median_bodypart_with_nan()
-            self.interpolate_nan_values()
-            self.fisheye_correct_tracking_data(session)
-            self.register_tracking_data(session)
-            self.plot_filtered_and_registered_tracking()
-            self.compute_avg_bodypart_locations()
-            self.compute_angles()
-            self.compute_speed(session)
-            self.compute_speed(session, session.video.shelter_location, 'speed rel. to shelter')
-            self.save_tracking_data(session)
+            print("Processing tracking data for session:                       {} - {}".format(session.number, session.name))
+            self.create_dlc_tracking_array(session)
+            self.remove_bad_tracking_data(session)
+            self.correct_and_register(session)
+            self.compute_metrics(session)
+            self.plot_tracking()
+            self.save_tracking(session)
 
-    # ------------------------------------------------------------------
+# -----HIGH-LEVEL FUNCS-------------------------------------------------------------
+    def create_dlc_tracking_array(self, session):
+        self.tracking_data = {}
+        self.extract_data_from_dlc_file(session)
+        self.create_array_with_dlc_tracking_data(session)
+        
+    def remove_bad_tracking_data(self, session):
+        self.correct_out_of_frame_tracking(session)
+        self.replace_low_confidence_points_with_nan()
+        self.interpolate_nan_values()
+        self.apply_median_filter(filter_length=7)
+        self.replace_points_far_from_median_bodypart_with_nan()
+        self.interpolate_nan_values()
 
+    def correct_and_register(self, session):
+        self.fisheye_correct_tracking_data(session)
+        self.register_tracking_data(session)
+
+    def compute_metrics(self, session):
+        self.compute_avg_bodypart_locations()
+        self.compute_angles()
+        self.compute_speed(session)
+        self.compute_speed(session, session.video.shelter_location, 'speed rel. to shelter')
+
+# -----LOW-LEVEL FUNCS--------------------------------------------------------------
     def extract_data_from_dlc_file(self, session):
         dlc_tracking_file = glob.glob(os.path.join(session.file_path, "*.h5"))[0]
         self.dlc_output = pd.read_hdf(dlc_tracking_file)
@@ -62,6 +75,11 @@ class Track():
             for j, axis in enumerate(['x', 'y']):
                 self.tracking_data_array[:, i, j] = self.dlc_output[self.dlc_network_name][body_part][axis].values
             self.tracking_data_array[:, i, 2] = self.dlc_output[self.dlc_network_name][body_part]['likelihood'].values
+
+    def correct_out_of_frame_tracking(self, session):
+        self.tracking_data_array[self.tracking_data_array<0] = 0
+        self.tracking_data_array[:,:,0][self.tracking_data_array[:, :, 0]>(session.video.width-1)]  = session.video.width -1
+        self.tracking_data_array[:,:,1][self.tracking_data_array[:, :, 1]>(session.video.height-1)] = session.video.height-1
 
     def replace_low_confidence_points_with_nan(self):
         low_confidence_points = self.tracking_data_array[:, :, 2] < self.settings.min_confidence_in_tracking
@@ -96,16 +114,7 @@ class Track():
                                                      np.concatenate((self.fisheye_corrected_tracking_data_array[:, i, 0:1].T,
                                                                      self.fisheye_corrected_tracking_data_array[:, i, 1:2].T,
                                                                      np.ones((1, session.video.num_frames))), 0))[:2, :].T
-            assert not np.sum(self.tracking_data[bodypart] < 0), "Negative positions found after registration"
-
-    def plot_filtered_and_registered_tracking(self):
-        if self.settings.display_tracking_output:
-            for axis in [0,1]:
-                plt.figure()
-                for bodypart in self.tracking_data['bodyparts']:
-                    plt.plot(self.tracking_data[bodypart][10000:20000, axis])
-                plt.legend(self.tracking_data['bodyparts'])
-            plt.show()
+            self.tracking_data[bodypart][self.tracking_data[bodypart]<0] = 0
 
     def compute_avg_bodypart_locations(self):
         #! This region mapping must be redone if different body parts are used during DeepLabCut tracking
@@ -139,6 +148,18 @@ class Track():
         smoothed_speed_cm_per_sec = gaussian_filter1d(speed_cm_per_sec, sigma=session.video.fps/10)
         self.tracking_data[speed_name] = smoothed_speed_cm_per_sec
        
+    def plot_tracking(self):
+        if self.settings.display_tracking_output:
+            for axis in [0,1]:
+                plt.figure()
+                plt.title('Example of 10,000 time-points of tracking data - axis {}'.format(axis))
+                for bodypart in self.tracking_data['bodyparts']:
+                    plt.plot(self.tracking_data[bodypart][10000:20000, axis])
+                plt.legend(self.tracking_data['bodyparts'])
+            plt.figure(figsize=(12,6))
+            plt.title('Histogram of confidence in tracking data')
+            plt.hist(self.tracking_data_array[:,:,2], 20, density=True)
+            plt.show()
 
-    def save_tracking_data(self, session):
+    def save_tracking(self, session):
         with open(session.video.tracking_data_file, "wb") as dill_file: pickle.dump(self.tracking_data, dill_file)

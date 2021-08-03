@@ -4,11 +4,14 @@ after track all videos
 --> plot escapes from each expt (redo reg for test sessions...)
 --> plot/stats for escape target 
 
+- *register using a later frame (in case arena turns)
+
+- figure/video saving
+
 - update tests
 
 ------- at work -------
-- examine DLC performance; update network if needed
---> track all videos
+- find dlc errors and retrain all videos
 
 - copy concatenated data to hard drive
 

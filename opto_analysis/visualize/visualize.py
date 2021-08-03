@@ -27,7 +27,7 @@ class Visualize():
                 self.display_tracking(i)
                 self.display_and_save_frames()
                 key = cv2.waitKey(self.delay_between_frames)
-                if key == ord('q'): break
+                if key == ord('q') or key==ord('n'): break
             if key == ord('q'): break
         self.release_video_objects()
 

@@ -2,18 +2,17 @@ from opto_analysis.utils.settings_objects import Settings_track
 
 settings_track = Settings_track(
 
-    redo_dlc_tracking=False,
     redo_processing_step=True,
 
-    min_confidence_in_tracking=0.99,
-    max_deviation_from_rest_of_points=60, # in pixels
+    min_confidence_in_tracking=0.5,
+    max_deviation_from_rest_of_points=100, # in pixels
     display_tracking_output=False, # show a plot of tracking data
 
     by_experiment=False,
     experiments = [''],
 
-    by_session=False,
-    sessions=[0,1],
+    by_session=True,
+    sessions=[x for x in range(48,49)],
 
     by_prev_session=False,
     prev_session=[0],

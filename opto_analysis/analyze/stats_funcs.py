@@ -4,7 +4,7 @@ from scipy.stats import percentileofscore
 from opto_analysis.utils.flatten import flatten
 
 def permutation_test(data: np.ndarray, groups: np.ndarray, sessions: np.ndarray, group_1:int=1, group_2:int=2, iterations:int = 1000, two_tailed:bool= True):
-    ''' test stat is the pooled mean and shuffled_by is session/mouse'''
+    ''' the test statistic is the pooled mean and data are shuffled by session'''
     group_1_data,     group_2_data     = data    [groups==group_1], data    [groups==group_2]
     group_1_sessions, group_2_sessions = sessions[groups==group_1], sessions[groups==group_2]
     group_1_by_session = [[group_1_data[group_1_sessions==session_num]] for session_num in np.unique(group_1_sessions)]

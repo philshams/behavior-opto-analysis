@@ -1,15 +1,16 @@
 from opto_analysis.process.session import Session
 from settings.settings_process import settings_process
+import sys
 import cv2
 import numpy as np
 
 
-def correct_and_register_frame(frame: object, video: object, fisheye_correction_map: tuple) -> object:
-    if fisheye_correction_map:
+def correct_and_register_frame(frame: object, video: object, fisheye_correction_map: tuple, skip_fisheye_correction: bool=False, skip_registration: bool=False) -> object:
+    if fisheye_correction_map and not skip_fisheye_correction:
         frame = cv2.copyMakeBorder(frame, video.y_offset, int((fisheye_correction_map[0].shape[0] - frame.shape[0]) - video.y_offset), video.x_offset, int((fisheye_correction_map[0].shape[1] - frame.shape[1]) - video.x_offset), cv2.BORDER_CONSTANT, value=0)
         frame = cv2.remap(frame, fisheye_correction_map[0], fisheye_correction_map[1], interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
         frame = frame[video.y_offset:video.height + video.y_offset, video.x_offset:video.width + video.x_offset]
-    if isinstance(video.registration_transform, np.ndarray):
+    if isinstance(video.registration_transform, np.ndarray) and not skip_registration:
         frame = cv2.warpAffine(frame, video.registration_transform, frame.shape[0:2])
     return frame
 
@@ -37,12 +38,12 @@ class Register():
     def __init__(self, session: Session, video: object, video_object: object) -> object:
         self.generate_rendered_arena(session)
         self.add_click_targets()
-        self.generate_actual_arena(video_object)
-        self.load_fisheye_correction_map(video)
-        self.correct_and_register_frame(video)
+        self.get_image_of_actual_arena(video_object, video)
+        self.perform_fisheye_correction(video)
         self.initialize_transform()
         self.refine_transform()
 
+# ----MAIN FUNCTIONS--------------------------------------------------------------------
     def generate_rendered_arena(self, session: Session):
         self.rendered_arena, self.click_targets = generate_rendered_arena(session, settings_process.size)
 
@@ -52,18 +53,16 @@ class Register():
             self.rendered_arena_with_click_targets = cv2.circle(self.rendered_arena, (click_target[0], click_target[1]), 4, 0, 1)
             self.rendered_arena_with_click_targets = cv2.putText(self.rendered_arena, str(i+1), tuple(click_target), 0, 1.0, 100, thickness=2)
 
-    def generate_actual_arena(self, video_object: object):
-        video_object.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    def get_image_of_actual_arena(self, video_object: object, video: object):
+        video_object.set(cv2.CAP_PROP_POS_FRAMES, (video.num_frames * 2 / 3))
         _, self.actual_arena = video_object.read()
 
-    def load_fisheye_correction_map(self, video: object):
+    def perform_fisheye_correction(self, video: object):
         self.fisheye_correction_map = load_fisheye_correction_map(video)
-
-    def correct_and_register_frame(self, video: object):
-        self.actual_arena = correct_and_register_frame(self.actual_arena[:, :, 0], video, self.fisheye_correction_map)
+        self.actual_arena = correct_and_register_frame(self.actual_arena[:, :, 0], video, self.fisheye_correction_map, skip_registration=True)
 
     def initialize_transform(self):
-        print("\n--REGISTRATION--\nClick the points in the actual arena corresponding to the numbered dots on the rendered arena -- in order!")
+        print("\n{}REGISTRATION\n\nStep 1: click the points in the actual arena corresponding to the numbered dots on the rendered arena -- in order!".format(' '*20))
         cv2.namedWindow('rendered arena')
         cv2.imshow('rendered arena', self.rendered_arena)
         cv2.startWindowThread()
@@ -74,11 +73,12 @@ class Register():
         while True:
             cv2.imshow('actual arena', self.actual_arena)
             if len(self.actual_clicked_points) == len(self.click_targets): break # once all points are clicked
-            if cv2.waitKey(10) & 0xFF == ord('q'): break
+            key = cv2.waitKey(10)
+            if key == ord('q'): print('quit.'); sys.exit()
         cv2.destroyAllWindows()
 
     def refine_transform(self):
-        print('\nIn the overlay, left click the rendered arena and then right click the corresponding location on the actual arena -> Press space bar when finished') 
+        print('Step 2: in the overlay, left click the rendered arena and then right click the corresponding location on the actual arena. Press space bar when ur satisfied\n') 
         cv2.namedWindow('overlay')
         cv2.setMouseCallback('overlay', self.click_additional_click_targets, self)
         while True:
@@ -88,7 +88,9 @@ class Register():
                 self.overlay_of_arenas = cv2.addWeighted(actual_arena_registered, 0.7, self.rendered_arena, 0.3, 0)
                 self.time_to_update = False
             cv2.imshow('overlay', self.overlay_of_arenas)
-            if cv2.waitKey(10) & 0xFF == ord(' '): break
+            key = cv2.waitKey(10)
+            if key==ord('q'): print('quit.'); sys.exit()
+            if key==ord(' '): break
         cv2.destroyAllWindows()
 
 # ----CLICK CALLBACK FUNCTIONS-------------------------------------------------------------
@@ -97,7 +99,6 @@ class Register():
         if event == cv2.EVENT_LBUTTONDOWN:
             self.actual_arena = cv2.circle(self.actual_arena, (x, y), 3, 255, -1)
             self.actual_arena = cv2.circle(self.actual_arena, (x, y), 4, 0, 1)
-            # actual_arena_data[1].append([x,y])
             self.actual_clicked_points.append([x,y])
             self.time_to_update = True
 

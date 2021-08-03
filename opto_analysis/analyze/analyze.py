@@ -34,7 +34,7 @@ class Analyze():
         self.plot_trajectories()
         self.save_plot()
 
-    def data(self):
+    def distribution(self):
         self.extract_data()
         self.do_statistics()
         self.initialize_data_plot()

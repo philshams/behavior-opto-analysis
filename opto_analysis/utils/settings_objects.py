@@ -18,7 +18,6 @@ class Settings_process:
 class Settings_track:
     dlc_settings_file: str = None
     inverse_fisheye_correction_file: str = None
-    redo_dlc_tracking: bool=False
     redo_processing_step: bool=False
     skip_processing_step: bool=False
     display_tracking_output: bool=False

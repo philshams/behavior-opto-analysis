@@ -38,4 +38,4 @@ def analyze():
     session_IDs = collect_session_IDs_analysis(settings_a.analysis, databank)
     if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a, 'escape trajectories').trajectories()
     if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a, 'laser trajectories' ).trajectories()
-    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).data()
+    if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).distribution()
