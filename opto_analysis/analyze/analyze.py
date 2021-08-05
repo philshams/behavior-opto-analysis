@@ -112,7 +112,7 @@ class Analyze():
         format_axis(self)
 
     def plot_scatterplot(self):
-        apply_x_jitter(self, offset_x=0, min_distance_y=0.01, jitter_distance_x=0.01 * self.num_of_groups)
+        apply_x_jitter(self, offset_x=0, min_distance_y=0.01, jitter_distance_x=0.01 + .002 * self.num_of_groups)
         self.ax.scatter(self.jittered_data_x, self.data_y, color=self.trial_colors, linewidth=0, s=35, zorder=99)
 
     def plot_boxplot(self, width=.25):

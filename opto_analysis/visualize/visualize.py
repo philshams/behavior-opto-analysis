@@ -5,7 +5,6 @@ from opto_analysis.utils.generate_stim_status_array import generate_stim_status_
 from opto_analysis.utils.directory import Directory
 import cv2
 import numpy as np
-import os
 
 class Visualize():
     def __init__(self, session: object, settings: object):
@@ -109,7 +108,6 @@ class Visualize():
             self.trail_thicknesses.append(int(self.stim_status[i]!=0)+int(self.stim_type=='audio')+1)
      
 # ----SETUP FUNCTIONS-----------------------------------------------------------------------------------------------
-
     def set_up_videos(self, stim_type: str, trial_num: int, onset_frames: object, stimulus_durations: object):
         self.stimulus_durations   = stimulus_durations
         self.stim_type            = stim_type

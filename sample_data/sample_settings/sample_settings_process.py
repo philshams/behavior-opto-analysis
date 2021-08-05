@@ -15,7 +15,4 @@ settings_process = Settings_process(
     by_session=True,
     sessions=[0, 1, 2],
 
-    by_prev_session=False,
-    prev_session=[0],
-
 )

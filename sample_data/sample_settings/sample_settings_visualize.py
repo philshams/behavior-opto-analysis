@@ -24,7 +24,4 @@ settings_visualize = Settings_visualize(
 
     by_session=True,
     sessions=[0],
-
-    by_prev_session=False,
-    prev_session=[0]
 )

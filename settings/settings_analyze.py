@@ -3,7 +3,7 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["escapes"], 
+analysis = analyses["escape targets naive vs exp all"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
@@ -18,10 +18,9 @@ leftside_only = False,
 rightside_only = False,
 reflect_trajectories = False,
 
-x_jitter = True,
-color_by = 'session', 
-# 'default' 'session' 'trial' 'target'  ''  (for all)
-# 'speed' 'time' 'speed+RT'                 (for trajectories)
+color_by = 'speed+RT', 
+# 'default' 'session' 'trial' 'target'  ''  || for all
+# 'speed'   'time'    'speed+RT'            || for trajectories
 
 save_folder = "D:\\data\\Paper II\\statistics"
 

@@ -15,9 +15,6 @@ settings_track = Settings_track(
     by_session=True,
     sessions=[0],
 
-    by_prev_session=False,
-    prev_session=[0],
-
     dlc_settings_file='.\\sample_data\\dlc_config.yaml',
     inverse_fisheye_correction_file = '.\\sample_data\\inverse_fisheye_maps.npy' # remove setting if n/a
 )

@@ -11,8 +11,6 @@ class Settings_process:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
-    by_prev_session: bool=False
-    prev_session: list=None
 
 @dataclass(frozen=True)
 class Settings_track:
@@ -27,8 +25,6 @@ class Settings_track:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
-    by_prev_session: bool=False
-    prev_session: list=None
 
 @dataclass(frozen=True)
 class Settings_visualize:
@@ -49,8 +45,6 @@ class Settings_visualize:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
-    by_prev_session: bool=False
-    prev_session: list=None
 
 @dataclass(frozen=True)
 class Settings_analyze_local:
@@ -69,9 +63,8 @@ class Settings_analyze_local:
     group_6: list=None
     group_7: list=None
     group_8: list=None
-    by_experiment: bool=False
+    by_experiment: bool=True
     by_session: bool=False
-    by_prev_session: bool=False
     compare: bool=False
     all_sessions: bool=False
 
