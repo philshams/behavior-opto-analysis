@@ -2,10 +2,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def get_color_based_on_speed(speed:float, object_to_color: str, stim_status: float=0, stim_type: str='audio') -> tuple:
+    if speed == None:
+        return (1, .8, .4, .3)
     colormap, speed_thresholds = get_color_parameters(stim_type, stim_status, object_to_color)
     idx = np.where( (speed - speed_thresholds)>0 )[0][-1]
     color = ((speed_thresholds[idx+1] - speed) * colormap[idx] + (speed - speed_thresholds[idx]) * colormap[idx+1]) / (speed_thresholds[idx+1] - speed_thresholds[idx])
     if object_to_color == 'plot': color = np.append(color[::-1]/256, .7) # BGR to RGB and 0-256 to 0-1 range
+    return color
+
+def get_color_based_on_target_score(target_score:float, edge_vector_threshold: float, analysis_type: str) -> tuple:
+    homing_vector_color = np.array([.4,.4,.4, .6])
+    edge_vector_color   = np.array([0, .4, 1, .5])
+    if target_score > edge_vector_threshold: color = edge_vector_color
+    if target_score < edge_vector_threshold: color = homing_vector_color
     return color
     
 def get_color_parameters(stim_type: str='audio', stim_status: float=0, object_to_color: str='trail'):
@@ -30,10 +39,11 @@ def get_colormap(object_to_color = 'tracking video', epoch='stimulus', plot_type
         colormap = colormap[np.array([6,11,0,5,10,15,4,9,14,3,8,13,2,7,12,1]), :]
     return colormap
 
-def generate_list_of_colors(color_by: str='speed', stim_type: str='audio', epoch: str='stimulus', speeds: np.ndarray=None)->list:
-    if color_by=='speed':
+def generate_list_of_colors(color_by: str='speed', stim_type: str='audio', epoch: str='stimulus', speeds: np.ndarray=None, RT: int=0)->list:
+    if 'speed' in color_by:
         colors = []
-        for speed in speeds:
+        for i, speed in enumerate(speeds):
+            if 'RT' in color_by and i < RT: speed = None
             color = get_color_based_on_speed(speed=speed, object_to_color='plot', stim_status=-1, stim_type=stim_type)
             colors.append(color)
     if color_by=='time':

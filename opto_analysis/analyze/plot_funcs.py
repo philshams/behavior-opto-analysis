@@ -1,29 +1,28 @@
-from opto_analysis.utils.color_funcs import get_colormap, generate_list_of_colors
+from opto_analysis.utils.color_funcs import get_colormap, generate_list_of_colors, get_color_based_on_target_score
 import matplotlib.pyplot as plt
 import matplotlib.collections as plt_coll
 import numpy as np
 
 def solid_line(self, trial: dict):
-    color = self.get_solid_color(trial, plot_type='trajectory')
+    color = get_plot_color(self, trial, plot_type='trajectory')
     self.ax.plot(trial['trajectory x'], trial['trajectory y'], color = color, linewidth=trial['linewidth'])
 
 def get_plot_color(self, trial: dict, plot_type:str='trajectory') -> tuple:
-    if not self.settings.color_by: 
+    if not self.color_by: 
         color=(.4,.4,.4, .7)
         return color
-    if self.settings.color_by=='target': 
-        if trial['escape target score'] >  self.settings.edge_vector_threshold: color = (0, .4, 1, .6)
-        if trial['escape target score'] <= self.settings.edge_vector_threshold: color = (.4,.4,.4,  1)
+    if self.color_by=='target':
+        color = get_color_based_on_target_score(trial['escape target score'], self.settings.edge_vector_threshold, self.analysis_type)
         return color
-    if self.settings.color_by=='trial':      self.color_counter = trial['trial count']
-    if self.settings.color_by=='session':    self.color_counter = trial['session count']
+    if self.color_by=='trial':      self.color_counter = trial['trial count']
+    if self.color_by=='session':    self.color_counter = trial['session count']
     color = get_colormap(object_to_color='plot', epoch=trial['epoch'], plot_type=plot_type)[self.color_counter%16]
     return color
 
 def gradient_line(self, trial: dict):
     points = np.array([trial['trajectory x'], trial['trajectory y']]).T.reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
-    colors = generate_list_of_colors(self.settings.color_by, self.stim_type, trial['epoch'], trial['speed'])
+    colors = generate_list_of_colors(self.color_by, self.stim_type, trial['epoch'], trial['speed'], RT=trial['escape initiation idx'])
     set_of_lines = plt_coll.LineCollection(segments, colors=colors, linewidth=trial['linewidth'])
     self.ax.add_collection(set_of_lines)
 

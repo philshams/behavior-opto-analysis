@@ -85,6 +85,9 @@ class Settings_analyze_global:
     escape_initiation_speed: float = 20
     edge_vector_threshold: float = 0.65
     two_tailed_test: bool=True
+    leftside_only: bool=False
+    rightside_only: bool=False
+    reflect_trajectories: bool=False
     save_folder: str=None
     color_by: str=''
     x_jitter: bool=True

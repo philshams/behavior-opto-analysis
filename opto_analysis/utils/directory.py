@@ -26,9 +26,9 @@ class Directory():
         if os.path.isdir(self.path): return
         Path(self.path).mkdir(parents=True)
 
-    def file_name(self, mouse: str=None, trial_num: int=None, title: str=None, color_by: str=None, plot_extension: str = '.png') -> str:
+    def file_name(self, mouse: str=None, trial_num: int=None, minutes_into_session: int=None, title: str=None, color_by: str=None, plot_extension: str = '.png') -> str:
         if self.stim_video or self.tracking_video:
-            self.file_name = os.path.join(self.path,"{}-{}.mp4".format(mouse, trial_num))
+            self.file_name = os.path.join(self.path,"{}-{} ({}').mp4".format(mouse, trial_num, minutes_into_session))
         if self.plot:
             if color_by: color_by_text = '_color=' + color_by
             self.file_name = os.path.join(self.path, title + color_by_text + plot_extension)

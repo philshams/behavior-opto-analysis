@@ -20,8 +20,17 @@ class Analyze():
         self.trial_colors   = []
         self.trials_to_plot = []
         self.group_nums = np.unique(session_IDs[:, 5])
-        self.num_of_groups = np.ptp(self.group_nums)+1       
-        self.analysis_type = analysis_type
+        self.num_of_groups = np.ptp(self.group_nums)+1 
+        self.analysis_type = analysis_type   
+        self.title = self.settings.analysis.title
+        self.color_by = self.settings.color_by
+        if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','']:
+            self.color_by = 'speed'
+        if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:
+            self.color_by = 'target'
+        if self.settings.leftside_only:  self.title += " (leftside)"
+        if self.settings.rightside_only: self.title += " (rightside)"   
+        if 'traject' in analysis_type and self.settings.reflect_trajectories: self.title += " (reflect)"
         if analysis_type=='escape trajectories': self.stim_type='audio'
         if analysis_type=='escape targets':      self.stim_type='audio'
         if analysis_type=='laser trajectories':  self.stim_type='laser'
@@ -68,8 +77,7 @@ class Analyze():
         if self.stim_type=='laser': epochs = ['stimulus', 'post-laser']
         for epoch in epochs:
             trial_start_idx, trial_end_idx = get_trial_start_and_end(self, onset_frames, stim_durations, epoch)
-            trial                          = initialize_trial_dict(self, trial_start_idx, trial_end_idx, epoch)
-            trial                          = add_relevant_data_to_trial_dict(self, trial, trial_start_idx, trial_end_idx, epoch)
+            trial                          = create_trial_dict(      self, trial_start_idx, trial_end_idx, epoch)
             self.trials_to_plot.append(trial)
         
 # ----STATISTICS FUNCS---------------------------------------------------
@@ -94,13 +102,13 @@ class Analyze():
 # ----PLOTTING DATA------------------------------------------------------
     def initialize_data_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(self.num_of_groups*2, 9))
-        self.fig.canvas.set_window_title(self.settings.analysis.title) 
+        self.fig.canvas.set_window_title(self.title) 
         self.ax.set_ylim([-.2, 1.2])
         self.x_range = [min(self.group_nums)-.6, max(self.group_nums)+.6]
         self.ax.set_xlim(self.x_range)
         plt.plot(self.x_range, [0,0],     color=(.9,.9,.9), linestyle='--', zorder=-1)
         plt.plot(self.x_range, [1,1],     color=(.9,.9,.9), linestyle='--', zorder=-1)
-        plt.plot(self.x_range, [.65,.65], color=(.9,.9,.9), linestyle='--', zorder=-1)
+        plt.plot(self.x_range, [self.settings.edge_vector_threshold,self.settings.edge_vector_threshold], color=(.9,.9,.9), linestyle='--', zorder=-1)
         format_axis(self)
 
     def plot_scatterplot(self):
@@ -114,19 +122,19 @@ class Analyze():
             iqr = quartile_3 - quartile_1
             lower_range = max(min(group_data_y), quartile_1-1.5*iqr)
             upper_range = min(max(group_data_y), quartile_3+1.5*iqr)
-            color = (.8,.8,.8)
+            color = (.85,.85,.85)
 
-            whiskers = self.ax.plot([group_num,group_num], [lower_range, upper_range], color=color, linewidth=2)
+            whiskers = self.ax.plot([group_num,group_num], [lower_range, upper_range], color=color, linewidth=1)
             boxplot = plt.Rectangle((group_num-width/2, quartile_1), width, iqr, color=color, edgecolor=None, fill=True)
             self.ax.add_artist(boxplot)
 
-            median_line = self.ax.plot([group_num-width/2.1, group_num+width/2.05], [median, median], color=(0,0,0), linewidth=1.5)
+            median_line = self.ax.plot([group_num-width/2.15, group_num+width/2.1], [median, median], color=(0,0,0), linewidth=3)
 
     def save_plot(self):
             # plt.ion()
             plt.show()
             plot_path = Directory(self.settings.save_folder, analysis_type=self.analysis_type, plot=True).\
-                        file_name(title=self.settings.analysis.title, color_by = self.settings.color_by)
+                        file_name(title=self.title, color_by = self.color_by)
             self.fig.savefig(plot_path, bbox_inches='tight', pad_inches=0) 
 
 # ----PLOTTING TRAJECTORIES-----------------------------------------------
@@ -144,8 +152,9 @@ class Analyze():
         circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
         format_axis(self)
+        self.ax.invert_yaxis()
 
     def plot_trajectories(self):
         for trial in self.trials_to_plot:
-            if self.settings.color_by in ['speed', 'time']: gradient_line(self, trial)
-            else:                                           solid_line(self, trial)        
+            if self.color_by in ['speed', 'speed+RT','time']: gradient_line(self, trial)
+            else:                                             solid_line(self, trial)        

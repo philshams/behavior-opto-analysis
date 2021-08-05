@@ -1,23 +1,28 @@
 ------- at home or work ------
-
-after track all videos 
---> plot/stats for escape target 
-    - color trajectories by target score
-    - color trajectories by GROUP!
-
-- put minute in trial clip title
+- do spontaneous homing analysis
 - update tests
 
 ------- at work -------
-- find dlc errors and retrain all videos
+- copy concatenated data, tracking output to hard drive
 
-- copy concatenated data to hard drive
+
+
+
+
+
+
+
+
+
+
 
 
 ------- after injecting next group ---------
+
 - do rendering videos/images once dlc is trained
     - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
     - and/or: mouse at beginning /end of stim, with trail?
+    - entire session in one plot?
 
 - try escape initiation as begin of turn-and-run
 
@@ -27,3 +32,4 @@ after track all videos
 
 - speed heatmap plot
 
+- find dlc errors and retrain all videos

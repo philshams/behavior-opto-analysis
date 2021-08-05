@@ -2,9 +2,12 @@ import numpy as np
 from typing import Tuple
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = self.stim_type=='audio' and \
-                successful_escape(self, onset_frames) and \
-                self.num_successful_escapes_this_session <  self.settings.max_num_trials            
+    eligible = self.stim_type=='laser' or \
+               (successful_escape(self, onset_frames) and \
+                escape_starts_near_threat_zone(self, onset_frames[0]) and \
+                self.num_successful_escapes_this_session <  self.settings.max_num_trials and \
+                (not self.settings.leftside_only  or     leftside_escape(self, onset_frames[0]) ) and \
+                (not self.settings.rightside_only or not leftside_escape(self, onset_frames[0]) )  )
     if eligible: self.num_successful_escapes_this_session += 1
     return eligible
 
@@ -20,23 +23,31 @@ def successful_escape(self, onset_frames: list) -> bool:
 def get_escape_initiation_idx(self, trial_start_idx: int) -> int:
     escape_initiation_idx = np.where(self.tracking_data['speed rel. to shelter'][trial_start_idx+1:] > self.settings.escape_initiation_speed)[0][0]
     assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps)
-        # print("Escape initiation taking longer than max escape duration, session: {}, at time: {} min".format(self.session.name, np.round(trial_start_idx/self.fps/60, 2)))
-        # return None # escape initiation time is longer than max escape duration
     return escape_initiation_idx
 
+def leftside_escape(self, trial_start_idx: int)->bool:
+    x = self.tracking_data['avg_loc'][trial_start_idx:trial_start_idx+self.settings.max_escape_duration*self.fps,0]
+    y = self.tracking_data['avg_loc'][trial_start_idx:trial_start_idx+self.settings.max_escape_duration*self.fps,1]
+    y_center = self.session.video.height/2
+    x_center = x[np.argmin(abs(y-y_center))]
+    leftside = x_center < self.session.video.width/2
+    return leftside
+
+def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
+    RT = get_escape_initiation_idx(self, trial_start_idx)
+    y_at_escape_initiation = self.tracking_data['avg_loc'][trial_start_idx+RT, 1]
+    escape_initiation_near_threat_zone = y_at_escape_initiation < self.session.video.height/2 - 100
+    return escape_initiation_near_threat_zone
+
 def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> float:
-    y_start, x_start = y[RT], x[RT]
-    y_goal, x_goal   = self.session.video.shelter_location[1], self.session.video.shelter_location[0]
-    y_target         = 512 - 100 # 10cm in front of the wall
-    x_target         = x[np.argmin(abs(y-y_target))]
-    y_obstacle_edge  = 512
-    x_obstacle_edge  = 512 + np.sign(x[np.argmin(abs(y-y_obstacle_edge))]-512) * 250
+    x_start, y_start, x_goal, y_goal, _, _, x_target, y_target, x_obstacle_edge, y_obstacle_edge, _ = get_various_x_and_y_locations(self, x, y, RT)
 
     distance_path_to_homing_vector, _           = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
     distance_path_to_edge_vector, x_edge_vector = distance_to_line(x_target, y_target, x_start, y_start, x_obstacle_edge, y_obstacle_edge)
     distance_edge_vector_to_homing_vector, _    = distance_to_line(x_edge_vector, y_target, x_start, y_start, x_goal, y_goal)
 
-    escape_target_score = abs(distance_path_to_homing_vector - distance_path_to_edge_vector + distance_edge_vector_to_homing_vector) / (2*distance_edge_vector_to_homing_vector)
+    escape_target_score = abs(distance_path_to_homing_vector - distance_path_to_edge_vector + distance_edge_vector_to_homing_vector) / \
+                            (2*distance_edge_vector_to_homing_vector)
     return escape_target_score
 
 def distance_to_line(x, y, x_start, y_start, x_goal, y_goal) -> Tuple[float, float]:
@@ -45,3 +56,17 @@ def distance_to_line(x, y, x_start, y_start, x_goal, y_goal) -> Tuple[float, flo
     distance_of_path_to_line = abs(y - slope * x - intercept) / np.sqrt((-slope) ** 2 + (1) ** 2)
     x_pos_at_y_value = (y - intercept) / slope
     return distance_of_path_to_line, x_pos_at_y_value
+ 
+def get_various_x_and_y_locations(self, x: np.ndarray, y: np.ndarray, RT: int) -> tuple:
+    y_start  = y[RT]
+    x_start  = x[RT]
+    y_goal   = self.session.video.shelter_location[1]
+    x_goal   = self.session.video.shelter_location[0]
+    y_center = self.session.video.height/2
+    x_center = x[np.argmin(abs(y-y_center))]
+    y_target         = y_center - 100 # 10cm in front of the wall
+    x_target         = x[np.argmin(abs(y-y_target))]
+    y_obstacle_edge  = y_center
+    _, x_homing_vector = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
+    x_obstacle_edge = self.session.video.height/2 + np.sign(x_target - x_homing_vector) * 250
+    return x_start, y_start, x_goal, y_goal, x_center, y_center, x_target, y_target, x_obstacle_edge, y_obstacle_edge, x_homing_vector

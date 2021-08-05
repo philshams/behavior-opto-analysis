@@ -27,3 +27,10 @@ setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
                    (self.tracking_data['avg_loc'][trial_start_idx:,1] - self.tracking_data['avg_loc'][trial_start_idx,1])**2)**.5
 
                     np.where(distance_from_trial_start>500)[0][0]
+
+
+
+    RT = get_escape_initiation_idx(self, trial_start_idx)
+    x_start, y_start, x_goal, y_goal, x_center, y_center, _, _, _, _, _ = get_various_x_and_y_locations(self, x, y, RT)
+    # _, x_homing_vector = distance_to_line(x_center, y_center, x_start, y_start, x_goal, y_goal)
+    # leftside = x_center < x_homing_vector

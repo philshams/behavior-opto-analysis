@@ -1,29 +1,35 @@
 from opto_analysis.utils.settings_objects import Settings_analyze_local
 analyses = {}
 
-analyses["escapes"] = \
-    Settings_analyze_local( title='escapes trajectories - BLOCK', 
-                            plot_escape = True, 
-                            by_experiment=True, 
-                            experiments=['block edge vectors'])
-    
 analyses["laser"] = \
     Settings_analyze_local( title='laser trajectories', 
                             plot_laser=True,
                             by_experiment=True, 
                             experiments=['block edge vectors'])
 
+analyses["escapes"] = \
+    Settings_analyze_local( title='escapes trajectories', 
+                            plot_escape = True, 
+                            by_experiment=True, 
+                            experiments=['block edge vectors'])
+
 analyses["escapes PRE"] = \
-    Settings_analyze_local( title='escapes trajectories - BLOCK PRE', 
+    Settings_analyze_local( title='escapes trajectories - PRE', 
                             plot_escape = True, 
                             by_experiment=True, 
                             experiments=['block pre edge vectors'])
 
 analyses["escapes POST"] = \
-    Settings_analyze_local( title='escapes trajectories - BLOCK POST', 
+    Settings_analyze_local( title='escapes trajectories - POST', 
                             plot_escape = True, 
                             by_experiment=True, 
                             experiments=['block post edge vectors'])
+
+analyses["escape targets"] = \
+    Settings_analyze_local( title='escapes targets', 
+                            plot_targets = True, 
+                            by_experiment=True, 
+                            experiments=['block edge vectors'])
 
 analyses["escape targets EV vs PRE vs POST"] = \
     Settings_analyze_local( title='escape targets EV vs PRE vs POST', 

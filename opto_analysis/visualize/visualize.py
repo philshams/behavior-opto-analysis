@@ -111,22 +111,23 @@ class Visualize():
 # ----SETUP FUNCTIONS-----------------------------------------------------------------------------------------------
 
     def set_up_videos(self, stim_type: str, trial_num: int, onset_frames: object, stimulus_durations: object):
-        self.stimulus_durations = stimulus_durations
-        self.stim_type = stim_type
-        self.onset_frames = onset_frames
-        self.fps = self.session.video.fps
-        self.seconds_before = self.settings.__dict__['seconds_before_' + self.stim_type]
-        self.seconds_after = self.settings.__dict__['seconds_after_' + self.stim_type]
-        self.source_video = cv2.VideoCapture(self.session.video.video_file)
-        self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
+        self.stimulus_durations   = stimulus_durations
+        self.stim_type            = stim_type
+        self.onset_frames         = onset_frames
+        self.fps                  = self.session.video.fps
+        self.seconds_before       = self.settings.__dict__['seconds_before_' + self.stim_type]
+        self.seconds_after        = self.settings.__dict__['seconds_after_' + self.stim_type]
+        self.source_video         = cv2.VideoCapture(self.session.video.video_file)
         self.frames_in_this_trial = range((onset_frames[-1]-onset_frames[0])+int((self.seconds_before+stimulus_durations[-1]+self.seconds_after)*self.session.video.fps))
-        self.trail = []
-        self.trail_colors = []
-        self.trail_thicknesses = []    
+        minutes_into_session      = np.round(onset_frames[0]/self.fps/60)
+        self.trail                = []
+        self.trail_colors         = []
+        self.trail_thicknesses    = []    
+        self.source_video.set(cv2.CAP_PROP_POS_FRAMES, onset_frames[0]-self.seconds_before*self.session.video.fps) # set source video to trial start
         self.stim_status = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps)  
         #self.stim_status: 0~stimulus on, negative~pre stimulus, positive~post-stimulus
 
-        trial_video_path = Directory(self.settings.save_folder, experiment=self.session.experiment, stim_type=self.stim_type, tracking_video=self.settings.display_tracking).file_name(self.session.mouse, trial_num+1)
+        trial_video_path = Directory(self.settings.save_folder, experiment=self.session.experiment, stim_type=self.stim_type, tracking_video=self.settings.display_tracking).file_name(self.session.mouse, trial_num+1, minutes_into_session)
         self.trial_video = cv2.VideoWriter(trial_video_path, cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
 
     def release_video_objects(self):
