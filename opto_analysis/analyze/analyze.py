@@ -24,8 +24,9 @@ class Analyze():
         self.analysis_type = analysis_type   
         self.title = self.settings.analysis.title
         self.color_by = self.settings.color_by
-        if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','']:
-            self.color_by = 'speed'
+        if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','side','']:
+            if 'escape' in analysis_type: self.color_by = 'target'
+            if 'laser'  in analysis_type: self.color_by = 'time'
         if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:
             self.color_by = 'target'
         if self.settings.leftside_only:  self.title += " (leftside)"
@@ -77,7 +78,7 @@ class Analyze():
         if self.stim_type=='laser': epochs = ['stimulus', 'post-laser']
         for epoch in epochs:
             trial_start_idx, trial_end_idx = get_trial_start_and_end(self, onset_frames, stim_durations, epoch)
-            trial                          = create_trial_dict(      self, trial_start_idx, trial_end_idx, epoch)
+            trial                          = create_trial_dict(self, trial_start_idx, trial_end_idx, epoch)
             self.trials_to_plot.append(trial)
         
 # ----STATISTICS FUNCS---------------------------------------------------
@@ -140,19 +141,14 @@ class Analyze():
 # ----PLOTTING TRAJECTORIES-----------------------------------------------
     def initialize_trajectory_plot(self):
         size = self.session.video.rendering_size_pixels
-        if self.stim_type=='audio':
-            self.fig, self.ax = plt.subplots(figsize=(9,9))
-            self.ax.set_xlim([0, size])
-            self.ax.set_ylim([0, size])
-        if self.stim_type=='laser': 
-            self.fig, self.ax = plt.subplots(figsize=(4.5,9))
-            self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
-            self.ax.set_xlim([0, size/2])
-            self.ax.set_ylim([0, size])   
+        self.fig, self.ax = plt.subplots(figsize=(9,9))
+        self.ax.set_xlim([0, size])
+        self.ax.set_ylim([0, size])
+        if self.stim_type=='laser': self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
         circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
-        format_axis(self)
         self.ax.invert_yaxis()
+        format_axis(self)
 
     def plot_trajectories(self):
         for trial in self.trials_to_plot:

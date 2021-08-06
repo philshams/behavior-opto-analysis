@@ -2,12 +2,11 @@ import numpy as np
 from typing import Tuple
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = self.stim_type=='laser' or \
-               (successful_escape(self, onset_frames) and \
+    eligible = (successful_escape(self, onset_frames) and \
                 escape_starts_near_threat_zone(self, onset_frames[0]) and \
                 self.num_successful_escapes_this_session <  self.settings.max_num_trials and \
-                (not self.settings.leftside_only  or     leftside_escape(self, onset_frames[0]) ) and \
-                (not self.settings.rightside_only or not leftside_escape(self, onset_frames[0]) )  )
+                (not self.settings.leftside_only  or     get_which_side(self, onset_frames[0])=='left'  ) and \
+                (not self.settings.rightside_only or not get_which_side(self, onset_frames[0])=='right' )  )
     if eligible: self.num_successful_escapes_this_session += 1
     return eligible
 
@@ -21,17 +20,10 @@ def successful_escape(self, onset_frames: list) -> bool:
     return successful_escape
 
 def get_escape_initiation_idx(self, trial_start_idx: int) -> int:
+    if self.stim_type=='laser': return None
     escape_initiation_idx = np.where(self.tracking_data['speed rel. to shelter'][trial_start_idx+1:] > self.settings.escape_initiation_speed)[0][0]
     assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps)
     return escape_initiation_idx
-
-def leftside_escape(self, trial_start_idx: int)->bool:
-    x = self.tracking_data['avg_loc'][trial_start_idx:trial_start_idx+self.settings.max_escape_duration*self.fps,0]
-    y = self.tracking_data['avg_loc'][trial_start_idx:trial_start_idx+self.settings.max_escape_duration*self.fps,1]
-    y_center = self.session.video.height/2
-    x_center = x[np.argmin(abs(y-y_center))]
-    leftside = x_center < self.session.video.width/2
-    return leftside
 
 def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
     RT = get_escape_initiation_idx(self, trial_start_idx)
@@ -40,6 +32,8 @@ def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
     return escape_initiation_near_threat_zone
 
 def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> float:
+    if self.stim_type=='laser': return None
+
     x_start, y_start, x_goal, y_goal, _, _, x_target, y_target, x_obstacle_edge, y_obstacle_edge, _ = get_various_x_and_y_locations(self, x, y, RT)
 
     distance_path_to_homing_vector, _           = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
@@ -70,3 +64,11 @@ def get_various_x_and_y_locations(self, x: np.ndarray, y: np.ndarray, RT: int) -
     _, x_homing_vector = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
     x_obstacle_edge = self.session.video.height/2 + np.sign(x_target - x_homing_vector) * 250
     return x_start, y_start, x_goal, y_goal, x_center, y_center, x_target, y_target, x_obstacle_edge, y_obstacle_edge, x_homing_vector
+
+def get_which_side(self, trial_start_idx: int) -> str:
+    y_center = self.session.video.height/2
+    cross_center_idx = np.where(self.tracking_data['avg_loc'][trial_start_idx:, 1] >= y_center)[0][0]
+    x_at_cross = self.tracking_data['avg_loc'][trial_start_idx+cross_center_idx, 0]
+    if x_at_cross < self.session.video.width/2: which_side = 'left'
+    if x_at_cross > self.session.video.width/2: which_side = 'right'
+    return which_side

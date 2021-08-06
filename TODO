@@ -1,7 +1,6 @@
 ------- at home or work ------
-- do spontaneous homing analysis
--* test prev session vs not
-- examine laser trials!
+- do spontaneous homing analysis (e.g. 9715 did any?)
+- *examine laser trials!; all expts; from onset (particular place) to edge; color by which side; and/or by directness to edge
 - update tests
 
 ------- at work -------
@@ -35,3 +34,5 @@
 - speed heatmap plot
 
 - find dlc errors and retrain all videos
+
+- rendering size ~ tuple

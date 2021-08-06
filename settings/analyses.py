@@ -4,9 +4,24 @@ analyses = {}
 # ----------LASER----------------------------------------------
 
 analyses["laser"] = \
-    Settings_analyze_local( title='laser trajectories', 
+    Settings_analyze_local( title='laser EV', 
                             plot_laser=True,
                             experiments=['block edge vectors'])
+
+analyses["laser PRE"] = \
+    Settings_analyze_local( title='laser PRE', 
+                            plot_laser=True,
+                            experiments=['block pre edge vectors'])
+
+analyses["laser POST"] = \
+    Settings_analyze_local( title='laser POST', 
+                            plot_laser=True,
+                            experiments=['block post edge vectors'])
+
+analyses["laser PUNISH"] = \
+    Settings_analyze_local( title='laser PUNISH', 
+                            plot_laser=True,
+                            experiments=['block after 2nd edge vector'])
 
 # ----------ESCAPES----------------------------------------------
 

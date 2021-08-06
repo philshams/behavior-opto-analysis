@@ -10,11 +10,18 @@ def get_color_based_on_speed(speed:float, object_to_color: str, stim_status: flo
     if object_to_color == 'plot': color = np.append(color[::-1]/256, .7) # BGR to RGB and 0-256 to 0-1 range
     return color
 
-def get_color_based_on_target_score(target_score:float, edge_vector_threshold: float, analysis_type: str) -> tuple:
+def get_color_based_on_target_score(target_score:float, edge_vector_threshold: float) -> tuple:
     homing_vector_color = np.array([.4,.4,.4, .6])
     edge_vector_color   = np.array([0, .4, 1, .5])
     if target_score > edge_vector_threshold: color = edge_vector_color
     if target_score < edge_vector_threshold: color = homing_vector_color
+    return color
+
+def get_color_based_on_side(side:str) -> tuple:
+    left_color  = np.array([0,1,0,.5])
+    right_color = np.array([1,0,0,.5])
+    if side == 'left':  color = left_color
+    if side == 'right': color = right_color
     return color
     
 def get_color_parameters(stim_type: str='audio', stim_status: float=0, object_to_color: str='trail'):

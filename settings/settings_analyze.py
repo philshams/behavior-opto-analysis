@@ -3,24 +3,24 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["escape targets naive vs exp all"], 
+analysis = analyses["laser"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
 max_escape_duration = 9,
-post_laser_seconds_to_plot = 5,
+post_laser_seconds_to_plot = 30,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 20,
 edge_vector_threshold = 0.68,
 two_tailed_test = True,
 
-leftside_only = False,
+leftside_only = True,
 rightside_only = False,
 reflect_trajectories = False,
 
-color_by = 'speed+RT', 
+color_by = 'default', 
 # 'default' 'session' 'trial' 'target'  ''  || for all
-# 'speed'   'time'    'speed+RT'            || for trajectories
+# 'speed'   'time'    'speed+RT'   'side'   || for trajectories
 
 save_folder = "D:\\data\\Paper II\\statistics"
 

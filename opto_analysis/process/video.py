@@ -15,7 +15,7 @@ class Video:
     height: int
     width: int
     fisheye_correction_file: str
-    rendering_size_pixels: int
+    rendering_size_pixels: int #TODO: make this a tuple (width, height)
     pixels_per_cm: int
     tracking_data_file: str
     #! replace these values with your own parameters

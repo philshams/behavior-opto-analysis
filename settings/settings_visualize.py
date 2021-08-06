@@ -3,7 +3,7 @@ from opto_analysis.utils.settings_objects import Settings_visualize
 settings_visualize = Settings_visualize(
 
     laser_trials=True,
-    escape_trials=True,
+    escape_trials=False,
     
     display_trail=True,
     display_tracking=False,
@@ -21,6 +21,6 @@ settings_visualize = Settings_visualize(
     by_experiment=False,
     experiments = [''],
 
-    by_session=False,
-    sessions=[1],
+    by_session=True,
+    sessions=[2],
 )
