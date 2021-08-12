@@ -2,11 +2,13 @@ import numpy as np
 from typing import Tuple
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = (successful_escape(self, onset_frames) and \
-                escape_starts_near_threat_zone(self, onset_frames[0]) and \
-                self.num_successful_escapes_this_session <  self.settings.max_num_trials and \
-                (not self.settings.leftside_only  or     get_which_side(self, onset_frames[0])=='left'  ) and \
-                (not self.settings.rightside_only or not get_which_side(self, onset_frames[0])=='right' )  )
+    eligible = (self.stim_type=='laser' \
+               or (successful_escape(self, onset_frames) \
+                  and escape_starts_near_threat_zone(self, onset_frames[0]) \
+                  and self.num_successful_escapes_this_session <  self.settings.max_num_trials)) \
+               and (not self.settings.leftside_only  or get_which_side(self, onset_frames[0])=='left')  \
+               and (not self.settings.rightside_only or get_which_side(self, onset_frames[0])=='right') \
+               and not fake_trial(self, onset_frames[0])
     if eligible: self.num_successful_escapes_this_session += 1
     return eligible
 
@@ -72,3 +74,11 @@ def get_which_side(self, trial_start_idx: int) -> str:
     if x_at_cross < self.session.video.width/2: which_side = 'left'
     if x_at_cross > self.session.video.width/2: which_side = 'right'
     return which_side
+
+def fake_trial(self, trial_start_idx: int) -> bool:
+    if self.stim_type=='laser' \
+        and (self.tracking_data['avg_loc'][trial_start_idx,0] < 200 \
+            or self.tracking_data['avg_loc'][trial_start_idx,0] > 600):
+        print("Laser test trial for {}".format(self.session.name))
+        return True
+    return False

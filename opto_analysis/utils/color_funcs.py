@@ -17,13 +17,6 @@ def get_color_based_on_target_score(target_score:float, edge_vector_threshold: f
     if target_score < edge_vector_threshold: color = homing_vector_color
     return color
 
-def get_color_based_on_side(side:str) -> tuple:
-    left_color  = np.array([0,1,0,.5])
-    right_color = np.array([1,0,0,.5])
-    if side == 'left':  color = left_color
-    if side == 'right': color = right_color
-    return color
-    
 def get_color_parameters(stim_type: str='audio', stim_status: float=0, object_to_color: str='trail'):
     if   stim_type == 'audio': speed_thresholds = np.array([0, 20, 40, 70, 999]) #cm/s
     elif stim_type == 'laser': speed_thresholds = np.array([0, 15, 20, 30, 999]) #cm/s

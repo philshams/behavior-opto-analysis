@@ -1,4 +1,4 @@
-from opto_analysis.utils.color_funcs import get_colormap, generate_list_of_colors, get_color_based_on_target_score, get_color_based_on_side
+from opto_analysis.utils.color_funcs import get_colormap, generate_list_of_colors, get_color_based_on_target_score
 import matplotlib.pyplot as plt
 import matplotlib.collections as plt_coll
 import numpy as np
@@ -11,9 +11,7 @@ def get_plot_color(self, trial: dict, plot_type:str='trajectory') -> tuple:
     if not self.color_by: 
         color=(.4,.4,.4, .7)
     if self.color_by=='target':
-        color = get_color_based_on_target_score(trial['escape target score'], self.settings.edge_vector_threshold, self.analysis_type)
-    if self.color_by=='side':
-        color = get_color_based_on_side(trial['which side'])
+        color = get_color_based_on_target_score(trial['escape target score'], self.settings.edge_vector_threshold)
     if self.color_by in ['trial', 'session']:      
         if self.color_by=='trial':   self.color_counter = trial['trial count']
         if self.color_by=='session': self.color_counter = trial['session count']
@@ -24,7 +22,7 @@ def gradient_line(self, trial: dict):
     points = np.array([trial['trajectory x'], trial['trajectory y']]).T.reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
     colors = generate_list_of_colors(self.color_by, self.stim_type, trial['epoch'], trial['speed'], RT=trial['escape initiation idx'])
-    set_of_lines = plt_coll.LineCollection(segments, colors=colors, linewidth=2)
+    set_of_lines = plt_coll.LineCollection(segments, colors=colors, linewidth=2 - 1*(trial['epoch']=='post-laser'))
     self.ax.add_collection(set_of_lines)
 
 def apply_x_jitter(self, offset_x=.35, min_distance_y=0.01, jitter_distance_x=0.04):

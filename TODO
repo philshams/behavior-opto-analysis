@@ -1,6 +1,5 @@
 ------- at home or work ------
-- do spontaneous homing analysis (e.g. 9715 did any?)
-- *examine laser trials!; all expts; from onset (particular place) to edge; color by which side; and/or by directness to edge
+- do spontaneous homing analysis (e.g. 9715 did any on left?)
 - update tests
 
 ------- at work -------
@@ -36,3 +35,5 @@
 - find dlc errors and retrain all videos
 
 - rendering size ~ tuple
+
+- quantify directness to edge;  which edge taken; time to shelter; for threshold crossings: laser vs. no laser (spont threshold crossings in non block EV) vs laser (non block EV)

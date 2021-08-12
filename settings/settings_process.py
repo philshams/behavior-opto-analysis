@@ -9,7 +9,7 @@ settings_process = Settings_process(
     pixels_per_cm = 10, # for the arena drawn in register.generate_rendered_arena, report here the ratio between size of arena in pixels and actual size in cm
 
     by_experiment=True,
-    experiments = ['open field'],
+    experiments = ['block pre edge vectors'],
 
     by_session=False,
     sessions=[x for x in range(48,49)],

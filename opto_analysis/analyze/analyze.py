@@ -24,7 +24,7 @@ class Analyze():
         self.analysis_type = analysis_type   
         self.title = self.settings.analysis.title
         self.color_by = self.settings.color_by
-        if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','side','']:
+        if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','']:
             if 'escape' in analysis_type: self.color_by = 'target'
             if 'laser'  in analysis_type: self.color_by = 'time'
         if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:

@@ -51,7 +51,7 @@ def get_laser_stimulus_parameters(laser_data: object, session: Session) -> Tuple
 
     laser_onset_frames = np.array([np.argmin(abs(x - session.camera_trigger.frame_trigger_onsets_idx)) for x in laser_trial_onset_idx])
     frames_since_previous_laser_onset = np.append(99999, np.diff(laser_onset_frames))
-    start_of_stimulus_train = frames_since_previous_laser_onset > (20 * session.camera_trigger.fps)
+    start_of_stimulus_train = frames_since_previous_laser_onset > (4 * session.camera_trigger.fps) # was 20
     stimulus_train_idx = np.array(
         [sum(start_of_stimulus_train[:i+1])-1 for i, s in enumerate(start_of_stimulus_train)])
     laser_onset_frames_grouped_by_stimulus_train = np.array(
