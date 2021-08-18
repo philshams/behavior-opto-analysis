@@ -105,6 +105,14 @@ analyses["escape targets naive vs exp all"] = \
                             group_5 = [16,17,18,19],
                             group_6 = [20,21,22,23],
                             group_7 = [0,1,2,3,8,9,10,11,16,17,18,19],
-                            group_8 = [4,5,6,7,12,13,14,15,20,21,22,23])                                                    
+                            group_8 = [4,5,6,7,12,13,14,15,20,21,22,23])
+
+# ----------SPONTANEOUS HOMINGS------------------------------------
+
+analyses["homings test"] = \
+    Settings_analyze_local( title='homings test', 
+                            plot_homings = True, 
+                            by_session=True, by_experiment=False,
+                            sessions=[0, 1])
 
 

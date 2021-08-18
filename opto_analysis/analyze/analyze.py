@@ -26,6 +26,7 @@ class Analyze():
         self.color_by = self.settings.color_by
         if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','']:
             if 'escape' in analysis_type: self.color_by = 'target'
+            if 'homing' in analysis_type: self.color_by = 'target'
             if 'laser'  in analysis_type: self.color_by = 'time'
         if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:
             self.color_by = 'target'
@@ -35,6 +36,7 @@ class Analyze():
         if analysis_type=='escape trajectories': self.stim_type='audio'
         if analysis_type=='escape targets':      self.stim_type='audio'
         if analysis_type=='laser trajectories':  self.stim_type='laser'
+        if analysis_type=='homing trajectories': self.stim_type='spontaneous'
 
 # ----MAIN METHODS------------------------------------------------------
     def trajectories(self):

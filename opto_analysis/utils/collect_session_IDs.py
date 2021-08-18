@@ -9,7 +9,7 @@ def collect_session_IDs(settings: object, databank: dict, group_num: int=0, key:
     if settings.by_session:
         if not key: key = 'sessions'
         factor_idx = 0
-    if settings.by_experiment or settings.by_session:
+    if not settings.all_sessions:
         assert isinstance(settings.__dict__[key], list), "Group must be listed in list format; make sure compare=True for cross-group comparisons" 
         group_idx = np.sum([factor==session_IDs[:,factor_idx] for factor in settings.__dict__[key]],0).astype(bool)
         session_IDs = session_IDs[group_idx]   

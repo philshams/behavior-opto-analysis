@@ -1,23 +1,14 @@
-------- at home or work ------
+------- on now ------
 - do spontaneous homing analysis (e.g. 9715 did any on left?)
+--> should fit into visualize and analyze
 - update tests
 
-------- at work -------
-- copy concatenated data, tracking output to hard drive
 
 
 
 
 
-
-
-
-
-
-
-
-
-------- after injecting next group ---------
+------- next up ---------
 
 - do rendering videos/images once dlc is trained
     - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)

@@ -25,6 +25,23 @@ class Settings_track:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
+    all_sessions: bool=False
+
+@dataclass(frozen=True)
+class Settings_homings:
+    fast_speed: float
+    fast_angular_speed: float
+    padding_duration: float
+    heading_dir_threshold_angle: int
+    min_change_in_dist_to_shelter: float
+    threat_area_width: int
+    threat_area_height: int
+    subgoal_locations: list
+    by_experiment: bool=False
+    experiments: list=None
+    by_session: bool=False
+    sessions: list=None
+    all_sessions: bool=False
 
 @dataclass(frozen=True)
 class Settings_visualize:
@@ -45,6 +62,7 @@ class Settings_visualize:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
+    all_sessions: bool=False
 
 @dataclass(frozen=True)
 class Settings_analyze_local:
