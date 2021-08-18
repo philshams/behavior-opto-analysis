@@ -7,9 +7,11 @@ def open_tracking_data(self):
 
 def index_onset_and_duration_by_stim_type(self):
         self.onset_frames = {}
-        self.onset_frames['laser'] = self.session.laser.onset_frames
-        self.onset_frames['audio'] = self.session.audio.onset_frames
+        self.onset_frames['laser']  = self.session.laser.onset_frames
+        self.onset_frames['audio']  = self.session.audio.onset_frames
+        self.onset_frames['homing'] = self.session.homing.onset_frames
         self.stimulus_durations = {}
-        self.stimulus_durations['laser'] = self.session.laser.stimulus_durations
-        self.stimulus_durations['audio'] = self.session.audio.stimulus_durations
+        self.stimulus_durations['laser']  = self.session.laser.stimulus_durations
+        self.stimulus_durations['audio']  = self.session.audio.stimulus_durations
+        self.stimulus_durations['homing'] = self.session.homing.stimulus_durations
         

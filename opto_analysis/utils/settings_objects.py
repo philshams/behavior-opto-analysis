@@ -11,6 +11,7 @@ class Settings_process:
     experiments: list=None
     by_session: bool=False
     sessions: list=None
+    all_sessions: bool=False
 
 @dataclass(frozen=True)
 class Settings_track:
@@ -47,6 +48,7 @@ class Settings_homings:
 class Settings_visualize:
     laser_trials: bool=True
     escape_trials: bool=True
+    homing_trials: bool=False
     display_tracking:bool=False
     display_trail:bool=True
     rapid: bool=True
@@ -54,8 +56,10 @@ class Settings_visualize:
     size: int=1024
     seconds_before_audio: int = 3
     seconds_before_laser: int = 3
+    seconds_before_homing: int = 3
     seconds_after_audio: int = 2
     seconds_after_laser: int = 6
+    seconds_after_homing: int = 3
     save_folder: str = None
     fisheye_correction_file: str = None
     by_experiment: bool=False
@@ -69,6 +73,7 @@ class Settings_analyze_local:
     plot_escape: bool=False
     plot_laser: bool=False
     plot_targets: bool=False
+    plot_homings: bool=False
     title: str=None
     save_folder: str=None
     experiments: list = None

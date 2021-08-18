@@ -43,3 +43,7 @@ setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
                 ['speed', 'smooth duration', 'close_to_shetler_angle', 'minimum_shelter_distance', 'angle_speed_threshold']]
         if np.array(same_settings_as_saved_homings).all(): return True
         return False
+
+
+                face_shelter_or_edge           = self.homing_angle          < self.settings.heading_dir_threshold_angle
+                        face_shelter_at_all            = self.shelter_angle         < 90

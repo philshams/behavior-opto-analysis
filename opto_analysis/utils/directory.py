@@ -3,8 +3,9 @@ from pathlib import Path
 
 class Directory():
     def __init__(self, base_folder: str, experiment:str=None, analysis_type: str=None, stim_type: bool=False, tracking_video:bool=False, plot: bool=False):
-        if stim_type=='audio': self.leaf_folder='escape videos'
-        if stim_type=='laser': self.leaf_folder='laser videos'
+        if stim_type=='audio':  self.leaf_folder='escape videos'
+        if stim_type=='laser':  self.leaf_folder='laser videos'
+        if stim_type=='homing': self.leaf_folder='homing videos'
         self.base_folder    = base_folder
         self.experiment     = experiment
         self.analysis_type  = analysis_type

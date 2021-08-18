@@ -16,7 +16,7 @@ class Session:
     laser: object=None
     audio: object=None
     video: object=None
-    spontaneous: object = None
+    homing: object = None
 
 def get_Session(session_ID: list) -> Session:
     global_session_number = session_ID[0]

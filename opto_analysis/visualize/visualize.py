@@ -99,7 +99,7 @@ class Visualize():
             
     def get_new_trail_segment(self, i):             
         time_to_get_new_trail_segment=self.num_frames_past_stim % 10 and \
-                                    ((self.stim_type=='audio' and self.stim_status[i]==0) or \
+                                    ((self.stim_type in ['audio','homing'] and self.stim_status[i]==0) or \
                                      (self.stim_type=='laser' and self.stim_status[i] > -1 and self.stim_status[i] < 3))
         if time_to_get_new_trail_segment:
             trail_color = get_color_based_on_speed(speed=self.speed, object_to_color='trail', stim_status=self.stim_status[i], stim_type=self.stim_type)

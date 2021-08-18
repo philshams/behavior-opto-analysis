@@ -41,6 +41,7 @@ def visualize():
         session = Process(session_ID).load_session()
         if settings_v.laser_trials:  Visualize(session, settings_v).trials(stim_type = 'laser')
         if settings_v.escape_trials: Visualize(session, settings_v).trials(stim_type = 'audio')
+        if settings_v.homing_trials: Visualize(session, settings_v).trials(stim_type = 'homing')
 
 def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 

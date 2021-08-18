@@ -14,7 +14,7 @@ def test_visualize_trials():
     visualize = Visualize(session, settings_visualize)
     i = 0
     trial_num = 0
-    for stim_type in ['audio','laser']:
+    for stim_type in ['audio','laser','homing']:
         onset_frames = visualize.onset_frames[stim_type][0]
         stimulus_durations = visualize.stimulus_durations[stim_type][0]
         set_up_videos_assertions(visualize, stim_type, trial_num, onset_frames, stimulus_durations)
@@ -45,7 +45,7 @@ def correct_and_register_frame_assertions(visualize):
 
 def get_current_position_and_speed_assertions(visualize):
     visualize.get_current_position_and_speed()
-    assert visualize.body_dir == 76.55667655549335 or visualize.body_dir == 10.562744077609219
+    assert visualize.body_dir == 72.25204229546755 or visualize.body_dir == 10.562744077609219
 
 def get_shading_color_assertions(visualize):
     visualize.get_shading_color()

@@ -22,6 +22,6 @@ def get_Audio(session: Session) -> Audio:
     audio_data = AI_data[np.arange(1, len(AI_data), 4)] # four interleaved time series
     audio_num_samples = len(audio_data)
     audio_on = abs(audio_data)>3
-    audio_onset_frames, stimulus_durations, _ = get_onset_and_duration(audio_on, session, stim_type='audio', min_frames_between_trials=session.daq_sampling_rate * 30, round_durations=True)
+    audio_onset_frames, stimulus_durations, _ = get_onset_and_duration(audio_on, session, stim_type='audio', min_frames_between_trials=session.daq_sampling_rate * 30, data_type='samples')
     audio = Audio(audio_num_samples, audio_onset_frames, stimulus_durations)
     return audio

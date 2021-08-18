@@ -132,7 +132,7 @@ class Track():
     def compute_angles(self):
         for direction_to_compute, front_bodypart, back_bodypart in zip(['body_dir','neck_dir', 'head_dir'],
                                                                        ['upper_body_loc', 'head_loc', 'snout_loc'],
-                                                                       ['body_loc', 'upper_body_loc', 'neck_loc']):
+                                                                       ['lower_body_loc', 'upper_body_loc', 'neck_loc']):
             self.tracking_data[direction_to_compute] = np.angle((self.tracking_data[front_bodypart][:, 0] - self.tracking_data[back_bodypart][:, 0]) + \
                                                                (-self.tracking_data[front_bodypart][:, 1] + self.tracking_data[back_bodypart][:, 1]) * 1j, deg=True)
 

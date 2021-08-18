@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='opto-analysis',
-    version='1.2',
+    version='1.3',
     author='Philip Shamash',
     license='GNU General Public License',
     packages = ['opto_analysis'],
@@ -12,7 +12,8 @@ setuptools.setup(
             "process = opto_analysis.run:process",
             "analyze = opto_analysis.run:analyze",
             "track = opto_analysis.run:track",
-            "visualize = opto_analysis.run:visualize"       
+            "visualize = opto_analysis.run:visualize",    
+            "homings = opto_analysis.run:homings"       
         ]
     }
 

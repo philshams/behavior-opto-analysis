@@ -1,9 +1,10 @@
 ------- on now ------
-- do spontaneous homing analysis (e.g. 9715 did any on left?)
+- do spontaneous homing analysis (e.g. 9715 did any on left?) AND threshold crossing analysis
+    - note: commented out requirement to start in threat area
 --> should fit into visualize and analyze
 - update tests
 
-
+- tracking is systematically off to the left... why?
 
 
 
