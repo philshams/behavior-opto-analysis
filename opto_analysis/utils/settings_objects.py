@@ -33,8 +33,8 @@ class Settings_homings:
     fast_speed: float
     fast_angular_speed: float
     padding_duration: float
-    heading_dir_threshold_angle: int
     min_change_in_dist_to_shelter: float
+    max_time_within_session: float
     threat_area_width: int
     threat_area_height: int
     subgoal_locations: list

@@ -36,7 +36,7 @@ class Analyze():
         if analysis_type=='escape trajectories': self.stim_type='audio'
         if analysis_type=='escape targets':      self.stim_type='audio'
         if analysis_type=='laser trajectories':  self.stim_type='laser'
-        if analysis_type=='homing trajectories': self.stim_type='spontaneous'
+        if analysis_type=='homing trajectories': self.stim_type='homing'
 
 # ----MAIN METHODS------------------------------------------------------
     def trajectories(self):
@@ -76,8 +76,8 @@ class Analyze():
             self.trial_count+=1
 
     def generate_trial_dict(self, onset_frames: list, stim_durations: list):
-        if self.stim_type=='audio': epochs = ['stimulus']
-        if self.stim_type=='laser': epochs = ['stimulus', 'post-laser']
+        if self.stim_type in ['audio', 'homing']: epochs = ['stimulus']
+        if self.stim_type=='laser':               epochs = ['stimulus', 'post-laser']
         for epoch in epochs:
             trial_start_idx, trial_end_idx = get_trial_start_and_end(self, onset_frames, stim_durations, epoch)
             trial                          = create_trial_dict(self, trial_start_idx, trial_end_idx, epoch)
@@ -146,7 +146,7 @@ class Analyze():
         self.fig, self.ax = plt.subplots(figsize=(9,9))
         self.ax.set_xlim([0, size])
         self.ax.set_ylim([0, size])
-        if self.stim_type=='laser': self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
+        if self.stim_type in ['laser', 'homing']: self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
         circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
         self.ax.invert_yaxis()

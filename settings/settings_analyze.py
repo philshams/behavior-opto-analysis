@@ -3,7 +3,7 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["homings test"], 
+analysis = analyses["homings"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
@@ -15,7 +15,7 @@ edge_vector_threshold = 0.68,
 two_tailed_test = True,
 
 leftside_only = False,
-rightside_only = False,
+rightside_only = True,
 reflect_trajectories = False,
 
 color_by = 'default', 

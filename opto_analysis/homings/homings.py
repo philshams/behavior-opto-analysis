@@ -12,8 +12,8 @@ class Homings:
     fast_speed: float
     fast_angular_speed: float
     padding_duration: float
-    heading_dir_threshold_angle: int
     min_change_in_dist_to_shelter: int
+    max_time_within_session: float
     threat_area_height: int
     threat_area_width: int
     subgoal_locations: list
@@ -34,8 +34,8 @@ class get_Homings:
                                 self.settings.fast_speed, 
                                 self.settings.fast_angular_speed,
                                 self.settings.padding_duration, 
-                                self.settings.heading_dir_threshold_angle, 
                                 self.settings.min_change_in_dist_to_shelter,
+                                self.settings.max_time_within_session,
                                 self.settings.threat_area_height,
                                 self.settings.threat_area_width,
                                 self.settings.subgoal_locations)
@@ -71,13 +71,15 @@ class get_Homings:
         homing_run_durations          = self.offset_frames - self.onset_frames + 1
         start_loc_x                   = self.tracking_data['avg_loc'][self.onset_frames, 0]
         start_loc_y                   = self.tracking_data['avg_loc'][self.onset_frames, 1]
+        onset_time_in_session         = self.onset_frames / self.session.video.fps / 60
 
-        sufficient_move_toward_shelter = change_in_distance_to_shelter > self.settings.min_change_in_dist_to_shelter
+        sufficient_move_toward_shelter = change_in_distance_to_shelter >  self.settings.min_change_in_dist_to_shelter
         sufficient_run_duration        = homing_run_durations          > (self.settings.padding_duration * self.session.video.fps + 1)
         starts_in_threat_area          = (start_loc_y                  <  self.settings.threat_area_height) * \
         (abs(start_loc_x - self.session.video.rendering_size_pixels/2) <  self.settings.threat_area_width/2)
+        starts_late_enough             = onset_time_in_session         <  self.settings.max_time_within_session
 
-        applicable_runs         = sufficient_move_toward_shelter * sufficient_run_duration * starts_in_threat_area
+        applicable_runs         = sufficient_move_toward_shelter * sufficient_run_duration * starts_in_threat_area * starts_late_enough
         self.onset_frames       = np.array([[onset_frame] for onset_frame in self.onset_frames[applicable_runs]])
         self.stimulus_durations = np.array([[stimulus_duration] for stimulus_duration in self.stimulus_durations[applicable_runs]])
 

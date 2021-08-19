@@ -12,7 +12,7 @@ def get_color_based_on_speed(speed:float, object_to_color: str, stim_status: flo
 
 def get_color_based_on_target_score(target_score:float, edge_vector_threshold: float) -> tuple:
     homing_vector_color = np.array([.4,.4,.4, .6])
-    edge_vector_color   = np.array([0, .4, 1, .5])
+    edge_vector_color   = np.array([0, .4, 1, .5]) #np.array([0, 0, 0, 1]) 
     if target_score > edge_vector_threshold: color = edge_vector_color
     if target_score < edge_vector_threshold: color = homing_vector_color
     return color

@@ -1,24 +1,13 @@
 ------- on now ------
-- do spontaneous homing analysis (e.g. 9715 did any on left?) AND threshold crossing analysis
-    - note: commented out requirement to start in threat area
---> should fit into visualize and analyze
-- update tests
-
-- tracking is systematically off to the left... why?
-
 
 
 
 ------- next up ---------
 
-- do rendering videos/images once dlc is trained
+- do rendering videos/images
     - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
-    - and/or: mouse at beginning /end of stim, with trail?
+    - RT as escape initiation?
     - entire session in one plot?
-
-- try escape initiation as begin of turn-and-run
-
-- plot non-laser control runs
 
 - place preference (incl. loom expts) pipeline
 
@@ -26,6 +15,6 @@
 
 - find dlc errors and retrain all videos
 
-- rendering size ~ tuple
+- rendering size ~ tuple, make size vs. video height/width more principled
 
-- quantify directness to edge;  which edge taken; time to shelter; for threshold crossings: laser vs. no laser (spont threshold crossings in non block EV) vs laser (non block EV)
+- characterize EFFECT OF LASER on POST-THRESHOLD-CROSSING BEHAVIOR: directness to edge;  which edge taken; time to shelter; for threshold crossings: laser vs. no laser (spont threshold crossings in non block EV) vs laser (non block EV); trajectories for a certain distance or time

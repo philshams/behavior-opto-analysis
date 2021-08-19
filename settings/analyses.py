@@ -3,6 +3,12 @@ analyses = {}
 
 # ----------LASER----------------------------------------------
 
+analyses["laser test"] = \
+    Settings_analyze_local( title='laser EV', 
+                            plot_laser=True,
+                            by_session=True, by_experiment=False,
+                            sessions=[1])
+
 analyses["laser"] = \
     Settings_analyze_local( title='laser EV', 
                             plot_laser=True,
@@ -113,6 +119,26 @@ analyses["homings test"] = \
     Settings_analyze_local( title='homings test', 
                             plot_homings = True, 
                             by_session=True, by_experiment=False,
-                            sessions=[0, 1])
+                            sessions=[28])
+
+analyses["homings"] = \
+    Settings_analyze_local( title='homings EV', 
+                            plot_homings=True,
+                            experiments=['block edge vectors'])
+
+analyses["homings PRE"] = \
+    Settings_analyze_local( title='homings PRE', 
+                            plot_homings=True,
+                            experiments=['block pre edge vectors'])
+
+analyses["homings POST"] = \
+    Settings_analyze_local( title='homings POST', 
+                            plot_homings=True,
+                            experiments=['block post edge vectors'])
+
+analyses["homings PUNISH"] = \
+    Settings_analyze_local( title='homings PUNISH', 
+                            plot_homings=True,
+                            experiments=['block after 2nd edge vector'])
 
 

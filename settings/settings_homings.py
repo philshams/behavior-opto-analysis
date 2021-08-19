@@ -2,18 +2,20 @@ from opto_analysis.utils.settings_objects import Settings_homings
 
 settings_homings = Settings_homings(
 
-    fast_speed                    = 10,
+    fast_speed                    = 15,
     padding_duration              = 1,
-    heading_dir_threshold_angle   = 30,
     fast_angular_speed            = 90,
-    min_change_in_dist_to_shelter = .3,
-    threat_area_width             = 1024, #600,
-    threat_area_height            = 512-200, #282, # distance from top of frame
+    min_change_in_dist_to_shelter = .2,
+    max_time_within_session       = 20,
+    threat_area_width             = 820, 
+    threat_area_height            = 302, #
     subgoal_locations             = [(512-250, 512),(512+250, 512)],
 
     by_experiment = False,
-    experiments = ['open field'],
+    experiments = ['block edge vectors'],
 
     by_session=True,
-    sessions=[0,1]
+    sessions=[x for x in range(48)]
+
+
 )

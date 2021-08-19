@@ -13,8 +13,15 @@ def create_trial_dict(self, trial_start_idx: int, trial_end_idx: int, epoch: str
     trial['escape initiation idx'] = get_escape_initiation_idx(self, trial_start_idx)
     trial['escape target score']   = get_escape_target_score(self, trial['trajectory x'], trial['trajectory y'], trial['escape initiation idx'])
     trial['which side']            = get_which_side(self, trial_start_idx)
+
     if'trajectories' in self.analysis_type and self.settings.reflect_trajectories and get_which_side(self, trial_start_idx)=='right':
         trial['trajectory x']  = self.session.video.rendering_size_pixels - trial['trajectory x']
+    
+    if self.stim_type == 'homing':
+        trial['escape target score'] = get_escape_target_score(self, self.tracking_data['head_loc'][trial_start_idx:trial_end_idx, 0], \
+                                                                     self.tracking_data['head_loc'][trial_start_idx:trial_end_idx, 1], \
+                                                                     trial['escape initiation idx'])
+        trial['frames before laser'] = min(abs(trial_start_idx - np.array([onsets[0] for onsets in self.session.laser.onset_frames])))
 
     return trial
 

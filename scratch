@@ -47,3 +47,12 @@ setup(name='opto_analysis', version='1.0.0', packages=['opto_analysis'])
 
                 face_shelter_or_edge           = self.homing_angle          < self.settings.heading_dir_threshold_angle
                         face_shelter_at_all            = self.shelter_angle         < 90
+
+
+    # edge_loc_1 = (self.session.video.width/2 - 250, self.session.video.height/2)
+    # edge_loc_2 = (self.session.video.width/2 + 250, self.session.video.height/2)
+    # distance_from_edge_loc_1 = min(((x - edge_loc_1[0])**2 + (y - edge_loc_1[1])**2)**.5)
+    # distance_from_edge_loc_2 = min(((x - edge_loc_2[0])**2 + (y - edge_loc_2[1])**2)**.5)
+    # min_distance_from_edge   = min(distance_from_edge_loc_1, distance_from_edge_loc_2) 
+    # if min_distance_from_edge < 50: return 1
+    # if min_distance_from_edge > 50: return 0                        
