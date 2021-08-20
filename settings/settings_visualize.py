@@ -4,7 +4,8 @@ settings_visualize = Settings_visualize(
 
     laser_trials=False,
     escape_trials=False,
-    homing_trials = True,
+    homing_trials = False,
+    t_xing_trials = True,
     
     display_trail=True,
     display_tracking=False,
@@ -15,9 +16,11 @@ settings_visualize = Settings_visualize(
     seconds_before_audio = 3,
     seconds_before_laser = 3,
     seconds_before_homing = 3,
+    seconds_before_threshold_crossing = 3,
     seconds_after_audio = 2,
     seconds_after_laser = 6,
     seconds_after_homing = 3,
+    seconds_after_threshold_crossing = 3,
 
     save_folder = "D:\\data\\Paper II\\trial clips\\",
 
@@ -25,5 +28,5 @@ settings_visualize = Settings_visualize(
     experiments = [''],
 
     by_session=True,
-    sessions=[28],
+    sessions=[2],
 )

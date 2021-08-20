@@ -130,13 +130,13 @@ class get_Homings:
         self.shelter_angle = abs(angle_relative_to_reference_locations[:, 0]) 
         self.homing_angle  = np.min(abs(angle_relative_to_reference_locations), axis = 1) 
 
-    def get_homing_speed_angular(self) -> np.ndarray:
+    def get_homing_speed_angular(self):
         angular_speed_deg_per_frame        = -np.diff(self.homing_angle)
         angular_speed_deg_per_sec          = angular_speed_deg_per_frame * self.session.video.fps
         smoothed_angular_speed_deg_per_sec = gaussian_filter1d(angular_speed_deg_per_sec, sigma=self.session.video.fps/10)
         self.homing_speed_angular          = np.concatenate((np.zeros(1), smoothed_angular_speed_deg_per_sec))
     
-    def get_speed_along_y_axis(self) -> np.ndarray:
+    def get_speed_along_y_axis(self):
         speed_y_pixel_per_frame     = np.diff(self.tracking_data['avg_loc'][:, 1], axis=0)
         speed_y_cm_per_sec          = speed_y_pixel_per_frame * self.session.video.fps / self.session.video.pixels_per_cm
         smoothed_speed_y_cm_per_sec = gaussian_filter1d(speed_y_cm_per_sec, sigma=self.session.video.fps/10)

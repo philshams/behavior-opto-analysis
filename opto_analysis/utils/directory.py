@@ -3,9 +3,10 @@ from pathlib import Path
 
 class Directory():
     def __init__(self, base_folder: str, experiment:str=None, analysis_type: str=None, stim_type: bool=False, tracking_video:bool=False, plot: bool=False):
-        if stim_type=='audio':  self.leaf_folder='escape videos'
-        if stim_type=='laser':  self.leaf_folder='laser videos'
-        if stim_type=='homing': self.leaf_folder='homing videos'
+        if stim_type=='audio':              self.leaf_folder='escape videos'
+        if stim_type=='laser':              self.leaf_folder='laser videos'
+        if stim_type=='homing':             self.leaf_folder='homing videos'
+        if stim_type=='threshold_crossing': self.leaf_folder='threshold crossing videos'
         self.base_folder    = base_folder
         self.experiment     = experiment
         self.analysis_type  = analysis_type
@@ -32,5 +33,6 @@ class Directory():
             self.file_name = os.path.join(self.path,"{}-{} ({}').mp4".format(mouse, trial_num, minutes_into_session))
         if self.plot:
             if color_by: color_by_text = '_color=' + color_by
+            else       : color_by_text = ''
             self.file_name = os.path.join(self.path, title + color_by_text + plot_extension)
         return self.file_name

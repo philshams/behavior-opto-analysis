@@ -16,7 +16,7 @@ class Visualize():
         open_tracking_data(self)
 
     def trials(self, stim_type):
-        for trial_num, (onset_frames, stimulus_durations) in enumerate(zip(self.onset_frames[stim_type], self.stimulus_durations[stim_type])):
+        for trial_num, (onset_frames, stimulus_durations) in enumerate(zip(self.session.__dict__[stim_type].onset_frames, self.session.__dict__[stim_type].stimulus_durations)):
             self.set_up_videos(stim_type, trial_num, onset_frames, stimulus_durations)            
             for i in self.frames_in_this_trial:
                 self.read_frame(onset_frames)
@@ -61,7 +61,6 @@ class Visualize():
             self.get_new_trail_segment(i)
             self.display_all_trail_segments()           
 
-
     def display_tracking(self, i):
         if self.settings.display_tracking:
             self.display_avg_location_on_frame()
@@ -99,7 +98,7 @@ class Visualize():
             
     def get_new_trail_segment(self, i):             
         time_to_get_new_trail_segment=self.num_frames_past_stim % 10 and \
-                                    ((self.stim_type in ['audio','homing'] and self.stim_status[i]==0) or \
+                                    ((self.stim_type in ['audio','homing','threshold_crossing'] and self.stim_status[i]==0) or \
                                      (self.stim_type=='laser' and self.stim_status[i] > -1 and self.stim_status[i] < 3))
         if time_to_get_new_trail_segment:
             trail_color = get_color_based_on_speed(speed=self.speed, object_to_color='trail', stim_status=self.stim_status[i], stim_type=self.stim_type)

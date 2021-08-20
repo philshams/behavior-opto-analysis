@@ -119,7 +119,7 @@ analyses["homings test"] = \
     Settings_analyze_local( title='homings test', 
                             plot_homings = True, 
                             by_session=True, by_experiment=False,
-                            sessions=[28])
+                            sessions=[4])
 
 analyses["homings"] = \
     Settings_analyze_local( title='homings EV', 
@@ -142,3 +142,30 @@ analyses["homings PUNISH"] = \
                             experiments=['block after 2nd edge vector'])
 
 
+# ----------THRESHOLD CROSSINGS------------------------------------
+
+analyses["t xings test"] = \
+    Settings_analyze_local( title='t xings test', 
+                            plot_t_xings = True, 
+                            by_session=True, by_experiment=False,
+                            sessions=[1])
+
+analyses["t xings"] = \
+    Settings_analyze_local( title='t xings EV', 
+                            plot_t_xings=True,
+                            experiments=['block edge vectors'])
+
+analyses["t xings PRE"] = \
+    Settings_analyze_local( title='t xings PRE', 
+                            plot_t_xings=True,
+                            experiments=['block pre edge vectors'])
+
+analyses["t xings POST"] = \
+    Settings_analyze_local( title='t xings POST', 
+                            plot_t_xings=True,
+                            experiments=['block post edge vectors'])
+
+analyses["t xings PUNISH"] = \
+    Settings_analyze_local( title='t xings PUNISH', 
+                            plot_t_xings=True,
+                            experiments=['block after 2nd edge vector'])

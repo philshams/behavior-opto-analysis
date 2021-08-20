@@ -6,6 +6,7 @@ from settings.settings_homings import settings_homings as settings_h
 from opto_analysis.process.process import Process
 from opto_analysis.track.track import Track
 from opto_analysis.homings.homings import get_Homings
+from opto_analysis.homings.threshold_crossings import get_Threshold_crossings
 from opto_analysis.visualize.visualize import Visualize
 from opto_analysis.analyze.analyze import Analyze
 from opto_analysis.utils.print_settings import print_settings, print_settings_analysis
@@ -33,6 +34,7 @@ def homings():
     for session_ID in session_IDs:
         session = Process(session_ID).load_session()
         get_Homings(settings_h, session)
+        get_Threshold_crossings(settings_h, session)
 
 def visualize():
     print("\n------ VISUALIZING DATA ------"); print_settings(settings_v)
@@ -42,6 +44,7 @@ def visualize():
         if settings_v.laser_trials:  Visualize(session, settings_v).trials(stim_type = 'laser')
         if settings_v.escape_trials: Visualize(session, settings_v).trials(stim_type = 'audio')
         if settings_v.homing_trials: Visualize(session, settings_v).trials(stim_type = 'homing')
+        if settings_v.t_xing_trials: Visualize(session, settings_v).trials(stim_type = 'threshold_crossing')
 
 def analyze():
     print("\n------ ANALYZING DATA ------"); print_settings_analysis(settings_a); 
@@ -49,4 +52,5 @@ def analyze():
     if settings_a.analysis.plot_escape:  Analyze(session_IDs, settings_a, 'escape trajectories').trajectories()
     if settings_a.analysis.plot_laser:   Analyze(session_IDs, settings_a, 'laser trajectories' ).trajectories()
     if settings_a.analysis.plot_homings: Analyze(session_IDs, settings_a, 'homing trajectories').trajectories()
+    if settings_a.analysis.plot_t_xings: Analyze(session_IDs, settings_a, 't xing trajectories').trajectories()
     if settings_a.analysis.plot_targets: Analyze(session_IDs, settings_a, 'escape targets'     ).distribution()

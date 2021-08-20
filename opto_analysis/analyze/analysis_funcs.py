@@ -2,7 +2,7 @@ import numpy as np
 from typing import Tuple
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = (self.stim_type in ['laser', 'homing'] \
+    eligible = (self.stim_type in ['laser', 'homing', 'threshold_crossing'] \
                or (successful_escape(self, onset_frames) \
                   and escape_starts_near_threat_zone(self, onset_frames[0]) \
                   and self.num_successful_escapes_this_session <  self.settings.max_num_trials)) \
@@ -23,7 +23,7 @@ def successful_escape(self, onset_frames: list) -> bool:
 
 def get_escape_initiation_idx(self, trial_start_idx: int) -> int:
     if self.stim_type == 'laser':  return None
-    if self.stim_type == 'homing': return 0
+    if self.stim_type in ['homing', 'threshold_crossing']: return 0
     escape_initiation_idx = np.where(self.tracking_data['speed rel. to shelter'][trial_start_idx+1:] > self.settings.escape_initiation_speed)[0][0]
     assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps)
     return escape_initiation_idx
@@ -36,7 +36,7 @@ def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
 
 def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> float:
     if self.stim_type=='laser':  return None
-    if self.stim_type=='homing': return gets_to_edge(self, x, y)
+    if self.stim_type in ['homing', 'threshold_crossing']: return gets_to_edge(self, x, y)
 
     x_start, y_start, x_goal, y_goal, _, _, x_target, y_target, x_obstacle_edge, y_obstacle_edge, _ = get_various_x_and_y_locations(self, x, y, RT)
 
@@ -76,7 +76,7 @@ def gets_to_edge(self, x: np.ndarray, y: np.ndarray) -> int:
     else: return 0
 
 def get_which_side(self, trial_start_idx: int) -> str:
-    if self.stim_type=='homing':
+    if self.stim_type in ['homing', 'threshold_crossing']:
         frames_before_laser = min(abs(trial_start_idx - np.array([onsets[0] for onsets in self.session.laser.onset_frames])))
         if frames_before_laser < 2 * self.session.video.fps: return 'left'
 

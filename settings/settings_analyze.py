@@ -3,7 +3,7 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["homings"], 
+analysis = analyses["t xings PUNISH"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
@@ -15,10 +15,10 @@ edge_vector_threshold = 0.68,
 two_tailed_test = True,
 
 leftside_only = False,
-rightside_only = True,
+rightside_only = False,
 reflect_trajectories = False,
 
-color_by = 'default', 
+color_by = '', 
 # 'default' 'session' 'trial' 'target'  ''  || for all
 # 'speed'   'time'    'speed+RT'            || for trajectories
 

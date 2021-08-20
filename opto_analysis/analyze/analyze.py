@@ -25,9 +25,10 @@ class Analyze():
         self.title = self.settings.analysis.title
         self.color_by = self.settings.color_by
         if 'traject' in analysis_type and not self.color_by in ['speed', 'speed+RT','time','target', 'session','trial','']:
-            if 'escape' in analysis_type: self.color_by = 'target'
-            if 'homing' in analysis_type: self.color_by = 'target'
-            if 'laser'  in analysis_type: self.color_by = 'time'
+            if 'escape' in analysis_type:  self.color_by = 'target'
+            if 'homing' in analysis_type:  self.color_by = 'target'
+            if 'laser'  in analysis_type:  self.color_by = 'time'
+            if 't xing'  in analysis_type: self.color_by = 'speed'
         if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:
             self.color_by = 'target'
         if self.settings.leftside_only:  self.title += " (leftside)"
@@ -37,6 +38,7 @@ class Analyze():
         if analysis_type=='escape targets':      self.stim_type='audio'
         if analysis_type=='laser trajectories':  self.stim_type='laser'
         if analysis_type=='homing trajectories': self.stim_type='homing'
+        if analysis_type=='t xing trajectories': self.stim_type='threshold_crossing'
 
 # ----MAIN METHODS------------------------------------------------------
     def trajectories(self):
@@ -76,8 +78,8 @@ class Analyze():
             self.trial_count+=1
 
     def generate_trial_dict(self, onset_frames: list, stim_durations: list):
-        if self.stim_type in ['audio', 'homing']: epochs = ['stimulus']
-        if self.stim_type=='laser':               epochs = ['stimulus', 'post-laser']
+        if self.stim_type in ['audio', 'homing', 'threshold_crossing']: epochs = ['stimulus']
+        if self.stim_type=='laser':                                     epochs = ['stimulus', 'post-laser']
         for epoch in epochs:
             trial_start_idx, trial_end_idx = get_trial_start_and_end(self, onset_frames, stim_durations, epoch)
             trial                          = create_trial_dict(self, trial_start_idx, trial_end_idx, epoch)
@@ -146,7 +148,8 @@ class Analyze():
         self.fig, self.ax = plt.subplots(figsize=(9,9))
         self.ax.set_xlim([0, size])
         self.ax.set_ylim([0, size])
-        if self.stim_type in ['laser', 'homing']: self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
+        if self.stim_type in ['laser', 'homing', 'threshold_crossing']: 
+            self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
         circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
         self.ax.invert_yaxis()

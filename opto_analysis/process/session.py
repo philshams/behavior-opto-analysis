@@ -17,6 +17,7 @@ class Session:
     audio: object=None
     video: object=None
     homing: object = None
+    threshold_crossing: object = None
 
 def get_Session(session_ID: list) -> Session:
     global_session_number = session_ID[0]

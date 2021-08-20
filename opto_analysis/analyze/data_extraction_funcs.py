@@ -17,7 +17,7 @@ def create_trial_dict(self, trial_start_idx: int, trial_end_idx: int, epoch: str
     if'trajectories' in self.analysis_type and self.settings.reflect_trajectories and get_which_side(self, trial_start_idx)=='right':
         trial['trajectory x']  = self.session.video.rendering_size_pixels - trial['trajectory x']
     
-    if self.stim_type == 'homing':
+    if self.stim_type in ['homing', 'threshold_crossing']:
         trial['escape target score'] = get_escape_target_score(self, self.tracking_data['head_loc'][trial_start_idx:trial_end_idx, 0], \
                                                                      self.tracking_data['head_loc'][trial_start_idx:trial_end_idx, 1], \
                                                                      trial['escape initiation idx'])

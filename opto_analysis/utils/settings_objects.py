@@ -38,6 +38,7 @@ class Settings_homings:
     threat_area_width: int
     threat_area_height: int
     subgoal_locations: list
+    duration_after_crossing: float
     by_experiment: bool=False
     experiments: list=None
     by_session: bool=False
@@ -49,6 +50,7 @@ class Settings_visualize:
     laser_trials: bool=True
     escape_trials: bool=True
     homing_trials: bool=False
+    t_xing_trials: bool=True
     display_tracking:bool=False
     display_trail:bool=True
     rapid: bool=True
@@ -57,9 +59,11 @@ class Settings_visualize:
     seconds_before_audio: int = 3
     seconds_before_laser: int = 3
     seconds_before_homing: int = 3
+    seconds_before_threshold_crossing: int = 3
     seconds_after_audio: int = 2
     seconds_after_laser: int = 6
     seconds_after_homing: int = 3
+    seconds_after_threshold_crossing: int = 3
     save_folder: str = None
     fisheye_correction_file: str = None
     by_experiment: bool=False
@@ -74,6 +78,7 @@ class Settings_analyze_local:
     plot_laser: bool=False
     plot_targets: bool=False
     plot_homings: bool=False
+    plot_t_xings: bool=False
     title: str=None
     save_folder: str=None
     experiments: list = None
