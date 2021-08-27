@@ -79,6 +79,7 @@ class Settings_analyze_local:
     plot_targets: bool=False
     plot_homings: bool=False
     plot_t_xings: bool=False
+    plot_trial: bool=False
     title: str=None
     save_folder: str=None
     experiments: list = None

@@ -3,9 +3,9 @@ from opto_analysis.utils.settings_objects import Settings_visualize
 settings_visualize = Settings_visualize(
 
     laser_trials=False,
-    escape_trials=False,
+    escape_trials=True,
     homing_trials = False,
-    t_xing_trials = True,
+    t_xing_trials = False,
     
     display_trail=True,
     display_tracking=False,
@@ -22,7 +22,7 @@ settings_visualize = Settings_visualize(
     seconds_after_homing = 3,
     seconds_after_threshold_crossing = 3,
 
-    save_folder = "D:\\data\\Paper II\\trial clips\\",
+    save_folder = "D:\\data\\Paper II",
 
     by_experiment=False,
     experiments = [''],

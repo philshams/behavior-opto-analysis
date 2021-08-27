@@ -6,6 +6,7 @@ from opto_analysis.analyze.stats_funcs import permutation_test, print_stat_test_
 from opto_analysis.analyze.analysis_funcs import trial_is_eligible
 from opto_analysis.utils.directory import Directory
 import matplotlib.pyplot as plt
+import matplotlib.patches as ptch
 import numpy as np
 
 class Analyze():
@@ -29,12 +30,14 @@ class Analyze():
             if 'homing' in analysis_type:  self.color_by = 'target'
             if 'laser'  in analysis_type:  self.color_by = 'time'
             if 't xing'  in analysis_type: self.color_by = 'speed'
+            if 'trial'   in analysis_type: self.color_by = 'speed'
         if 'target'  in analysis_type and not self.color_by in ['target', 'session','trial','']:
             self.color_by = 'target'
         if self.settings.leftside_only:  self.title += " (leftside)"
         if self.settings.rightside_only: self.title += " (rightside)"   
         if 'traject' in analysis_type and self.settings.reflect_trajectories: self.title += " (reflect)"
         if analysis_type=='escape trajectories': self.stim_type='audio'
+        if analysis_type=='trial trajectory':    self.stim_type='audio'
         if analysis_type=='escape targets':      self.stim_type='audio'
         if analysis_type=='laser trajectories':  self.stim_type='laser'
         if analysis_type=='homing trajectories': self.stim_type='homing'
@@ -44,8 +47,16 @@ class Analyze():
     def trajectories(self):
         self.extract_data()
         self.initialize_trajectory_plot()
-        self.plot_trajectories()
+        for trial in self.trials_to_plot:
+            self.plot_trajectory(trial)
         self.save_plot()
+
+    def single_trial(self):
+        self.extract_data()
+        for trial in self.trials_to_plot:
+            self.initialize_trajectory_plot()
+            self.plot_single_trial(trial)
+            self.save_plot()
 
     def distribution(self):
         self.extract_data()
@@ -55,7 +66,7 @@ class Analyze():
         self.plot_scatterplot()
         self.save_plot()
 
-# ----DATA EXTRACTION FUNCS----------------------------------------------
+# ----DATA EXTRACTION FUNCS---------------------------------------------
     def extract_data(self):
         for session_ID in self.session_IDs:
             self.open_session_data(session_ID) 
@@ -85,11 +96,10 @@ class Analyze():
             trial                          = create_trial_dict(self, trial_start_idx, trial_end_idx, epoch)
             self.trials_to_plot.append(trial)
         
-# ----STATISTICS FUNCS---------------------------------------------------
+# ----STATISTICS FUNCS--------------------------------------------------
     def do_statistics(self):
-        if not 'trajectories' in self.analysis_type:
-            self.compile_all_trials_data()
-            self.run_permutation_tests()
+        self.compile_all_trials_data()
+        self.run_permutation_tests()
 
     def compile_all_trials_data(self):
         for trial in self.trials_to_plot:
@@ -104,7 +114,7 @@ class Analyze():
             p = permutation_test(self.data_y,self.data_x,self.data_session_num,group_1=1,group_2=group_num,iterations=1000,two_tailed=self.settings.two_tailed_test)
             print_stat_test_results(p, self.analysis_type, self.settings.two_tailed_test, group_1=1, group_2=group_num,)
        
-# ----PLOTTING DATA------------------------------------------------------
+# ----PLOTTING DATA-----------------------------------------------------
     def initialize_data_plot(self):
         self.fig, self.ax = plt.subplots(figsize=(self.num_of_groups*2, 9))
         self.fig.canvas.set_window_title(self.title) 
@@ -136,13 +146,12 @@ class Analyze():
             median_line = self.ax.plot([group_num-width/2.15, group_num+width/2.1], [median, median], color=(0,0,0), linewidth=3)
 
     def save_plot(self):
-            # plt.ion()
-            plt.show()
-            plot_path = Directory(self.settings.save_folder, analysis_type=self.analysis_type, plot=True).\
-                        file_name(title=self.title, color_by = self.color_by)
-            self.fig.savefig(plot_path, bbox_inches='tight', pad_inches=0) 
+        plt.show()
+        plot_path = Directory(self.settings.save_folder, experiment=self.session.experiment, analysis_type=self.analysis_type, stim_type = self.stim_type, plot=True).\
+                    file_name(self.session.mouse, self.trial_num, self.minutes_into_session, self.title, self.color_by)
+        self.fig.savefig(plot_path, bbox_inches='tight', pad_inches=0) 
 
-# ----PLOTTING TRAJECTORIES-----------------------------------------------
+# ----PLOTTING TRAJECTORIES---------------------------------------------
     def initialize_trajectory_plot(self):
         size = self.session.video.rendering_size_pixels
         self.fig, self.ax = plt.subplots(figsize=(9,9))
@@ -154,8 +163,54 @@ class Analyze():
         self.ax.add_artist(circle)
         self.ax.invert_yaxis()
         format_axis(self)
+        self.trial_num = None
+        self.minutes_into_session = None    
 
-    def plot_trajectories(self):
-        for trial in self.trials_to_plot:
-            if self.color_by in ['speed', 'speed+RT','time']: gradient_line(self, trial)
-            else:                                             solid_line(self, trial)        
+    def plot_single_trial(self, trial):
+        self.plot_trajectory(trial)
+        self.plot_silhouettes(trial)
+        self.trial_num            = trial['trial count']
+        self.minutes_into_session = np.round(trial['trial start'] / self.session.video.fps / 60) 
+
+    def plot_trajectory(self, trial):
+        if self.color_by in ['speed', 'speed+RT','time']: gradient_line(self, trial)
+        else:                                             solid_line(self, trial)   
+
+    def plot_silhouettes(self, trial, mouse_size: float=38, color: tuple=(.7,.7,.7)):
+
+        colors = generate_list_of_colors(self.color_by, self.stim_type, trial['epoch'], trial['speed'], RT=trial['escape initiation idx'], object_to_color='trial')
+
+        frames_to_illustrate = np.concatenate((np.ones(1, dtype=int) * trial['trial start'], np.linspace(trial['trial start'] + trial['escape initiation idx'], trial['escape end idx']-2, num=6, dtype=int)))
+
+        for i, idx in enumerate(frames_to_illustrate): 
+
+            head_dir = 180-self.tracking_data['head_dir'][idx]
+            neck_dir = 180-self.tracking_data['neck_dir'][idx]
+            body_dir = 180-self.tracking_data['body_dir'][idx]
+            upper_body_dir = np.mean((neck_dir, body_dir))
+            lower_body_dir = np.mean((body_dir, upper_body_dir))
+            shoulder_dir   = np.mean((neck_dir, upper_body_dir))
+
+            head_loc       = self.tracking_data['head_loc'][idx,:]
+            body_loc       = self.tracking_data['body_loc'][idx,:]
+            upper_body_loc = self.tracking_data['upper_body_loc'][idx, :]
+            lower_body_loc = np.mean((body_loc, upper_body_loc), axis=0)
+            neck_loc       = np.mean((head_loc, upper_body_loc), axis=0)
+            shoulder_loc   = np.mean((neck_loc, upper_body_loc), axis=0)
+
+            color = colors[idx - trial['trial start']]
+            if i==0: color = (.7,.7,.7)
+
+            head_ellipse       = ptch.Ellipse(head_loc,       width = int(mouse_size*.60), height = int(mouse_size * .23), angle = head_dir,       color=color, alpha=1, edgecolor=None)
+            neck_ellipse       = ptch.Ellipse(neck_loc,       width = int(mouse_size*.80), height = int(mouse_size * .38), angle = neck_dir,       color=color, alpha=1, edgecolor=None)
+            shoulder_ellipse   = ptch.Ellipse(shoulder_loc,   width = int(mouse_size*.50), height = int(mouse_size * .45), angle = shoulder_dir,   color=color, alpha=1, edgecolor=None)
+            upper_body_ellipse = ptch.Ellipse(upper_body_loc, width = int(mouse_size*.50), height = int(mouse_size * .45), angle = upper_body_dir, color=color, alpha=1, edgecolor=None)
+            lower_body_ellipse = ptch.Ellipse(lower_body_loc, width = int(mouse_size*.50), height = int(mouse_size * .45), angle = lower_body_dir, color=color, alpha=1, edgecolor=None)
+            body_ellipse       = ptch.Ellipse(body_loc,       width = int(mouse_size*.95), height = int(mouse_size * .58), angle = body_dir,       color=color, alpha=1, edgecolor=None)
+
+            self.ax.add_artist(head_ellipse)
+            self.ax.add_artist(neck_ellipse)
+            self.ax.add_artist(shoulder_ellipse)
+            self.ax.add_artist(upper_body_ellipse)
+            self.ax.add_artist(lower_body_ellipse)
+            self.ax.add_artist(body_ellipse)

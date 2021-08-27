@@ -28,6 +28,12 @@ def get_escape_initiation_idx(self, trial_start_idx: int) -> int:
     assert escape_initiation_idx < (self.settings.max_escape_duration*self.fps)
     return escape_initiation_idx
 
+def get_to_shelter_idx(self, trial_start_idx: int) -> int:
+    if self.stim_type in ['homing', 'threshold_crossing', 'laser']:  return None
+    to_shelter_idx = np.where(self.tracking_data['avg_loc'][trial_start_idx:, 1] > 850)[0][0]
+    return to_shelter_idx
+
+
 def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
     RT = get_escape_initiation_idx(self, trial_start_idx)
     y_at_escape_initiation = self.tracking_data['avg_loc'][trial_start_idx+RT, 1]

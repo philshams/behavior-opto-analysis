@@ -124,7 +124,7 @@ class Visualize():
         self.stim_status = generate_stim_status_array(self.onset_frames, self.stimulus_durations, self.seconds_before, self.seconds_after, self.fps)  
         #self.stim_status: 0~stimulus on, negative~pre stimulus, positive~post-stimulus
 
-        trial_video_path = Directory(self.settings.save_folder, experiment=self.session.experiment, stim_type=self.stim_type, tracking_video=self.settings.display_tracking).file_name(self.session.mouse, trial_num+1, minutes_into_session)
+        trial_video_path = Directory(self.settings.save_folder, experiment=self.session.experiment, stim_type=self.stim_type, tracking_video=self.settings.display_tracking).file_name(self.session.mouse, trial_num, minutes_into_session)
         self.trial_video = cv2.VideoWriter(trial_video_path, cv2.VideoWriter_fourcc(*"mp4v"), self.session.video.fps, (self.settings.size, self.settings.size), self.settings.display_tracking or self.settings.display_trail)
 
     def release_video_objects(self):

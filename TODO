@@ -5,7 +5,7 @@
 
 - do rendering videos/images
     - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
-    - RT as escape initiation?
+    - RT as homing run initiation?
     - entire session in one plot?
 
 - place preference (incl. loom expts) pipeline

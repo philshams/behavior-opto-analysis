@@ -3,7 +3,7 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["t xings PUNISH"], 
+analysis = analyses["single trial test"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
@@ -18,11 +18,11 @@ leftside_only = False,
 rightside_only = False,
 reflect_trajectories = False,
 
-color_by = '', 
+color_by = 'default', 
 # 'default' 'session' 'trial' 'target'  ''  || for all
 # 'speed'   'time'    'speed+RT'            || for trajectories
 
-save_folder = "D:\\data\\Paper II\\statistics"
+save_folder = "D:\\data\\Paper II"
 
 )
 

@@ -169,3 +169,11 @@ analyses["t xings PUNISH"] = \
     Settings_analyze_local( title='t xings PUNISH', 
                             plot_t_xings=True,
                             experiments=['block after 2nd edge vector'])
+
+# ----------SINGLE TRIALS------------------------------------
+
+analyses["single trial test"] = \
+    Settings_analyze_local( title='single trial test', 
+                            plot_trial = True, 
+                            by_session=True, by_experiment=False,
+                            sessions=[1])                    
