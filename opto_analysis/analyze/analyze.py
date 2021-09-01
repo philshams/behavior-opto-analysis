@@ -147,19 +147,19 @@ class Analyze():
 
     def save_plot(self):
         plt.show()
-        plot_path = Directory(self.settings.save_folder, experiment=self.session.experiment, analysis_type=self.analysis_type, stim_type = self.stim_type, plot=True).\
+        plot_path = Directory(self.settings.save_folder, experiment=self.session.experiment, analysis_type=self.analysis_type, stim_type = self.stim_type, media_type='plot').\
                     file_name(self.session.mouse, self.trial_num, self.minutes_into_session, self.title, self.color_by)
         self.fig.savefig(plot_path, bbox_inches='tight', pad_inches=0) 
 
 # ----PLOTTING TRAJECTORIES---------------------------------------------
     def initialize_trajectory_plot(self):
-        size = self.session.video.rendering_size_pixels
+        size = self.session.video.registration_size
         self.fig, self.ax = plt.subplots(figsize=(9,9))
-        self.ax.set_xlim([0, size])
-        self.ax.set_ylim([0, size])
+        self.ax.set_xlim([0, size[0]])
+        self.ax.set_ylim([0, size[1]])
         if self.stim_type in ['laser', 'homing', 'threshold_crossing']: 
-            self.ax.plot([size/2-250, size/2+250], [size/2, size/2], color=[0, 0, 0], linewidth=5) #obstacle
-        circle = plt.Circle((size/2, size/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
+            self.ax.plot([size[0]/2-250, size[1]/2+250], [size[0]/2, size[1]/2], color=[0, 0, 0], linewidth=5) #obstacle
+        circle = plt.Circle((size[0]/2, size[1]/2), radius=460, color=[0, 0, 0], linewidth=1, fill=False)
         self.ax.add_artist(circle)
         self.ax.invert_yaxis()
         format_axis(self)

@@ -55,7 +55,6 @@ class Settings_visualize:
     display_trail:bool=True
     rapid: bool=True
     display_stimulus: bool=True
-    size: int=1024
     seconds_before_audio: int = 3
     seconds_before_laser: int = 3
     seconds_before_homing: int = 3

@@ -3,19 +3,16 @@
 
 ------- next up ---------
 
-- do rendering videos/images
-    - try: colored line plus occasional silhouettes (try matplotlib) w/ onset silhouette as well as RT silhouette (and arrival silhouette?) (and intermittent silhouettes?)
-    - RT as homing run initiation?
-    - entire session in one plot?
-
 - place preference (incl. loom expts) pipeline
 
 - speed heatmap plot
 
 - find dlc errors and retrain all videos
 
-- rendering size ~ tuple, make size vs. video height/width more principled
-
 - characterize EFFECT OF LASER on POST-THRESHOLD-CROSSING BEHAVIOR: directness to edge;  which edge taken; time to shelter; for threshold crossings: laser vs. no laser (spont threshold crossings in non block EV) vs laser (non block EV); right vs left; trajectories for a certain distance or time
 
 - characterize exploration and effect of laser (e.g. does it change the amount of time spent near edge? The SR (time-discounted prob) of edge from threat zone? do the other laser params?)
+
+- RT as homing run initiation?
+
+- make neater

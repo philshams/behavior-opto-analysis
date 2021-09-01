@@ -37,7 +37,7 @@ def get_to_shelter_idx(self, trial_start_idx: int) -> int:
 def escape_starts_near_threat_zone(self, trial_start_idx: int)->bool:
     RT = get_escape_initiation_idx(self, trial_start_idx)
     y_at_escape_initiation = self.tracking_data['avg_loc'][trial_start_idx+RT, 1]
-    escape_initiation_near_threat_zone = y_at_escape_initiation < self.session.video.height/2 - 100
+    escape_initiation_near_threat_zone = y_at_escape_initiation < self.session.video.registration_size[1]/2 - 100
     return escape_initiation_near_threat_zone
 
 def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> float:
@@ -66,18 +66,18 @@ def get_various_x_and_y_locations(self, x: np.ndarray, y: np.ndarray, RT: int) -
     x_start  = x[RT]
     y_goal   = self.session.video.shelter_location[1]
     x_goal   = self.session.video.shelter_location[0]
-    y_center = self.session.video.height/2
+    y_center = self.session.video.registration_size[1]/2
     x_center = x[np.argmin(abs(y-y_center))]
     y_target         = y_center - 100 # 10cm in front of the wall
     x_target         = x[np.argmin(abs(y-y_target))]
     y_obstacle_edge  = y_center
     _, x_homing_vector = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
-    x_obstacle_edge = self.session.video.width/2 + np.sign(x_target - x_homing_vector) * 250
+    x_obstacle_edge = self.session.video.registration_size[0]/2 + np.sign(x_target - x_homing_vector) * 250
     return x_start, y_start, x_goal, y_goal, x_center, y_center, x_target, y_target, x_obstacle_edge, y_obstacle_edge, x_homing_vector
 
 def gets_to_edge(self, x: np.ndarray, y: np.ndarray) -> int:
-    x_values_to_examine = x[y>self.session.video.height/2-50]
-    x_dist_from_center  = abs(x_values_to_examine - self.session.video.width/2)
+    x_values_to_examine = x[y>self.session.video.registration_size[1]/2-50]
+    x_dist_from_center  = abs(x_values_to_examine - self.session.video.registration_size[0]/2)
     if (x_dist_from_center>250).any(): return 1
     else: return 0
 
@@ -86,11 +86,11 @@ def get_which_side(self, trial_start_idx: int) -> str:
         frames_before_laser = min(abs(trial_start_idx - np.array([onsets[0] for onsets in self.session.laser.onset_frames])))
         if frames_before_laser < 2 * self.session.video.fps: return 'left'
 
-    y_center = self.session.video.height/2 - 50 * (self.stim_type=='homing')
+    y_center = self.session.video.registration_size[1]/2 - 50 * (self.stim_type=='homing')
     cross_center_idx = np.where(self.tracking_data['avg_loc'][trial_start_idx:, 1] >= y_center)[0][0]
     x_at_cross = self.tracking_data['avg_loc'][trial_start_idx+cross_center_idx, 0]
-    if x_at_cross < self.session.video.width/2: which_side = 'left'
-    if x_at_cross > self.session.video.width/2: which_side = 'right'
+    if x_at_cross < self.session.video.registration_size[0]/2: which_side = 'left'
+    if x_at_cross > self.session.video.registration_size[0]/2: which_side = 'right'
     return which_side
 
 def fake_trial(self, trial_start_idx: int) -> bool:

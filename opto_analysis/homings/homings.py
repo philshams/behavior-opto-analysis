@@ -73,11 +73,11 @@ class get_Homings:
         start_loc_y                   = self.tracking_data['avg_loc'][self.onset_frames, 1]
         onset_time_in_session         = self.onset_frames / self.session.video.fps / 60
 
-        sufficient_move_toward_shelter = change_in_distance_to_shelter >  self.settings.min_change_in_dist_to_shelter
-        sufficient_run_duration        = homing_run_durations          > (self.settings.padding_duration * self.session.video.fps + 1)
-        starts_in_threat_area          = (start_loc_y                  <  self.settings.threat_area_height) * \
-        (abs(start_loc_x - self.session.video.rendering_size_pixels/2) <  self.settings.threat_area_width/2)
-        starts_late_enough             = onset_time_in_session         <  self.settings.max_time_within_session
+        sufficient_move_toward_shelter = change_in_distance_to_shelter    >  self.settings.min_change_in_dist_to_shelter
+        sufficient_run_duration        = homing_run_durations             > (self.settings.padding_duration * self.session.video.fps + 1)
+        starts_in_threat_area          = (start_loc_y                     <  self.settings.threat_area_height) * \
+        (abs(start_loc_x - self.session.video.registration_size[0]/2) <  self.settings.threat_area_width/2)
+        starts_late_enough             = onset_time_in_session            <  self.settings.max_time_within_session
 
         applicable_runs         = sufficient_move_toward_shelter * sufficient_run_duration * starts_in_threat_area * starts_late_enough
         self.onset_frames       = np.array([[onset_frame] for onset_frame in self.onset_frames[applicable_runs]])

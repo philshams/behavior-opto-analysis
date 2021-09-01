@@ -29,8 +29,8 @@ class get_Threshold_crossings:
         open_tracking_data(self) # generates self.tracking_data
         self.get_speed_along_each_axis()
 
-        height = self.session.video.rendering_size_pixels
-        width  = self.session.video.rendering_size_pixels
+        height = self.session.video.registration_size[1]
+        width  = self.session.video.registration_size[0]
         self.roi = np.zeros((height, width))
         if self.session.experiment in ['block edge vectors', 'block after 2nd edge vector', 'open field','no laser']:
             cv2.circle(self.roi, (int(width/2-250), int(height/2 - 50)), 200, 100, -1)

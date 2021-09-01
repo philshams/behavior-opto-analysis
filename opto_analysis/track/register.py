@@ -23,7 +23,7 @@ def load_fisheye_correction_map(video: object):
     return fisheye_correction_map
     
 def generate_rendered_arena(session: Session, size: int) -> object:
-    rendered_arena = 255 * np.ones((size, size)).astype(np.uint8)
+    rendered_arena = 255 * np.ones(size).astype(np.uint8)
     #! This section must be modified with a new section for each type of arena (default: 92-cm circle with a square shelter and a 50cmx10cm removable rectangle in the middle)
     if "place preference" in session.experiment:
         pass #TODO: make place preference arena

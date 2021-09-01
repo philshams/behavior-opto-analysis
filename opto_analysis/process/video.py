@@ -15,7 +15,7 @@ class Video:
     height: int
     width: int
     fisheye_correction_file: str
-    rendering_size_pixels: int #TODO: make this a tuple (width, height)
+    registration_size: tuple
     pixels_per_cm: int
     tracking_data_file: str
     #! replace these values with your own parameters
@@ -31,14 +31,14 @@ def get_Video(session: Session, settings: object, registration_transform: object
     height = int(video_object.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(video_object.get(cv2.CAP_PROP_FRAME_WIDTH))
     fisheye_correction_file = settings.fisheye_correction_file
-    rendering_size_pixels = settings.size
+    registration_size = settings.size
     pixels_per_cm = settings.pixels_per_cm
     tracking_data_file = os.path.join(session.file_path, "tracking")
 
-    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
+    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, registration_size, pixels_per_cm, tracking_data_file)
     if settings.skip_registration or (isinstance(registration_transform, np.ndarray) and not settings.create_new_registration): 
         return video
 
     registration_transform = Register(session, video, video_object).transform
-    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, rendering_size_pixels, pixels_per_cm, tracking_data_file)
+    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, registration_size, pixels_per_cm, tracking_data_file)
     return video

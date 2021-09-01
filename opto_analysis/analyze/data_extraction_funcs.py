@@ -18,7 +18,7 @@ def create_trial_dict(self, trial_start_idx: int, trial_end_idx: int, epoch: str
     trial['which side']            = get_which_side(self, trial_start_idx)
 
     if'trajectories' in self.analysis_type and self.settings.reflect_trajectories and get_which_side(self, trial_start_idx)=='right':
-        trial['trajectory x']  = self.session.video.rendering_size_pixels - trial['trajectory x']
+        trial['trajectory x']  = self.session.video.registration_size[0] - trial['trajectory x']
     
     if self.stim_type in ['homing', 'threshold_crossing']:
         trial['escape target score'] = get_escape_target_score(self, self.tracking_data['head_loc'][trial_start_idx:trial_end_idx, 0], \
@@ -38,6 +38,6 @@ def get_trial_start_and_end(self, onset_frames: list, stim_durations: list, epoc
         trial_start_idx = int(onset_frames[-1] + stim_durations[-1]*self.fps)
         trial_end_idx = trial_start_idx + self.fps * self.settings.post_laser_seconds_to_plot
     if self.stim_type=='laser' and self.session.experiment in ['block pre edge vectors', 'block edge vectors', 'block after 2nd edge vector']:
-        cross_center_idx = np.where(self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 1] > (self.session.video.rendering_size_pixels/2) )[0]
+        cross_center_idx = np.where(self.tracking_data['avg_loc'][trial_start_idx:trial_end_idx, 1] > (self.session.video.registration_size[1]/2) )[0]
         if cross_center_idx.size: trial_end_idx = trial_start_idx + cross_center_idx[0]
     return trial_start_idx, trial_end_idx
