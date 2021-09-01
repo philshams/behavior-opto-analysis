@@ -15,6 +15,7 @@ class Visualize():
         open_tracking_data(self)
 
     def trials(self, stim_type):
+        print("\nPress 'q' to quit and 'n' to move to the next video")
         for trial_num, (onset_frames, stimulus_durations) in enumerate(zip(self.session.__dict__[stim_type].onset_frames, self.session.__dict__[stim_type].stimulus_durations)):
             self.set_up_videos(stim_type, trial_num, onset_frames, stimulus_durations)            
             for i in self.frames_in_this_trial:

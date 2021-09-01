@@ -3,7 +3,7 @@ from opto_analysis.utils.open_tracking_data import open_tracking_data
 from opto_analysis.analyze.plot_funcs import *
 from opto_analysis.analyze.data_extraction_funcs import *
 from opto_analysis.analyze.stats_funcs import permutation_test, print_stat_test_results
-from opto_analysis.analyze.analysis_funcs import trial_is_eligible
+from opto_analysis.analyze.trial_eligibility_funcs import trial_is_eligible
 from opto_analysis.utils.directory import Directory
 import matplotlib.pyplot as plt
 import matplotlib.patches as ptch

@@ -31,6 +31,12 @@ analyses["laser PUNISH"] = \
 
 # ----------ESCAPES----------------------------------------------
 
+analyses["escapes test"] = \
+    Settings_analyze_local( title='escapes trajectories (test)', 
+                            plot_escape = True, 
+                            by_session=True, by_experiment=False,
+                            sessions=[27])
+
 analyses["escapes"] = \
     Settings_analyze_local( title='escapes trajectories', 
                             plot_escape = True, 

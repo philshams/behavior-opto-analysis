@@ -3,11 +3,11 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["escapes OPEN"], 
+analysis = analyses["escapes test"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
-max_escape_duration = 9,
+max_escape_duration = 10,
 post_laser_seconds_to_plot = 0,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 20,

@@ -64,3 +64,7 @@ click_in_actual_arena_coordinates = list(np.matmul(np.append(inverse_transform,n
 
 
     click_in_actual_arena_coordinates = list(np.matmul(inverse_transform, [x, y, 1])[0:2].astype(int))                   
+
+                self.tracking_data[bodypart] = np.matmul(registration_transform, np.concatenate((self.fisheye_corrected_tracking_data_array[:, i, 0:1].T,
+                                                                                             self.fisheye_corrected_tracking_data_array[:, i, 1:2].T,
+                                                                                               np.ones((1, session.video.num_frames))), 0))[:2, :].T
