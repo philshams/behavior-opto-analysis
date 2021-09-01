@@ -1,4 +1,4 @@
-from opto_analysis.utils.open_tracking_data import open_tracking_data, index_onset_and_duration_by_stim_type
+from opto_analysis.utils.open_tracking_data import open_tracking_data
 from opto_analysis.track.register import load_fisheye_correction_map, correct_and_register_frame
 from opto_analysis.utils.color_funcs import get_color_based_on_speed, get_colormap
 from opto_analysis.utils.generate_stim_status_array import generate_stim_status_array
@@ -12,7 +12,6 @@ class Visualize():
         self.settings = settings
         self.fisheye_correction_map = load_fisheye_correction_map(session.video)
         self.delay_between_frames = int(1000/self.session.video.fps*(not self.settings.rapid)+self.settings.rapid)
-        index_onset_and_duration_by_stim_type(self)
         open_tracking_data(self)
 
     def trials(self, stim_type):

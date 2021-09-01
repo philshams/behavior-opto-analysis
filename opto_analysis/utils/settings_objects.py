@@ -4,6 +4,7 @@ from dataclasses import dataclass
 class Settings_process:
     create_new_registration: bool=False
     skip_registration: bool=True
+    registration: str='partial affine'
     fisheye_correction_file: str=None
     size: int=1024
     pixels_per_cm : int=10

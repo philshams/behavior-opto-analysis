@@ -12,7 +12,7 @@ settings_track = Settings_track(
     experiments = ['open field'],
 
     by_session=True,
-    sessions=[x for x in range(10,48)],
+    sessions=[x for x in [27]],
 
     dlc_settings_file='D:\\data\\DLC_nets\\opto-philip-2021-07-26\\config.yaml',
     inverse_fisheye_correction_file = '.\\sample_data\\inverse_fisheye_maps.npy' # remove setting if n/a

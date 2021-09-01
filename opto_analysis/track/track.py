@@ -110,10 +110,14 @@ class Track():
 
     def register_tracking_data(self, session):
         for i, bodypart in enumerate(self.tracking_data['bodyparts']):
-            self.tracking_data[bodypart] = np.matmul(np.append(session.video.registration_transform, np.zeros((1, 3)), 0),
-                                                     np.concatenate((self.fisheye_corrected_tracking_data_array[:, i, 0:1].T,
-                                                                     self.fisheye_corrected_tracking_data_array[:, i, 1:2].T,
-                                                                     np.ones((1, session.video.num_frames))), 0))[:2, :].T
+            if 'affine' in session.video.registration_type:
+                registration_transform = np.append(session.video.registration_transform, np.zeros((1, 3)), 0)
+            if 'homography' in session.video.registration_type:
+                registration_transform = session.video.registration_transform
+
+            self.tracking_data[bodypart] = np.matmul(registration_transform, np.concatenate((self.fisheye_corrected_tracking_data_array[:, i, 0:1].T,
+                                                                                             self.fisheye_corrected_tracking_data_array[:, i, 1:2].T,
+                                                                                               np.ones((1, session.video.num_frames))), 0))[:2, :].T
             self.tracking_data[bodypart][self.tracking_data[bodypart]<0] = 0
 
     def compute_avg_bodypart_locations(self):

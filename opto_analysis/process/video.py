@@ -11,10 +11,11 @@ class Video:
     num_frames: int
     video_file: str
     fps: int
-    registration_transform: object
     height: int
     width: int
     fisheye_correction_file: str
+    registration_transform: object
+    registration_type: str
     registration_size: tuple
     pixels_per_cm: int
     tracking_data_file: str
@@ -32,13 +33,14 @@ def get_Video(session: Session, settings: object, registration_transform: object
     width = int(video_object.get(cv2.CAP_PROP_FRAME_WIDTH))
     fisheye_correction_file = settings.fisheye_correction_file
     registration_size = settings.size
+    registration_type = settings.registration
     pixels_per_cm = settings.pixels_per_cm
     tracking_data_file = os.path.join(session.file_path, "tracking")
 
-    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, registration_size, pixels_per_cm, tracking_data_file)
+    video = Video(num_frames, video_file, fps, height, width, fisheye_correction_file, registration_transform, registration_type, registration_size, pixels_per_cm, tracking_data_file)
     if settings.skip_registration or (isinstance(registration_transform, np.ndarray) and not settings.create_new_registration): 
         return video
 
     registration_transform = Register(session, video, video_object).transform
-    video = Video(num_frames, video_file, fps, registration_transform, height, width, fisheye_correction_file, registration_size, pixels_per_cm, tracking_data_file)
+    video = Video(num_frames, video_file, fps, height, width, fisheye_correction_file, registration_transform, registration_type, registration_size, pixels_per_cm, tracking_data_file)
     return video

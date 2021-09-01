@@ -1,7 +1,11 @@
 -------- on now ---------
+- eligibility: must start in TZ, and end at 6 total escapes
 
+- investigate offset in registration...
 
 ------- next up ---------
+
+- make neater, update tests
 
 - place preference (incl. loom expts) pipeline
 
@@ -14,5 +18,3 @@
 - characterize exploration and effect of laser (e.g. does it change the amount of time spent near edge? The SR (time-discounted prob) of edge from threat zone? do the other laser params?)
 
 - RT as homing run initiation?
-
-- make neater
