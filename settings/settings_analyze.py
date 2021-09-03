@@ -3,22 +3,23 @@ from settings.analyses import analyses
 
 settings_analyze = Settings_analyze(
 
-analysis = analyses["escapes test"], 
+analysis = analyses["single trial homing"], 
 # see types_of_analysis.py for options
 
 max_num_trials = 6,
-max_escape_duration = 10,
+max_escape_duration = 9,
 post_laser_seconds_to_plot = 0,
 min_distance_from_shelter = 10,
 escape_initiation_speed = 20,
 edge_vector_threshold = 0.68,
+binarize_statistics = True,
 two_tailed_test = True,
 
 leftside_only = False,
 rightside_only = False,
 reflect_trajectories = False,
 
-color_by = 'default', 
+color_by = 'speed', 
 # 'default' 'session' 'trial' 'target'  ''  || for all
 # 'speed'   'time'    'speed+RT'            || for trajectories
 

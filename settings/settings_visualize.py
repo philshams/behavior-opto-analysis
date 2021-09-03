@@ -2,9 +2,9 @@ from opto_analysis.utils.settings_objects import Settings_visualize
 
 settings_visualize = Settings_visualize(
 
-    laser_trials=True,
+    laser_trials=False,
     escape_trials=True,
-    homing_trials = False,
+    homing_trials = True,
     t_xing_trials = False,
     
     display_trail=True,
@@ -24,9 +24,9 @@ settings_visualize = Settings_visualize(
 
     save_folder = "D:\\data\\Paper II",
 
-    by_experiment=False,
-    experiments = [''],
+    by_experiment=True,
+    experiments = ['no laser'],
 
-    by_session=True,
+    by_session=False,
     sessions=[27],
 )

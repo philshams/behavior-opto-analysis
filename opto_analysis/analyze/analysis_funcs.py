@@ -56,7 +56,7 @@ def gets_to_edge(self, x: np.ndarray, y: np.ndarray) -> int:
     else: return 0
 
 def get_which_side(self, trial_start_idx: int) -> str:
-    if self.stim_type in ['homing', 'threshold_crossing']:
+    if self.stim_type in ['homing', 'threshold_crossing'] and 'block' in self.session.experiment:
         frames_before_laser = min(abs(trial_start_idx - np.array([onsets[0] for onsets in self.session.laser.onset_frames])))
         if frames_before_laser < 2 * self.session.video.fps: return 'left'
 

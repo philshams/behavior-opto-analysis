@@ -25,10 +25,12 @@ def permutation_test(data: np.ndarray, groups: np.ndarray, sessions: np.ndarray,
     p = 1 - percentileofscore(null_distribution, test_statistic, kind='mean') / 100
     return p
 
-def print_stat_test_results(p, comparison: str, two_tailed: bool, group_1: int, group_2: int):
+def print_stat_test_results(p, comparison: str, two_tailed: bool, binarized: bool, group_1: int, group_2: int):
     if p > 0.0001: p = np.round(p, 4)
     if p < 0.05: result = 'SIGNIFICANT.'
     else:        result = 'not significant'
     if two_tailed: test_type = 'Two-tailed'
     else:          test_type = 'One-tailed'
-    print("\n{} permutation test on {}\n  group {} vs. group {}\n  p = {} \n  {}".format(test_type, comparison, group_1, group_2, p, result))
+    if binarized:  test_data = ', binarized'
+    else:          test_data = ''
+    print("\n{}{} permutation test on {}\n  group {} vs. group {}\n  p = {} \n  {}".format(test_type, test_data, comparison, group_1, group_2, p, result))

@@ -1,5 +1,6 @@
 -------- on now ---------
 
+- fix single-trial homings silhouettes
 
 
 ------- next up ---------
@@ -17,3 +18,5 @@
 - characterize exploration and effect of laser (e.g. does it change the amount of time spent near edge? The SR (time-discounted prob) of edge from threat zone? do the other laser params?)
 
 - RT as homing run initiation?
+
+- EVs only count after having discovered the shelter?

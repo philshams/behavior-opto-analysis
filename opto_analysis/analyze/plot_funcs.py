@@ -16,7 +16,7 @@ def get_plot_color(self, trial: dict, plot_type:str='trajectory') -> tuple:
         if self.color_by=='trial':   self.color_counter = trial['trial count']
         if self.color_by=='session': self.color_counter = trial['session count']
         color = get_colormap(object_to_color='plot', epoch=trial['epoch'], plot_type=plot_type)[self.color_counter%16]
-    if self.stim_type in ['homing', 'threshold_crossing']:
+    if self.stim_type in ['homing', 'threshold_crossing'] and 'block' in self.session.experiment:
         if trial['frames before laser'] < 6*self.session.video.fps and trial['which side']=='left':
             # color[:3] = color[:3]/20
             color = (0,0,0,1)

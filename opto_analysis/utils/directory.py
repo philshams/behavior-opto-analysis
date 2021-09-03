@@ -10,9 +10,8 @@ class Directory():
 
         if stim_type or 'trial' in analysis_type: self.subfolder = 'trials'
         if analysis_type:
-            if 'trajectories' in analysis_type:     self.subfolder = 'trajectories'
-            else:                                     self.subfolder = 'statistics'
-
+            if 'trajectories' in analysis_type: self.subfolder = 'trajectories'
+            if 'targets' in analysis_type:      self.subfolder = 'statistics'
             if 'trajectories' in analysis_type: analysis_type = analysis_type.replace(' trajectories', '')
             if 't xing' in analysis_type:       analysis_type = analysis_type.replace('t xing', 'threshold crossing')
         

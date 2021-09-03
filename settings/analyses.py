@@ -78,14 +78,15 @@ analyses["escape targets EV vs PRE vs POST"] = \
                             group_3 = ['block post edge vectors'])
 
 analyses["escape targets all"] = \
-    Settings_analyze_local( title='escape targets EV vs PRE vs POST vs PUNISH vs OPEN', 
+    Settings_analyze_local( title='escape targets OPEN vs PRE vs POST vs PUNISH vs NL vs EV', 
                             plot_targets=True,
                             compare=True, 
-                            group_1 = ['block edge vectors'], 
+                            group_1 = ['open field'], 
                             group_2 = ['block pre edge vectors'], 
                             group_3 = ['block post edge vectors'],
                             group_4 = ['block after 2nd edge vector'],
-                            group_5 = ['open field'])    
+                            group_5 = ['no laser'],    
+                            group_6 = ['block edge vectors'])
 
 analyses["escape targets naive vs exp"] = \
     Settings_analyze_local( title='escapes targets naive vs exp', 
@@ -132,6 +133,11 @@ analyses["homings"] = \
                             plot_homings=True,
                             experiments=['block edge vectors'])
 
+analyses["homings NL"] = \
+    Settings_analyze_local( title='homings EV', 
+                            plot_homings=True,
+                            experiments=['no laser'])                            
+
 analyses["homings PRE"] = \
     Settings_analyze_local( title='homings PRE', 
                             plot_homings=True,
@@ -161,6 +167,11 @@ analyses["t xings"] = \
                             plot_t_xings=True,
                             experiments=['block edge vectors'])
 
+analyses["t xings NL"] = \
+    Settings_analyze_local( title='t xings NL', 
+                            plot_t_xings=True,
+                            experiments=['no laser'])                            
+
 analyses["t xings PRE"] = \
     Settings_analyze_local( title='t xings PRE', 
                             plot_t_xings=True,
@@ -182,4 +193,11 @@ analyses["single trial test"] = \
     Settings_analyze_local( title='single trial test', 
                             plot_trial = True, 
                             by_session=True, by_experiment=False,
-                            sessions=[1])                    
+                            sessions=[1])   
+
+analyses["single trial homing"] = \
+    Settings_analyze_local( title='single trial homing', 
+                            plot_homing = True, 
+                            # by_session=True, by_experiment=False,
+                            # sessions=[32])   
+                            experiments=['no laser'])   

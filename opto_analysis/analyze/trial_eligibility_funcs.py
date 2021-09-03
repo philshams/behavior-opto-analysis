@@ -1,12 +1,14 @@
 from opto_analysis.analyze.analysis_funcs import get_escape_initiation_idx, get_which_side
 
 def trial_is_eligible(self, onset_frames: list) -> bool:
-    eligible = ((self.stim_type in ['laser', 'homing', 'threshold_crossing']) and not fake_trial(self, onset_frames[0])) \
+    eligible = (self.stim_type in ['laser', 'homing', 'threshold_crossing'] \
                     or (successful_escape(self, onset_frames) \
                         and escape_starts_near_threat_zone(self, onset_frames[0]) \
-                        and self.num_successful_escapes_this_session <  self.settings.max_num_trials) \
+                        and self.num_successful_escapes_this_session <  self.settings.max_num_trials)) \
                     and (not self.settings.leftside_only  or get_which_side(self, onset_frames[0])=='left')  \
-                    and (not self.settings.rightside_only or get_which_side(self, onset_frames[0])=='right') 
+                    and (not self.settings.rightside_only or get_which_side(self, onset_frames[0])=='right') \
+                    and not fake_trial(self, onset_frames[0]) \
+                    # and self.trial_num in [1]
     return eligible
 
 def successful_escape(self, onset_frames: list) -> bool:

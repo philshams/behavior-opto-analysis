@@ -80,6 +80,7 @@ class Settings_analyze_local:
     plot_homings: bool=False
     plot_t_xings: bool=False
     plot_trial: bool=False
+    plot_homing: bool=False
     title: str=None
     save_folder: str=None
     experiments: list = None
@@ -105,7 +106,8 @@ class Settings_analyze_global:
     post_laser_seconds_to_plot: int = 5
     min_distance_from_shelter: int = 10
     escape_initiation_speed: float = 20
-    edge_vector_threshold: float = 0.65
+    edge_vector_threshold: float = 0.68
+    binarize_statistics: bool = False
     two_tailed_test: bool=True
     leftside_only: bool=False
     rightside_only: bool=False

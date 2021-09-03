@@ -58,6 +58,15 @@ databank['session IDs'] = [
 # [46,6,      'open field',     True,       ""],
 # [47,7,      'open field',     True,       ""],
 
+# [48,0, 'block edge vectors (bedding)', False, ""],
+# [49,1, 'block edge vectors (bedding)', False, ""],
+# [50,2, 'block edge vectors (bedding)', False, ""],
+# [51,3, 'block edge vectors (bedding)', False, ""],
+# [52,4, 'block edge vectors (bedding)', True, ""],
+# [53,5, 'block edge vectors (bedding)', True, ""],
+# [54,6, 'block edge vectors (bedding)', True, ""],
+# [55,7, 'block edge vectors (bedding)', True, ""],
+
 [48,0, 'laser place preference (expt parameters)', True, "21MAR27_9714_place pref left"],
 [49,1, 'laser place preference (expt parameters)', True, "21MAR27_9717_place pref left"],
 [50,2, 'laser place preference (expt parameters)', True, "21MAR27_9719_place pref right"],
