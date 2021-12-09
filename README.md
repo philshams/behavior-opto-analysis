@@ -20,14 +20,24 @@ Opto analysis is a package for analyzing free-moving behavioral data during opto
   - **Both**: Install the package with the command ```pip install -e .```
 
 ## Usage
+![process](https://github.com/philshams/philshams/blob/main/process.JPG)
+To process data, verify data synchronization, and register videos, fill in the the file *./settings/settings_process.py* with your desired settings, and run the terminal command ```process```
+___
+![track](https://github.com/philshams/philshams/blob/main/track.JPG)
+To track data (DeepLabCut), fill in the the file *./settings/settings_track.py* with your desired settings, and run the command ```track```
+___
+![visualize](https://github.com/philshams/philshams/blob/main/visualize.JPG)
+<p float="left">
+<img src="https://github.com/philshams/philshams/blob/main/escape_gif.gif" width="300"/>
+<img src="https://github.com/philshams/philshams/blob/main/track_gif.gif" width="300"/>
+</p>
+To visualize trials, fill in the the file *./settings/settings_visualize.py* with your desired settings, and run the command ```visualize```. This  requires a trained DLC network.
 
-- To process data and verify synchronization, fill in the the file *./settings/settings_process.py* with your desired settings, and run the terminal command ```process```
+___
 
-- To track data (DeepLabCut), fill in the the file *./settings/settings_track.py* with your desired settings, and run the command ```track```
+![analyze](https://github.com/philshams/philshams/blob/main/analyze.JPG)
+To analyze and plot data, fill in the *./settings/analyses* with your desired analysis program options and then fill in *./settings/settings_analyze.py* with global analysis settings (including the program you'd like to run), and run the command ```analyze```
 
-- To visualize trials, fill in the the file *./settings/settings_visualize.py* with your desired settings, and run the command ```visualize```. This  requires a trained DLC network.
-
-- To analyze and plot data, fill in the the file *./settings/analyses* with your desired analysis program options and then fill in *./settings/settings_analyze.py* with your desired global analysis settings (including the program you'd like to run), and run the command ```analyze```
 
 ## Testing (devs)
 - In VS code: run test discovery and then run or debug the desired tests in the Test Explorer. Run each test in *./tests/test_run.py* to debug an entire workflow (processing, tracking, visualization, analysis)
