@@ -31,6 +31,7 @@ ___
 <img src="https://github.com/philshams/philshams/blob/main/escape_gif.gif" width="300"/>
 <img src="https://github.com/philshams/philshams/blob/main/track_gif.gif" width="300"/>
 </p>
+
 To visualize trials, fill in the the file *./settings/settings_visualize.py* with your desired settings, and run the command ```visualize```. This  requires a trained DLC network.
 
 ___
