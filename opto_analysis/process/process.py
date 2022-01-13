@@ -41,7 +41,7 @@ class Process():
         if stage==1:
             print('\n\n---')
             for key in self.session.__dict__.keys():
-                if key in ['name','number','mouse','date','previous_sessions']:
+                if key in ['name','number','mouse','previous_sessions']:
                     print(" {}: {}".format(key, self.session.__dict__[key]))
         if stage==2:
             print('')

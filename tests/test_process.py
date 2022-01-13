@@ -25,7 +25,6 @@ def collect_session_IDs_assertions(selected_session_IDs: object):
     assert selected_session_IDs[0, 4] == ".\\sample_data\\21MAR16_9718_block evs"
 
 def session_assertions(session):
-    assert session.date == '21MAR16'
     assert session.mouse == '9718'
     assert session.experiment == 'block edge vectors'
     assert session.daq_sampling_rate == 15000
