@@ -8,7 +8,7 @@ settings_homings = Settings_homings(
     min_change_in_dist_to_shelter = .2,
     max_time_within_session       = 20,
     threat_area_width             = 820, 
-    threat_area_height            = 275, #302,
+    threat_area_height            = 275, 
     subgoal_locations             = [(512-250, 512),(512+250, 512)],
 
     duration_after_crossing       = 6,
@@ -17,7 +17,7 @@ settings_homings = Settings_homings(
     experiments = ['block edge vectors'],
 
     by_session=True,
-    sessions=[x for x in range(48)]
+    sessions=[0]
 
 
 )

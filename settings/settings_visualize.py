@@ -24,9 +24,9 @@ settings_visualize = Settings_visualize(
 
     save_folder = "D:\\data\\Paper II",
 
-    by_experiment=True,
+    by_experiment=False,
     experiments = ['no laser'],
 
-    by_session=False,
-    sessions=[27],
+    by_session=True,
+    sessions=[0],
 )
