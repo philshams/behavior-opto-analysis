@@ -4,7 +4,7 @@ settings_visualize = Settings_visualize(
 
     laser_trials=False,
     escape_trials=True,
-    homing_trials = True,
+    homing_trials = False,
     t_xing_trials = False,
     
     display_trail=True,
@@ -22,7 +22,7 @@ settings_visualize = Settings_visualize(
     seconds_after_homing = 3,
     seconds_after_threshold_crossing = 3,
 
-    save_folder = "D:\\data\\Paper II",
+    save_folder = "..\\",
 
     by_experiment=False,
     experiments = ['no laser'],
