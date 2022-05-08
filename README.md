@@ -3,7 +3,7 @@
 
 # opto analysis
 
-Opto analysis is a package for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging in VS Code, but it can be extended to other systems upon request. 
+Opto analysis is a package for analyzing free-moving behavioral data during optogenetics experiments. It is currently optimized for and tested on Windows terminals with debugging in VS Code, but it can be extended to other systems upon request. It uses behavioral videos, additional data streams and a trained DeepLabCut tracking network and it outputs visualizations and statistics of navigational trajectories.  
 
 ## Installation
 
