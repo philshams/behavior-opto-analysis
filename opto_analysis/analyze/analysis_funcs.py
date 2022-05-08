@@ -20,9 +20,11 @@ def get_escape_target_score(self, x: np.ndarray, y: np.ndarray, RT: int) -> floa
 
     x_start, y_start, x_goal, y_goal, _, _, x_target, y_target, x_obstacle_edge, y_obstacle_edge, _ = get_various_x_and_y_locations(self, x, y, RT)
 
-    distance_path_to_homing_vector, _           = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
-    distance_path_to_edge_vector, x_edge_vector = distance_to_line(x_target, y_target, x_start, y_start, x_obstacle_edge, y_obstacle_edge)
-    distance_edge_vector_to_homing_vector, _    = distance_to_line(x_edge_vector, y_target, x_start, y_start, x_goal, y_goal)
+    distance_path_to_homing_vector, x_homing_vector = distance_to_line(x_target, y_target, x_start, y_start, x_goal, y_goal)
+    distance_path_to_edge_vector, x_edge_vector     = distance_to_line(x_target, y_target, x_start, y_start, x_obstacle_edge, y_obstacle_edge)
+    distance_edge_vector_to_homing_vector1, _       = distance_to_line(x_homing_vector, y_target, x_start, y_start, x_obstacle_edge, y_obstacle_edge)
+    distance_edge_vector_to_homing_vector2, _       = distance_to_line(x_edge_vector, y_target, x_start, y_start,  x_goal, y_goal)
+    distance_edge_vector_to_homing_vector           = np.mean([distance_edge_vector_to_homing_vector1, distance_edge_vector_to_homing_vector2]) # avg to get the length of the line segment that connects the EV and HV and crosses the average of the EV and HV paths at the target y-coord
 
     escape_target_score = abs(distance_path_to_homing_vector - distance_path_to_edge_vector + distance_edge_vector_to_homing_vector) / \
                             (2*distance_edge_vector_to_homing_vector)
